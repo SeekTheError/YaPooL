@@ -6,7 +6,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Example:
-    (r'^/security/register/$', security.accountcontroller.register),
-    (r'^/security/activate/(?P<code>\w+)$', security.accountcontroller.activate),
+    (r'^security/register/', 'security.accountcontroller.register'),
+    (r'^security/activate/(?P<code>\w+)$', 'security.accountcontroller.activate'),
     
     )

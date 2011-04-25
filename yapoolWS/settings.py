@@ -91,10 +91,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'couchdbinterface',
     'security',
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'couchdbinterface',
+    
 )
+
+EMAIL_HOST= 'smtp.gmail.com'
+EMAIL_PORT= '25'
+EMAIL_HOST_USER = 'kuestions.kaist@gmail.com'
+EMAIL_HOST_PASSWORD = 'kuestions123456'
+EMAIL_USE_TLS = True
