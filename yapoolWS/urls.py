@@ -6,11 +6,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Example:
-    # (r'^yapoolWS/', include('yapoolWS.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
-)
+    (r'^/security/register/$', security.accountcontroller.register),
+    (r'^/security/activate/(?P<code>\w+)$', security.accountcontroller.activate),
+    
+    )

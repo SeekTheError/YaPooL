@@ -17,12 +17,10 @@ NOTE: it may not work on windows, because of the different convention for the ne
 print 'loading couchdb layer'
 from couchdb import *
 
-
-DB_NAME='_users'
-
-
+USER_DB='_users'
+YAPOOL_DB='yapooldb'
 SERVER_URL='http://localhost:5984/'
-def loadDatabase (server,dbname=DB_NAME) :
+def loadDatabase (server,dbname=USER_DB) :
   '''
   This method aim to load or create any couchdb database in a LOCAL couchdb installation
   '''
@@ -33,9 +31,6 @@ def loadDatabase (server,dbname=DB_NAME) :
   except Exception :
     print 'unable to retrieve the users database'
     return None
-
-
-
   
 server=None
   
@@ -66,6 +61,7 @@ def query (query) :
     return db.query(query)
   except ServerError :
     print 'ServerError, error in query'
+
 
 
 

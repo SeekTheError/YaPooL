@@ -2,41 +2,51 @@
 #-------------------------User---------------------------
 from couchdb.mapping import *
 import dblayer
-from dblayer import getDb
+from dblayer import getDb, getServer, loadDatabase
 
 #TODO add topics field
 class User(Document) :
-  login = TextField()
-  password = TextField()
+  _id = TextField()
+  name = TextField()
+  password_sha = TextField()
+  roles=ListField(TextField())
   email = TextField()
+  salt=TextField()
   activationCode = TextField()
   isActivated = BooleanField()
   type = TextField()
   TYPE = 'user'
- 
-    
-  
+  ID_PREFIX="org.couchdb.user:"
+
   def create(self) :
-  #1: create the user in couch
-  #2: turn it into a yapooler(add role)
-  #3: return a boolean, True if it worked, false otherwise
-    if self.findByLogin() == None:
-      if self.login and self.password :
-        self.createUserInCouch()
-        '''
+    self._id='org.couchdb.user:'+self.name
+    print self._id
+    if self.findByName() == None:
+      if self.name and self.password_sha and self.email and self.activationCode:
         self.isActivated = False
         self.type = self.TYPE
-        self.owner = self.login
-        self.store(getDb())
-        '''
+        import uuid
+        import hashlib
+        self.salt=uuid.uuid1().get_hex()
+        self.password_sha=hashlib.sha1(self.password_sha+self.salt).hexdigest()
+        self.roles.append('yapooler')     
         #TODO: check if it return the last version
-        return True
+               
+        profile=Profile(owner=self._id)
+        print profile.owner
+        profileCreated = profile.create()
+        if profileCreated :
+          self.store(getDb())
+          return self
+        else :
+         return None
       else : 
-        return False
+        print 'required parameters have not been supplied: login, email and password needed'
+        return None
     else :
-      print 'a user already exist for login: ', self.login
-      return False
-  
+      print 'username already in used: ', self.name
+      return None
+
       
   def update(self) :
     '''
@@ -50,19 +60,10 @@ class User(Document) :
 
 
 
-  def findByLogin(self) :
-    '''
-    return the actual version of the user.
-    '''
-    view = dblayer.view("user/login", self.login)
-    if len(view) == 0 :
-      return None
-    elif len(view) == 1:
-      #TODO optimize
-      for u in view : return User.load(getDb(), u.id)
-    else :
-      print 'WARNING: critical error, more than one user for same login'
-      raise IntegrityConstraintException
+  def findByName(self) :
+    ID_PREFIX="org.couchdb.user:"
+    return User.load(dblayer.db,ID_PREFIX+self.name)
+    
 
   def findByActivationCode(self) :
     view = dblayer.view('user/activationCode', self.activationCode)
@@ -76,6 +77,16 @@ class User(Document) :
       raise IntegrityConstraintException
       
   def findBySessionId(self) :
+    view = dblayer.view("user/mail", self.sessionId)
+    if len(view) == 0 :
+      return None
+    elif len(view) == 1:
+      for u in view : return User.load(getDb(), u.id)
+    else :
+      print 'WARNING: critical error, more than one user with sthe same session Id '
+      raise IntegrityConstraintException
+    
+  def findBySessionId(self) :
     view = dblayer.view("user/sessionId", self.sessionId)
     if len(view) == 0 :
       return None
@@ -86,6 +97,18 @@ class User(Document) :
       raise IntegrityConstraintException
 
 
+
+class Profile(Document):
+  owner = TextField()
+  type = TextField()
+  def create(self):
+    self.type='profile'
+    if self.owner :
+      self.store(loadDatabase (getServer(),dbname=dblayer.YAPOOL_DB))
+      return True
+    else : 
+      return False
+    
 
 class IllegalAttempt(Exception) :
   pass
