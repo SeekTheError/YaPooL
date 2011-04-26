@@ -1,4 +1,4 @@
-package com.jsar.client.module;
+package com.jsar.client.unit;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -8,9 +8,8 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.jsar.client.http.EntryImpl;
-import com.jsar.client.http.HttpInterface;
-import com.jsar.client.http.HttpRequestCallback;
 import com.jsar.client.http.HttpDataFormatter;
+import com.jsar.client.http.HttpInterface;
 
 public class YapoolRegistrationFormGenerator {
 
@@ -24,8 +23,6 @@ public class YapoolRegistrationFormGenerator {
     emailField.setVisible(true);
     final TextBox passwordField = new PasswordTextBox();
     passwordField.setText("*******");
-    final TextArea messageArea=new TextArea();
-    messageArea.setVisible(false);
     
     passwordField.setVisible(true);
     final Button registerButton = new Button("Register");
@@ -35,32 +32,19 @@ public class YapoolRegistrationFormGenerator {
     RootPanel.get("emailFieldContainer").add(emailField);
     RootPanel.get("passwordFieldContainer").add(passwordField);
     RootPanel.get("registerButtonContainer").add(registerButton);
-    RootPanel.get("messageAreaContainer").add(messageArea);
 
  
     registerButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
-	messageArea.setVisible(true);
-	messageArea.setText("trying to create a new user");
-	
 	String params="?registerLogin="+loginField.getText()+"&register" +
 			"Email="+emailField.getText()+"&registerPassword="+passwordField.getText();
-	/*
-	EntryImpl login=new EntryImpl("registerLogin",loginField.getText());
-	EntryImpl email=new EntryImpl("registerEmail",emailField.getText());
-	EntryImpl password=new EntryImpl("registerPassword",passwordField.getText());
 	
-	EntryImpl[] queryEntries= new EntryImpl[3];
-	queryEntries[0]=login;
-	queryEntries[1]=email;
-	queryEntries[2]=password;
 	
-	String postData=HttpDataFormatter.buildQueryString(queryEntries);
-	*/
-	messageArea.setText(messageArea.getText()+"\nposting the Datas:\n"+params);
-	String url="http://127.0.0.1:8888/django/security/register/"+params;
+	String url="/security/register/";
 	System.out.println(url);
-	HttpInterface.doGet(url);
+	HttpInterface.doGet(url+params);
+	
+	HttpInterface.doGet("/yapooldb/");
 	
       }
     });

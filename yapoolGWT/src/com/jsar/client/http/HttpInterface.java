@@ -7,6 +7,7 @@ import com.google.gwt.user.client.Window;
 
 public class HttpInterface {
 
+  @SuppressWarnings("unused")
   public static void doPost(String url, String postData) {
     RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
 
@@ -19,12 +20,15 @@ public class HttpInterface {
       e.printStackTrace();
     }
   }
+  @SuppressWarnings("unused")
   public static void doGet(String url) {
     RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+  
 
     try {
       HttpRequestCallback requestCallback = new HttpRequestCallback();
-      Request response = builder.sendRequest(null, requestCallback);
+      builder.setCallback(requestCallback);
+      builder.send();
     } catch (RequestException e) {
       Window.alert("Failed to send the request: " + e.getMessage());
       e.printStackTrace();

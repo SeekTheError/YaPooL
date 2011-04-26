@@ -16,7 +16,7 @@ import com.jsar.client.http.HttpInterface;
 import com.jsar.client.http.EntryImpl;
 import com.jsar.client.http.HttpRequestCallback;
 import com.jsar.client.http.HttpDataFormatter;
-import com.jsar.client.module.YapoolRegistrationFormGenerator;
+import com.jsar.client.unit.YapoolRegistrationFormGenerator;
 
 
 /**

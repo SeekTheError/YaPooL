@@ -1,0 +1,28 @@
+#enable the mod_proxy with lighttpd, then add this to the mod_proxy configuration
+
+
+server.modules   += ( "mod_proxy" )
+
+
+
+$HTTP["url"] =~ ".*/yapooldb/.*?" { 
+proxy.server=( "/yapooldb/" => 
+      (
+        ( "host" => "127.0.0.1",
+          "port" => 5984
+        )
+      )
+  )
+}
+
+$HTTP["url"] =~ ".*/security.*" {
+proxy.server  = ( "/security" => 
+      ( 
+        ( "host" => "127.0.0.1",
+          "port" => 8001
+        )
+      )
+    )
+
+}
+

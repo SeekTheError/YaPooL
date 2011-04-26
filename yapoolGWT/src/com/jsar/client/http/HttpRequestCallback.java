@@ -29,7 +29,6 @@ public class HttpRequestCallback implements RequestCallback{
     System.out.println("Status Code: "+response.getStatusCode());
     System.out.println("Text: "+response.getText());
     System.out.println(response.getHeader("message"));
-    System.out.println(request.isPending());
     if (STATUS_CODE_OK == response.getStatusCode()) {
      
     } else {
