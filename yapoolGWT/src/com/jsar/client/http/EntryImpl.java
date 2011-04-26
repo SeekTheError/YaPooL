@@ -1,6 +1,6 @@
 package com.jsar.client.http;
 
-public class EntryImpl implements PostDataFormatter.Entry {
+public class EntryImpl implements HttpDataFormatter.Entry {
 
   String name;
   String value;

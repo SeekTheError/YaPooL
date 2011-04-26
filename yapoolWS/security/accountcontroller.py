@@ -4,6 +4,7 @@ from django.shortcuts import  render_to_response
 from django.conf import settings
 import logging
 import re;
+from django.utils.datastructures import  MultiValueDictKeyError
 logger = logging.getLogger(__name__)
 
 from couchdbinterface.entities import User
@@ -15,10 +16,14 @@ def register(request) :
   '''
   print 'receiving a request'
   #parameter retrieval
-  login = request.GET['registerLogin']
-  password = request.GET['registerPassword']
-  email = request.GET['registerEmail']
-  
+  try :
+    login = request.GET['registerLogin']
+    password = request.GET['registerPassword']
+    email = request.GET['registerEmail']
+  except MultiValueDictKeyError :
+    response=HttpResponse('400 - BAD URI')
+    response.status_code=400
+    return response
   
   #parameter validation
   loginIsValid = re.match('[\w0-9]*', login) and len(login) > 3 and len(login) < 16
@@ -31,7 +36,10 @@ def register(request) :
   if loginIsValid and passwordIsValid and emailIsValid :
      return processFormInformation(login, password, email, request)   
   else :
-    return HttpResponse('{"message" : "failure"}') 
+    response=HttpResponse("400")
+    response['message'] = 'invalid information'
+    response.status_code=400
+    return response
 
 #TODO Find a issue: during the process, sometimes the user is created in spite of an error
 import hashlib
@@ -43,11 +51,18 @@ def processFormInformation(login, password, email, request) :
   print u
   if u != None :
     sendActivationMail(email=email, activationCode=activationCode)
-    message = 'account succesfully created'
-    return HttpResponse('{"message" : "success"}')
+    
+    response=HttpResponse()
+    response.status_code=200
+    response['message'] = 'account successfully created'
+    return response
   else :
     message = 'error: login name already taken'
-    return HttpResponse('{"message" : "error"}')
+    context={"message" :  "login name already taken"}
+    response=HttpResponse()
+    response['message'] = 'login already taken'
+    response.status_code=412
+    return response
   
      
 from util.mailsender import sendMail    
@@ -58,8 +73,6 @@ def sendActivationMail(email, activationCode) :
   message = 'Please follow this link to activate your account'
   message += '\n' + settings.ACTIVATION_LINK_BASE_URL + activationCode
   sendMail(subject, message, email)
-  return code
-  
   
 
 def activate(request, code) :
@@ -70,12 +83,11 @@ def activate(request, code) :
       user.isActivated = True
       user.update()
       message = 'your account have been successfully activated'
+      return HttpResponse('your account have been successfully activated')
     else :
-      message = 'this account have been already activated'
+      return HttpResponse('this account have already been activated')
   else :
-    message = 'wrong activation link'
-  context = {'message': message}
-  return render_to_response('index.html', context , context_instance=RequestContext(request))
+    return HttpResponse('wrong activation link')
 
      
      

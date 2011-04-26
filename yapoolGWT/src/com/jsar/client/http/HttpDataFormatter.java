@@ -2,7 +2,7 @@ package com.jsar.client.http;
 
 import com.google.gwt.http.client.URL;
 
-public class PostDataFormatter {
+public class HttpDataFormatter {
 
     
     public static interface Entry {

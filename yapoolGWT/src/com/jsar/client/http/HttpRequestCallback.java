@@ -5,31 +5,34 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestTimeoutException;
 import com.google.gwt.http.client.Response;
 
+//TODO implement a way to read
 public class HttpRequestCallback implements RequestCallback{
 
   private static final int STATUS_CODE_OK = 200;
+  
+  
 
   private int lastStatusCode=0;
   private String lastResponseHeader=null;
-  
+  //TODO : implement the request timeout
   public void onError(Request request, Throwable exception) {
     lastResponseHeader=exception.getMessage();
+
     if (exception instanceof RequestTimeoutException) {
-      // handle a request timeout
+      System.out.println(exception.getMessage());
     } else {
-      // handle other request errors
+      System.out.println(exception.getMessage());
     }
   }
 
   public void onResponseReceived(Request request, Response response) {
-    lastStatusCode=response.getStatusCode();
-    System.out.println(lastStatusCode);
-    lastResponseHeader=response.getHeadersAsString();
-    System.out.println(lastResponseHeader);
+    System.out.println("Status Code: "+response.getStatusCode());
+    System.out.println("Text: "+response.getText());
+    System.out.println(response.getHeader("message"));
+    System.out.println(request.isPending());
     if (STATUS_CODE_OK == response.getStatusCode()) {
      
     } else {
-      // handle non-OK response from the server
     }
   }
 

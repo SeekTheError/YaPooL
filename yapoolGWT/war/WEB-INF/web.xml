@@ -5,11 +5,33 @@
 
 <web-app>
   
-  <!-- Servlets -->
-  
+  <!-- Servlets  -->
+  <servlet>
+	  <servlet-name>JettyProxy</servlet-name>
+	   <servlet-class>org.mortbay.servlet.ProxyServlet$Transparent</servlet-class>
+		<init-param>
+			<param-name>ProxyTo</param-name>
+			<param-value>http://127.0.0.1:8001</param-value>
+		</init-param>
+		<init-param>
+			<param-name>Prefix</param-name>
+			<param-value>/django</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup> 
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>JettyProxy</servlet-name>
+		<url-pattern>/django/*</url-pattern>
+	</servlet-mapping>
+
+ 
   <!-- Default page to serve -->
   <welcome-file-list>
     <welcome-file>YapoolGWT.html</welcome-file>
   </welcome-file-list>
+  
+  	
+  
 
 </web-app>
