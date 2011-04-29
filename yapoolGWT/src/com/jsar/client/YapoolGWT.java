@@ -1,45 +1,84 @@
 package com.jsar.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.PasswordTextBox;
+import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextArea;
-import com.google.gwt.user.client.ui.TextBox;
-import com.jsar.client.http.HttpInterface;
-import com.jsar.client.http.EntryImpl;
-import com.jsar.client.http.HttpRequestCallback;
-import com.jsar.client.http.HttpDataFormatter;
-import com.jsar.client.unit.YapoolRegistrationFormGenerator;
 
+import com.jsar.client.http.AbstractRequestCallback;
+import com.jsar.client.http.HttpInterface;
+import com.jsar.client.json.SessionObject;
+import com.jsar.client.unit.YapoolRegisterUnit;
+import com.jsar.client.unit.YapoolSignUnit;
 
 /**
- * Entry point classes define <code>onModuleLoad()</code>.
+ * this class is responsible for loading the independant module, and also to
+ * manage the global layout
+ * 
+ * @author rem
+ * 
  */
+
 public class YapoolGWT implements EntryPoint {
-  /**
-   * The message displayed to the user when the server cannot be reached or
-   * returns an error.
-   */
-  private static final String SERVER_ERROR = "An error occurred while "
-      + "attempting to contact the server. Please check your network " + "connection and try again.";
-
-
   
+  YapoolRegisterUnit registerUnit;
+  YapoolSignUnit signUnit;
+  private boolean signState = false;
+  private SessionObject currentSession = null;
+
   /**
    * This is the entry point method.
    */
   public void onModuleLoad() {
+    HttpInterface.doGet("/_session", new AbstractRequestCallback() {
+      @Override
+      public void onResponseReceived(Request request, Response response) {
+	currentSession = new SessionObject(response.getText());
+	loadComponent();
+	if (currentSession.getName() != null) {
+	  setSignState(true);
+	} else {
+	  setSignState(false);
+	}
+	
+      }
+    });
+  }
 
-    new YapoolRegistrationFormGenerator();    
-    
+  public boolean getSignState() {
+    return signState;
+  }
+
+  private void loadComponent() {
+    registerUnit = new YapoolRegisterUnit();
+    signUnit = new YapoolSignUnit(this);
+  }
+
+  public SessionObject getCurrentSession() {
+    return currentSession;
+  }
+
+  public void setCurrentSession(SessionObject currentSession) {
+    this.currentSession = currentSession;
+  }
+
+  /**
+   * 
+   * @param state
+   *          true for logged in, false otherwise
+   */
+  public void setSignState(boolean state) {
+    signState = state;
+    if (state == true) {
+      signUnit.signIn();
+      registerUnit.setVisible(false);
+    } else {
+      signUnit.signOut();
+      registerUnit.setVisible(true);
+    }
+  }
+  public void loadSession(String jsonString){
+    currentSession=new SessionObject(jsonString);
+  }
   
-  
-}
 }

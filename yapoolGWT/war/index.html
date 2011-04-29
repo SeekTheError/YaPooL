@@ -13,11 +13,7 @@
 <!-- Consider inlining CSS to reduce the number of requested files -->
 <!--                                                               -->
 <link type="text/css" rel="stylesheet" href="YapoolGWT.css">
-
-<!--                                           -->
-<!-- Any title is fine                         -->
-<!--                                           -->
-<title>Web Application Starter Project</title>
+<title>YaPooL!</title>
 
 <!--                                           -->
 <!-- This script loads your compiled module.   -->
@@ -48,24 +44,62 @@
 	</noscript>
 
 	<h1>YaPooL!</h1>
-	<table align="center" id="RegisterForm">
-	   <tr><td>Register to YaPooL</td></tr>
-		<tr>
-			<td>login</td>
-			<td id="loginFieldContainer"></td>
-		</tr>
-		<tr>
-			<td>password</td>
-			<td id="passwordFieldContainer"></td>
-		</tr>
-		<tr>
-			<td>email</td>
-			<td id="emailFieldContainer"></td>
-		</tr>
-		<tr>
-			<td id="registerButtonContainer"></td>
-		</tr>
-	</table>
-	<div align='center' id="messageAreaContainer"></div>
+
+	<div id="signDiv" align=center>
+		<h2 align=center id="signLabelContainer"></h2>
+		<table id="signTable">
+			<tr>
+				<td>Login</td>
+			</tr>
+			<tr>
+				<td id="signLoginFieldContainer"></td>
+			</tr>
+			<tr>
+				<td>Password</td>
+			</tr>
+			<tr>
+				<td id="signPasswordFieldContainer"></td>
+			</tr>
+			<tr>
+				<td id="signMessageLabelContainer"></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td id="signButtonContainer"></td>
+			</tr>
+		</table>
+	</div>
+	<div id="registerDiv" align=center>
+		<h2 align=center id="registerLabelContainer"></h2>
+		<table id="registerTable">
+
+			<tr>
+				<td>login</td>
+			</tr>
+			<tr>
+				<td id="registerLoginFieldContainer"></td>
+			</tr>
+			<tr>
+				<td>password</td>
+			</tr>
+			<tr>
+				<td id="registerPasswordFieldContainer"></td>
+			</tr>
+			<tr>
+				<td>email</td>
+			</tr>
+			<tr>
+				<td id="registerEmailFieldContainer"></td>
+			</tr>
+			<tr>
+				<td id="registerButtonContainer"></td>
+			</tr>
+			<tr>
+				<td id="registerMessageLabelContainer"></td>
+			</tr>
+		</table>
+
+	</div>
 </body>
 </html>
