@@ -3,7 +3,6 @@ package com.jsar.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
-import com.google.gwt.user.client.ui.RootPanel;
 
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
@@ -73,6 +72,7 @@ public class YapoolGWT implements EntryPoint {
       signUnit.signIn();
       registerUnit.setVisible(false);
     } else {
+      currentSession.setName(null);
       signUnit.signOut();
       registerUnit.setVisible(true);
     }

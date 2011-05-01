@@ -95,7 +95,6 @@ public class YapoolSignUnit {
   }
 
   public void signOut() {
-
     signButton.setText("Sign in");
     signLabel.setText("Sign In");
     RootPanel.get("signTable").setVisible(true);
