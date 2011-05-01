@@ -1,0 +1,19 @@
+SETUP file for YaPooL
+
+1 Setting Up the Project
+
+To be able to modify the gwt part of yapool, you just need to create a new project in eclipse(new project > select the simplest type: project)
+with the path of the folder yapoolGWT
+
+
+2 Set Up the server
+
+to be able to run the project in dev mode, you have to run it with an external server, apache or lighttpd for instance.
+then copy all the ressources that are under the "war" directory of the project inti the folder that you will access via you server.
+
+then you need to set up two proxied url:
+
+localhost /_session  	>  	localhost:5984/_session
+localhost /_yapooldb/ 	>	localhost:5984/yapooldb/
+
+an mod_proxy configuration for lighttpd can be found as a HowTo in the root of the YaPooL repository folder
