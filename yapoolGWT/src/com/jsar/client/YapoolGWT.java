@@ -1,6 +1,7 @@
 package com.jsar.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 
@@ -24,30 +25,45 @@ public class YapoolGWT implements EntryPoint {
   YapoolSignUnit signUnit;
   private boolean signState = false;
   private SessionObject currentSession = null;
+  private boolean componentLoaded=false;
 
   /**
    * This is the entry point method.
    */
   public void onModuleLoad() {
+    loadSession();
+    
+  }
+  
+  public native void reload() 
+  /*-{ 
+    
+          $wnd.location.replace("/yapool/"); 
+  }-*/; 
+  
+  public void loadSession(){
     HttpInterface.doGet("/_session", new AbstractRequestCallback() {
       @Override
       public void onResponseReceived(Request request, Response response) {
-	currentSession = new SessionObject(response.getText());
-	loadComponent();
+	currentSession = new SessionObject(response.getText());	
+	if(!componentLoaded)
+	{loadComponent();componentLoaded=true;}
 	if (currentSession.getName() != null) {
 	  setSignState(true);
 	} else {
 	  setSignState(false);
 	}
-	
       }
     });
+    
   }
 
   public boolean getSignState() {
     return signState;
   }
-
+/*
+ * load the different YaPooL html Unit
+ */
   private void loadComponent() {
     registerUnit = new YapoolRegisterUnit();
     signUnit = new YapoolSignUnit(this);
@@ -77,8 +93,22 @@ public class YapoolGWT implements EntryPoint {
       registerUnit.setVisible(true);
     }
   }
-  public void loadSession(String jsonString){
-    currentSession=new SessionObject(jsonString);
+
+  
+  public void reloadSession(){
+    HttpInterface.doGet("/_session", new AbstractRequestCallback() {
+      @Override
+      public void onResponseReceived(Request request, Response response) {
+	currentSession = new SessionObject(response.getText());	
+	if (currentSession.getName() != null) {
+	  signUnit.signIn();
+	  setSignState(true);
+	} else {
+	  signUnit.signOut();
+	  setSignState(false);
+	}
+      }
+    });
   }
   
 }

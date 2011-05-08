@@ -79,17 +79,19 @@ public class YapoolSignUnit {
 
     @Override
     public void onResponseReceived(Request request, Response response) {
+      System.out.println(response.getText());
       
       if (yapoolGWT.getSignState() == false) {
 	if (SignRequestCallback.responseIsOk(response)) {
-	  yapoolGWT.setSignState(true);
+	  yapoolGWT.reloadSession();
 	} else if (!SignRequestCallback.responseIsOk(response)) {
 	  // TODO format this error message
+	 
 	  messageLabel.setVisible(true);
 	  messageLabel.setText(response.getText());
 	}
       } else if (yapoolGWT.getSignState() == true) {
-	yapoolGWT.setSignState(false);
+	 yapoolGWT.reloadSession();
       }
     }
   }
