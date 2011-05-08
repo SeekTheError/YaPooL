@@ -99,7 +99,8 @@ public class YapoolSignUnit {
   public void signOut() {
     signButton.setText("Sign in");
     signLabel.setText("Sign In");
-    RootPanel.get("signTable").setVisible(true);
+    RootPanel.get("signLoginFieldContainer").setVisible(true);
+    RootPanel.get("signPasswordFieldContainer").setVisible(true);
   }
 
   public void signIn() {
@@ -107,7 +108,8 @@ public class YapoolSignUnit {
     loginField.setText("");
     signButton.setText("sign out");
     signLabel.setText(yapoolGWT.getCurrentSession().getName());
-    RootPanel.get("signTable").setVisible(false);
+    RootPanel.get("signLoginFieldContainer").setVisible(false);
+    RootPanel.get("signPasswordFieldContainer").setVisible(false);
   }
 
 }

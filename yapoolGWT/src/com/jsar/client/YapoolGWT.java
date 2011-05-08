@@ -32,14 +32,7 @@ public class YapoolGWT implements EntryPoint {
    */
   public void onModuleLoad() {
     loadSession();
-    
   }
-  
-  public native void reload() 
-  /*-{ 
-    
-          $wnd.location.replace("/yapool/"); 
-  }-*/; 
   
   public void loadSession(){
     HttpInterface.doGet("/_session", new AbstractRequestCallback() {

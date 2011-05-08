@@ -1,7 +1,4 @@
-/** Add css rules here for your application. */
 
-
-/** Example rules used by the template application (remove for your app) */
 h1 {
   font-size: 2em;
   font-weight: bold;
@@ -9,6 +6,34 @@ h1 {
   margin: 40px 0px 70px;
   text-align: center;
 }
+
+.top_header{width: 1000px;height: 150px; position: fixed;
+	width:100%;
+	top:0px;
+	z-index: 10;
+	height:60px; 
+}
+
+.top_header_left{width: 500px;left: 20px; float: left;}
+
+.top_header_right{width:500px;right: 20px;float: right; position:fixed;}
+
+
+
+
+
+.content{
+	top: 150px;
+	width:1040px;
+	height: 100%;
+	position: fixed;
+
+	margin-top:20px;
+	margin-bottom: 20px;
+	font-size: 10pt;
+}
+
+.content_right{width: 200px;right: 20px; }
 
 .sendButton {
   display: block;
