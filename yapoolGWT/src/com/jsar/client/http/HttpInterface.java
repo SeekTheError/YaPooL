@@ -5,6 +5,8 @@ import com.google.gwt.http.client.RequestBuilder;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.user.client.Window;
+import com.jsar.client.YapoolGWT;
+import com.jsar.client.json.Json;
 
 public class HttpInterface {
 
@@ -15,6 +17,25 @@ public class HttpInterface {
     builder.setHeader("Content-type", "application/x-www-form-urlencoded");
     try {
       Request response = builder.sendRequest(postData, requestCallback);
+     
+    } catch (RequestException e) {
+      Window.alert("Failed to send the request: " + e.getMessage());
+      e.printStackTrace();
+    }
+  }
+  
+  @SuppressWarnings("unused")
+  public static void doPostJson(String url, Json json,RequestCallback requestCallback) {
+    RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
+    //builder.setRequestData(json);
+    if(YapoolGWT.currentSession.getName()!=null)
+      json.setOwner(YapoolGWT.currentSession.getName());
+    else{
+      // todo: display a you need to be looged in message
+    }
+    builder.setHeader("Content-type", "application/json");
+    try {
+      Request response = builder.sendRequest(json.toString(), requestCallback);
      
     } catch (RequestException e) {
       Window.alert("Failed to send the request: " + e.getMessage());

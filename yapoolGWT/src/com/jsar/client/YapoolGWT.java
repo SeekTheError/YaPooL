@@ -1,13 +1,13 @@
 package com.jsar.client;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
-import com.jsar.client.json.SessionObject;
+import com.jsar.client.json.SessionJson;
+import com.jsar.client.unit.MessageUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
 
@@ -21,10 +21,12 @@ import com.jsar.client.unit.YapoolSignUnit;
 
 public class YapoolGWT implements EntryPoint {
   
+  public static SessionJson currentSession = null;
+  
   YapoolRegisterUnit registerUnit;
   YapoolSignUnit signUnit;
   private boolean signState = false;
-  private SessionObject currentSession = null;
+  
   private boolean componentLoaded=false;
 
   /**
@@ -38,7 +40,8 @@ public class YapoolGWT implements EntryPoint {
     HttpInterface.doGet("/_session", new AbstractRequestCallback() {
       @Override
       public void onResponseReceived(Request request, Response response) {
-	currentSession = new SessionObject(response.getText());	
+	currentSession = new SessionJson(response.getText());	
+	System.out.println(currentSession);
 	if(!componentLoaded)
 	{loadComponent();componentLoaded=true;}
 	if (currentSession.getName() != null) {
@@ -60,14 +63,15 @@ public class YapoolGWT implements EntryPoint {
   private void loadComponent() {
     registerUnit = new YapoolRegisterUnit();
     signUnit = new YapoolSignUnit(this);
+    new MessageUnit();
   }
 
-  public SessionObject getCurrentSession() {
+  public SessionJson getCurrentSession() {
     return currentSession;
   }
 
-  public void setCurrentSession(SessionObject currentSession) {
-    this.currentSession = currentSession;
+  public void setCurrentSession(SessionJson currentSession) {
+    YapoolGWT.currentSession = currentSession;
   }
 
   /**
@@ -92,7 +96,8 @@ public class YapoolGWT implements EntryPoint {
     HttpInterface.doGet("/_session", new AbstractRequestCallback() {
       @Override
       public void onResponseReceived(Request request, Response response) {
-	currentSession = new SessionObject(response.getText());	
+	currentSession = new SessionJson(response.getText());	
+	System.out.println(currentSession.toString());
 	if (currentSession.getName() != null) {
 	  signUnit.signIn();
 	  setSignState(true);
