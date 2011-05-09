@@ -6,7 +6,7 @@ import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestException;
 import com.google.gwt.user.client.Window;
 import com.jsar.client.YapoolGWT;
-import com.jsar.client.json.Json;
+import com.jsar.client.json.AbstractJson;
 
 public class HttpInterface {
 
@@ -25,7 +25,7 @@ public class HttpInterface {
   }
   
   @SuppressWarnings("unused")
-  public static void doPostJson(String url, Json json,RequestCallback requestCallback) {
+  public static void doPostJson(String url, AbstractJson json,RequestCallback requestCallback) {
     RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
     //builder.setRequestData(json);
     if(YapoolGWT.currentSession.getName()==null){
