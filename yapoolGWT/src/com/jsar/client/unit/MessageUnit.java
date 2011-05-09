@@ -1,7 +1,9 @@
 package com.jsar.client.unit;
 
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -15,11 +17,12 @@ public class MessageUnit {
   public MessageUnit(){
     final TextBox input = new TextBox();
     RootPanel.get("messageInputContainer").add(input);
-    input.addKeyPressHandler(new KeyPressHandler() {
+  
+    input.addKeyDownHandler(new KeyDownHandler() {
       
       @Override
-      public void onKeyPress(KeyPressEvent event) {
-       if(event.getCharCode()==13){
+      public void onKeyDown(KeyDownEvent event) {
+       if(event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER){
 	 MessageJson message=new MessageJson();
 	 message.setMessage(input.getText());
 	 input.setText("");

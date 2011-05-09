@@ -30,6 +30,9 @@ public class Json{
   public void  setOwner(String owner){
     jsonObject.put("owner",new JSONString(owner));
   }
+  public String getOwner(String owner){
+    return jsonObject.get("owner").isString().toString();
+  }
 
   
 }

@@ -7,6 +7,7 @@ import com.google.gwt.http.client.Response;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.SessionJson;
+import com.jsar.client.unit.ListYapoolUnit;
 import com.jsar.client.unit.MessageUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
@@ -63,6 +64,7 @@ public class YapoolGWT implements EntryPoint {
   private void loadComponent() {
     registerUnit = new YapoolRegisterUnit();
     signUnit = new YapoolSignUnit(this);
+    new ListYapoolUnit();
     new MessageUnit();
   }
 

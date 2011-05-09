@@ -28,10 +28,8 @@ public class HttpInterface {
   public static void doPostJson(String url, Json json,RequestCallback requestCallback) {
     RequestBuilder builder = new RequestBuilder(RequestBuilder.POST, url);
     //builder.setRequestData(json);
-    if(YapoolGWT.currentSession.getName()!=null)
-      json.setOwner(YapoolGWT.currentSession.getName());
-    else{
-      // todo: display a you need to be looged in message
+    if(YapoolGWT.currentSession.getName()==null){
+     Window.alert("you need to be logged in to do this action");
     }
     builder.setHeader("Content-type", "application/json");
     try {
