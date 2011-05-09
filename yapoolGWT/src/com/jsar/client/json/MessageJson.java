@@ -2,7 +2,7 @@ package com.jsar.client.json;
 
 import com.google.gwt.json.client.JSONString;
 
-public class MessageJson extends Json {
+public class MessageJson extends AbstractJson {
 
   public static final String MESSAGE = "message";
 
@@ -11,7 +11,7 @@ public class MessageJson extends Json {
   }
 
   public String getMessage() {
-    return jsonObject.get(MESSAGE).isString().toString();
+    return jsonObject.get(MESSAGE).isString().stringValue();
   }
 
 }
