@@ -30,6 +30,7 @@ public class HttpInterface {
     //builder.setRequestData(json);
     if(YapoolGWT.currentSession.getName()==null){
      Window.alert("you need to be logged in to do this action");
+     return;
     }
     builder.setHeader("Content-type", "application/json");
     try {
