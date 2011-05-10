@@ -2,6 +2,9 @@ package com.jsar.client.unit;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.Button;
@@ -52,26 +55,42 @@ public class YapoolSignUnit {
     signButtonClickHandler = new SignButtonClickHandler();
     signButton.addClickHandler(signButtonClickHandler);
 
+    passwordField.addKeyDownHandler(new KeyDownHandler() {
+
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+	if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	  logIn();
+	}
+
+      }
+    });
+
   }
 
   class SignButtonClickHandler implements ClickHandler {
-    private static final String queryUrl = "/_session";
+    
 
     @Override
     public void onClick(ClickEvent event) {
-      if (yapoolGWT.getSignState() == false) {
-	String login = loginField.getText();
-	String password = passwordField.getText();
-	passwordField.setText("");
+      logIn();
 
-	EntryImpl[] entries = { new EntryImpl("name", login), new EntryImpl("password", password) };
-	String data = HttpDataFormatter.buildQueryString(entries);
+    }
+  }
+  private static final String queryUrl = "/_session";
+  public void logIn() {
+    
+    if (yapoolGWT.getSignState() == false) {
+      String login = loginField.getText();
+      String password = passwordField.getText();
+      passwordField.setText("");
 
-	HttpInterface.doPost(queryUrl, data, new SignRequestCallback());
-      } else {
-	HttpInterface.doDelete(queryUrl, new SignRequestCallback());
-      }
+      EntryImpl[] entries = { new EntryImpl("name", login), new EntryImpl("password", password) };
+      String data = HttpDataFormatter.buildQueryString(entries);
 
+      HttpInterface.doPost(queryUrl, data, new SignRequestCallback());
+    } else {
+      HttpInterface.doDelete(queryUrl, new SignRequestCallback());
     }
   }
 
@@ -83,12 +102,12 @@ public class YapoolSignUnit {
 	if (SignRequestCallback.responseIsOk(response)) {
 	  yapoolGWT.reloadSession();
 	} else if (!SignRequestCallback.responseIsOk(response)) {
-	  // TODO format this error message	 
+	  // TODO format this error message
 	  messageLabel.setVisible(true);
 	  messageLabel.setText(response.getText());
 	}
       } else if (yapoolGWT.getSignState() == true) {
-	 yapoolGWT.reloadSession();
+	yapoolGWT.reloadSession();
       }
     }
   }

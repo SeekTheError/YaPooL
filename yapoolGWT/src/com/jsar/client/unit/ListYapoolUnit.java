@@ -54,14 +54,7 @@ public class ListYapoolUnit {
 	System.out.println(yapool.getId());
 	
 	
-      }
-      
-      
-    }
-    
-    
-    
+      }    
+    }  
   }
-  
-
 }
