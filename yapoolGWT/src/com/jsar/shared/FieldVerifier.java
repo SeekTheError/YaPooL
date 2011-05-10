@@ -1,5 +1,7 @@
 package com.jsar.shared;
 
+import com.sun.org.apache.regexp.internal.RE;
+
 /**
  * <p>
  * FieldVerifier validates that the name the user enters is valid.
@@ -38,5 +40,14 @@ public class FieldVerifier {
       return false;
     }
     return name.length() > 3;
+  }
+  
+  
+  //TODO code this to match a korean telephone number
+  public static boolean isValidTelephoneNumber(String telephoneNumber) {
+    if (telephoneNumber == null) {
+      return false;
+    }
+    return true;
   }
 }
