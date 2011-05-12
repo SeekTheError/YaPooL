@@ -13,10 +13,14 @@ import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.ViewJson;
 import com.jsar.client.json.YapoolJson;
 
-public class ListYapoolUnit {
+public class ListYapoolUnit extends AbstractUnit{
   
   private Label yapoolNameLabel;
   private FlexTable yapoolListTable;
+  
+  public String getUnitName(){return "listYapooLUnit";}
+
+  public String getContainerId(){return "displayYapoolContainer";}
 
   public ListYapoolUnit(){
     yapoolNameLabel=new Label("List of yapool");
