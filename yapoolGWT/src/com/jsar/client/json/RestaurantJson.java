@@ -5,6 +5,8 @@ package com.jsar.client.json;
 
 import java.util.ArrayList;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONArray;
@@ -22,7 +24,7 @@ public class RestaurantJson extends AbstractJson{
 	  public static final String ADDRESS="address";
 	  public static final String TELEPHONE_NUMBER= "telephoneNumber";
 	  public static final String TYPE_OF_FOOD ="typeOfFood";
-	  public static final String SEND_URL="/yapooldb/";
+	  public static final String TYPE="Restaurant";
 	  
 	  public void setName(String name){
 	    jsonObject.put(NAME, new JSONString(name));
@@ -59,17 +61,29 @@ public class RestaurantJson extends AbstractJson{
 		    jsonObject.get(TYPE_OF_FOOD).isString().toString();
 	}
 	 /* yapoolDB?key=" "*/
-	 public void postJson()
-	 {
-		 HttpInterface.doPostJson(SEND_URL,
-				 			this,
-				 			new RestaurantJsonRequestCallback());
-	 }
+	
+
+}
+
+
+class CreateRestaurantClickHandler implements ClickHandler
+{
+ public RestaurantJson restaurant;
+ public static String SEND_URL="/yapooldb/";
+ public void onClick(ClickEvent event)
+ {
+	 HttpInterface.doPostJson(SEND_URL,restaurant,new RestaurantJsonRequestCallback());
+ }
 }
 class RestaurantJsonRequestCallback extends AbstractRequestCallback
 {
-    public void onResponseReceived(Request request, Response response) 
-    {
-      System.out.println(response.toString());
-    }
+  public void onResponseReceived(Request request, Response response) 
+  {
+     System.out.println(response.toString());
+  }
+}
+
+class ListRestaurantClickHandler implements ClickHandler
+{
+	
 }
