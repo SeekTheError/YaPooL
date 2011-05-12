@@ -24,7 +24,7 @@ public class DisplayYapoolUnit {
 	private Label yapoolNameLabel;
 	private FlexTable postListTable;
 	private PostJson tempMessage = null;
-	private String currentYapoolId;
+	private String currentYapoolId = null;
 	
 	public void displayYapool(String yapoolId){
 		currentYapoolId = yapoolId;
@@ -51,6 +51,10 @@ public class DisplayYapoolUnit {
 			@Override
 			public void onKeyDown(KeyDownEvent event) {
 				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+					if(currentYapoolId == null){
+						Window.alert("No Yapool ID.");
+						return;
+					}
 					if(messageInput.getText() == "")
 						return;
 					PostJson newPost = new PostJson();
