@@ -54,7 +54,7 @@ def processFormInformation(login, password, email, request) :
     
     response=HttpResponse()
     response.status_code=200
-    response['message'] = 'account successfully created'
+    response['message'] = 'account successfully created, you will received your activation mail soon'
     return response
   else :
     message = 'error: login name already taken'

@@ -1,7 +1,5 @@
 package com.jsar.shared;
 
-import com.sun.org.apache.regexp.internal.RE;
-
 /**
  * <p>
  * FieldVerifier validates that the name the user enters is valid.

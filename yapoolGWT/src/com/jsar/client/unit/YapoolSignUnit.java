@@ -39,6 +39,7 @@ public class YapoolSignUnit {
     signButton = new Button("");
     signLabel = new Label("");
     signLabel.setVisible(true);
+ 
 
     RootPanel.get("signLabelContainer").add(signLabel);
     RootPanel.get("signLoginFieldContainer").add(loginField);

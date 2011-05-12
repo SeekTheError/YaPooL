@@ -6,22 +6,23 @@ h1 {
 
 .top_header{width: 1000px;height: 250px; position: fixed;
 	width:100%;
+	min-width: 500px;
 	top:0px;
 	z-index: 10;
 	height:60px; 
 	background-color: #777777;
 }
 
-.top_header_left{width: 500px;left: 20px; float: left;}
+.top_header_left{left: 20px; float: left;}
 
-.top_header_right{width:500px;right: 20px;float: right; position:fixed;}
+.top_header_right{right: 20px;float: right;}
 
 
 
 
 
 .content{
-	top: 150px;
+	top: 100px;
 	width:1040px;
 	height: 100%;
 	position: fixed;
@@ -31,7 +32,7 @@ h1 {
 	font-size: 10pt;
 }
 
-.content_left{width: 200px;left: 20px;float: left; position:fixed;background-color: #777777;}
+.content_left{width: 200px;left: 20px;float: left; position:fixed;border: thin;border-color: black;}
 
 .content_right{width: 800px;right: 20px;float:right;position: fixed;}
 
@@ -58,3 +59,5 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.register{float:right; display: inline; padding-right: 34px}
