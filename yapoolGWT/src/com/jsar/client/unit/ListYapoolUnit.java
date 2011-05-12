@@ -47,7 +47,6 @@ public class ListYapoolUnit extends AbstractUnit{
     public void onResponseReceived(Request request, Response response) {
       System.out.println("ListYaPool\n"+response.getText());
       JSONArray yapools=new ViewJson(response.getText()).getRows();
-      
       int size=yapools.size();
       for(int i=0;i<size;i++){
 	JSONObject temp=yapools.get(i).isObject().get("value").isObject();
