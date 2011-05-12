@@ -19,89 +19,98 @@ import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.ViewJson;
 import com.jsar.client.json.PostJson;
 
-public class DisplayYapoolUnit {
+public class DisplayYapoolUnit extends AbstractUnit {
 
-	private Label yapoolNameLabel;
-	private FlexTable postListTable;
-	private PostJson tempMessage = null;
-	private String currentYapoolId;
-	
-	public void displayYapool(String yapoolId){
-		currentYapoolId = yapoolId;
-		postListTable.removeAllRows();
-		postListTable.setText(0, 0, "User Name");
-		postListTable.setText(0, 1, "Message");
-		HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + yapoolId + "\"",
-				new DisplayYapoolRequestCallback());
+  public static DisplayYapoolUnit displayYapoolUnit;
+  private Label yapoolNameLabel;
+  private FlexTable postListTable;
+  private PostJson tempMessage = null;
+  private String currentYapoolId;
+
+  public void displayYapool(String yapoolId) {
+    NavigationUnit.navigationUnit.hideAll();
+    this.SetVisible(true);
+    
+    currentYapoolId = yapoolId;
+    postListTable.removeAllRows();
+    postListTable.setText(0, 0, "User Name");
+    postListTable.setText(0, 1, "Message");
+    HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + yapoolId + "\"",
+	new DisplayYapoolRequestCallback());
+  }
+
+  public DisplayYapoolUnit() {
+    DisplayYapoolUnit.displayYapoolUnit=this;
+    yapoolNameLabel = new Label("Wall Postings");
+    postListTable = new FlexTable();
+    VerticalPanel verticalPanel = new VerticalPanel();
+    verticalPanel.add(yapoolNameLabel);
+    verticalPanel.add(postListTable);
+
+    RootPanel.get("displayYapoolContainer").add(verticalPanel);
+
+    final TextBox messageInput = new TextBox();
+    RootPanel.get("displayYapoolContainer").add(messageInput);
+
+    messageInput.addKeyDownHandler(new KeyDownHandler() {
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+	if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	  if (messageInput.getText() == "")
+	    return;
+	  PostJson newPost = new PostJson();
+	  newPost.setMessage(messageInput.getText());
+	  newPost.setYapoolId(currentYapoolId);
+	  if (YapoolGWT.currentSession.getName() == null) {
+	    Window.alert("You need to log in first!");
+	    return;
+	  }
+	  newPost.setUser(YapoolGWT.currentSession.getName());
+	  messageInput.setText("");
+	  //System.out.println(newPost);
+	  tempMessage = newPost;
+	  HttpInterface.doPostJson("/yapooldb/", newPost, new MessageRequestCallback());
 	}
-	
-	public DisplayYapoolUnit() {
-		yapoolNameLabel = new Label("Wall Postings");
-		postListTable = new FlexTable();
-		VerticalPanel verticalPanel = new VerticalPanel();
-		verticalPanel.add(yapoolNameLabel);
-		verticalPanel.add(postListTable);
+      }
+    });
+    
+    this.SetVisible(false);
+  }
 
-		RootPanel.get("displayYapoolContainer").add(verticalPanel);
-				
-		final TextBox messageInput = new TextBox();
-		RootPanel.get("displayYapoolContainer").add(messageInput);
+  public class DisplayYapoolRequestCallback extends AbstractRequestCallback {
 
-		messageInput.addKeyDownHandler(new KeyDownHandler() {
-			@Override
-			public void onKeyDown(KeyDownEvent event) {
-				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-					if(messageInput.getText() == "")
-						return;
-					PostJson newPost = new PostJson();
-					newPost.setMessage(messageInput.getText());
-					newPost.setYapoolId(currentYapoolId);
-					if(YapoolGWT.currentSession.getName() == null){
-						Window.alert("You need to log in first!");
-						return;
-					}
-					newPost.setUser(YapoolGWT.currentSession.getName());
-					messageInput.setText("");
-					System.out.println(newPost);
-					tempMessage = newPost;
-					HttpInterface.doPostJson("/yapooldb/", newPost,
-							new MessageRequestCallback());
-				}
-			}
-		});
-	}
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      System.out.println("ListYaPool\n" + response.getText());
+      JSONArray yapools = new ViewJson(response.getText()).getRows();
 
-	public class DisplayYapoolRequestCallback extends AbstractRequestCallback {
+      int size = yapools.size();
+      for (int i = 0; i < size; i++) {
+	JSONObject temp = yapools.get(i).isObject().get("value").isObject();
+	PostJson post = new PostJson(temp);
+	int rowCounts = postListTable.getRowCount();
+	postListTable.setText(rowCounts, 0, post.getUser());
+	postListTable.setText(rowCounts, 1, post.getMessage());
+	System.out.println(post.getId());
+      }
+    }
+  }
 
-		@Override
-		public void onResponseReceived(Request request, Response response) {
-			System.out.println("ListYaPool\n" + response.getText());
-			JSONArray yapools = new ViewJson(response.getText()).getRows();
+  class MessageRequestCallback extends AbstractRequestCallback {
 
-			int size = yapools.size();
-			for (int i = 0; i < size; i++) {
-				JSONObject temp = yapools.get(i).isObject().get("value")
-						.isObject();
-				PostJson post = new PostJson(temp);
-				int rowCounts = postListTable.getRowCount();
-				postListTable.setText(rowCounts, 0, post.getUser());
-				postListTable.setText(rowCounts, 1, post.getMessage());
-				System.out.println(post.getId());
-			}
-		}
-	}
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      System.out.println(response.toString());
+      System.out.println("added Successfully");
 
-	class MessageRequestCallback extends AbstractRequestCallback {
+      int rowCounts = postListTable.getRowCount();
+      postListTable.setText(rowCounts, 0, tempMessage.getUser());
+      postListTable.setText(rowCounts, 1, tempMessage.getMessage());
+    }
+  }
 
-		@Override
-		public void onResponseReceived(Request request, Response response) {
-			System.out.println(response.toString());
-			System.out.println("added Successfully");
-
-			int rowCounts = postListTable.getRowCount();
-			postListTable.setText(rowCounts, 0, tempMessage.getUser());
-			postListTable.setText(rowCounts, 1, tempMessage.getMessage());
-			//System.out.println(post.getId());
-		}
-	}
+  @Override
+  public String getContainerId() {
+    return "displayYapoolContainer";
+  }
 }

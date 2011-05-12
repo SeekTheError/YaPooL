@@ -35,6 +35,8 @@ public class YapoolGWT implements EntryPoint {
   private ListYapoolUnit listYapoolUnit;
   private DisplayYapoolUnit displayYapoolUnit;
 
+  private NavigationUnit navigationUnit;
+
   /**
    * This is the entry point method.
    */
@@ -74,7 +76,7 @@ public class YapoolGWT implements EntryPoint {
     signUnit = new YapoolSignUnit(this);
     listYapoolUnit = new ListYapoolUnit();
     displayYapoolUnit = new DisplayYapoolUnit();
-    new NavigationUnit();
+    navigationUnit=new NavigationUnit();
   }
 
   public SessionJson getCurrentSession() {
