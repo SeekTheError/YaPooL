@@ -12,10 +12,10 @@ import com.jsar.client.unit.MessageUnit;
 import com.jsar.client.unit.NavigationUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
+import com.jsar.client.unit.DisplayYapoolUnit;
 
 /**
- * this class is responsible for loading the independant module, and also to
- * manage the global layout
+ * this class is responsible for loading the independant module, and also for swithing from an loged in to a log out mod
  * 
  * @author rem
  * 
@@ -31,7 +31,8 @@ public class YapoolGWT implements EntryPoint {
   
   private boolean componentLoaded=false;
 
-  private ListYapoolUnit listYapoolUnit;
+  ListYapoolUnit listYapoolUnit;
+  DisplayYapoolUnit	displayYapoolUnit;
 
   /**
    * This is the entry point method.
@@ -68,6 +69,7 @@ public class YapoolGWT implements EntryPoint {
     registerUnit = new YapoolRegisterUnit();
     signUnit = new YapoolSignUnit(this);
     listYapoolUnit=new ListYapoolUnit();
+    displayYapoolUnit=new DisplayYapoolUnit();
     new NavigationUnit();
   }
 

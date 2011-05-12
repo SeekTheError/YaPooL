@@ -15,6 +15,12 @@ import com.jsar.client.handler.VisibilityClickHandler;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 
+
+/**
+ * this unit display a Pop Up that allow user to register
+ * @author rem
+ *
+ */
 public class YapoolRegisterUnit {
 
   public static final String containerId = "registerDiv";
