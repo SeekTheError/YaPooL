@@ -132,4 +132,3 @@ class RestaurantPostRequestCallback extends AbstractRequestCallback {
 		System.out.println(response.toString());
 	}
 }
-

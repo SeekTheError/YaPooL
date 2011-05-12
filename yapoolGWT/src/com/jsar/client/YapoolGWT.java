@@ -105,40 +105,6 @@ public class YapoolGWT implements EntryPoint {
       signUnit.signIn();
       registerUnit.setVisible(false);
       
-      RestaurantJson rs=new RestaurantJson();
-      rs.setAddress("Address A");
-      rs.setName("restaurant A");
-      rs.setTelephoneNumber("042-350-1111");
-      ArrayList typeOfFoods= new ArrayList();
-      typeOfFoods.add("AAtype");
-      typeOfFoods.add("ABtype");
-      typeOfFoods.add("ACtype");
-      rs.setTypeOfFood(typeOfFoods);
-      
-      HttpInterface.doPostJson("/yapooldb/", rs, new RestaurantPostRequestCallback());
-      
-      rs.setAddress("Address B");
-      rs.setName("restaurant B");
-      rs.setTelephoneNumber("042-350-2222");
-      ArrayList typeOfFoods2= new ArrayList();
-      typeOfFoods.add("BAtype");
-      typeOfFoods.add("BBtype");
-      typeOfFoods.add("BCtype");
-      rs.setTypeOfFood(typeOfFoods);
-      
-      HttpInterface.doPostJson("/yapooldb/", rs, new RestaurantPostRequestCallback());
-      
-      rs.setAddress("Address A");
-      rs.setName("restaurant A");
-      rs.setTelephoneNumber("042-350-3333");
-      ArrayList typeOfFoods3= new ArrayList();
-      typeOfFoods.add("AAtype");
-      typeOfFoods.add("ABtype");
-      typeOfFoods.add("ACtype");
-      rs.setTypeOfFood(typeOfFoods);
-      
-      HttpInterface.doPostJson("/yapooldb/", rs, new RestaurantPostRequestCallback());
-      
     } else {
       currentSession.setName(null);
       signUnit.signOut();
@@ -164,8 +130,4 @@ public class YapoolGWT implements EntryPoint {
   }
 }
 
-class RestaurantPostRequestCallback extends AbstractRequestCallback {
-	public void onResponseReceived(Request request, Response response) {
-		System.out.println(response.toString());
-	}
-}
+
