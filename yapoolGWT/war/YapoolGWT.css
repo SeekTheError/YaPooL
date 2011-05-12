@@ -3,6 +3,8 @@ h1 {
   font-size: 2em;
   font-weight: bold;
 }
+body {
+	font-size: 20px}
 
 .top_header{width: 1000px;height: 250px; position: fixed;
 	width:100%;
@@ -29,7 +31,7 @@ h1 {
 
 	margin-top:20px;
 	margin-bottom: 20px;
-	font-size: 10pt;
+	font-size: 14pt;
 }
 
 .content_left{width: 200px;left: 20px;float: left; position:fixed;border: thin;border-color: black;}

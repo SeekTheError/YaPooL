@@ -1,5 +1,7 @@
 package com.jsar.client.unit;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -10,12 +12,25 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  *
  */
 public class NavigationUnit {
+  public static NavigationUnit navigationUnit;
   
   public static final String containerId="navigationUnitContainer";
   
   public NavigationUnit(){
+    NavigationUnit.navigationUnit=this;   
    Label yapoolNavigatonLabel=new Label("YaPooLs");
+   Label listYapoolLabel=new Label("list of Yapools");
+   listYapoolLabel.addClickHandler(new ClickHandler() {
+    
+    @Override
+    public void onClick(ClickEvent event) {
+      hideAll();
+      ListYapoolUnit.listYapoolUnit.SetVisible(true);     
+    }
+  });
+     
    VerticalPanel yapoolPanel=new VerticalPanel();
+   yapoolPanel.add(listYapoolLabel);
    RootPanel.get("yapoolNavigationLabel").add(yapoolNavigatonLabel);
    RootPanel.get("yapoolNavigationContainer").add(yapoolPanel);
    //Label createYapool=new Label("Create a YaPooL");
@@ -31,8 +46,14 @@ public class NavigationUnit {
    //RootPanel.get("myPageNavigationContainer").add(myPagePanel);
    
    
+   
     
     
+  }
+  
+  public void hideAll(){
+    ListYapoolUnit.listYapoolUnit.SetVisible(false);
+    DisplayYapoolUnit.displayYapoolUnit.SetVisible(false);
   }
 
 }

@@ -13,7 +13,7 @@ public void SetVisible(boolean visible){
   RootPanel.get(getContainerId()).setVisible(visible);
 }
 
-public abstract String getUnitName();
+
 
 public abstract String getContainerId();
 

@@ -101,9 +101,13 @@ class User(Document) :
 class Profile(Document):
   owner = TextField()
   type = TextField()
+  currentYapool=TextField()
+  pastYapools=ListField(TextField())
+  _id = TextField()
   def create(self):
     self.type='profile'
     if self.owner :
+      self._id=
       self.store(loadDatabase (getServer(),dbname=dblayer.YAPOOL_DB))
       return True
     else : 
