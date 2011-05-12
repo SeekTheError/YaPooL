@@ -24,7 +24,7 @@ public class ListYapoolUnit {
     VerticalPanel verticalPanel=new VerticalPanel();
     verticalPanel.add(yapoolNameLabel);
     verticalPanel.add(yapoolListTable);   
-    RootPanel.get("displayYapoolContainer").add(verticalPanel);
+    RootPanel.get("listYapoolContainer").add(verticalPanel);
     
     yapoolListTable.setText(0, 0, "YaPool Name");
     yapoolListTable.setText(0, 1, "YaPool Description");
