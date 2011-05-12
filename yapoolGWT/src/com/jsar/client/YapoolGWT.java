@@ -9,6 +9,7 @@ import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.SessionJson;
 import com.jsar.client.unit.ListYapoolUnit;
 import com.jsar.client.unit.MessageUnit;
+import com.jsar.client.unit.NavigationUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
 
@@ -29,6 +30,8 @@ public class YapoolGWT implements EntryPoint {
   private boolean signState = false;
   
   private boolean componentLoaded=false;
+
+  private ListYapoolUnit listYapoolUnit;
 
   /**
    * This is the entry point method.
@@ -64,8 +67,8 @@ public class YapoolGWT implements EntryPoint {
   private void loadComponent() {
     registerUnit = new YapoolRegisterUnit();
     signUnit = new YapoolSignUnit(this);
-    new ListYapoolUnit();
-    new MessageUnit();
+    listYapoolUnit=new ListYapoolUnit();
+    new NavigationUnit();
   }
 
   public SessionJson getCurrentSession() {

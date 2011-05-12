@@ -39,4 +39,13 @@ public class FieldVerifier {
     }
     return name.length() > 3;
   }
+  
+  
+  //TODO code this to match a korean telephone number
+  public static boolean isValidTelephoneNumber(String telephoneNumber) {
+    if (telephoneNumber == null) {
+      return false;
+    }
+    return true;
+  }
 }

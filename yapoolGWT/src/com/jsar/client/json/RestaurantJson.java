@@ -3,9 +3,6 @@
  */
 package com.jsar.client.json;
 
-import java.util.ArrayList;
-
-import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONString;
 
 /**
@@ -26,21 +23,21 @@ public class RestaurantJson extends AbstractJson{
 	  }
 
 	  public String getName(){
-	    return jsonObject.get(NAME).isString().toString();
+	    return jsonObject.get(NAME).isString().stringValue();
 	  }
 	  public void setAddress(String description){
 	    jsonObject.put(ADDRESS, new JSONString(description));
 	  }
 
 	  public String getAddress(){
-	    return jsonObject.get(ADDRESS).isString().toString();
+	    return jsonObject.get(ADDRESS).isString().stringValue();
 	  }
 	  public void setTelephoneNumber(String telephoneNumber){
 	    jsonObject.put(TELEPHONENUMBER, new JSONString(telephoneNumber));
 	  }
 
 	  public void getTelephoneNumber(){
-	    jsonObject.get(TELEPHONENUMBER).isString().toString();
+	    jsonObject.get(TELEPHONENUMBER).isString().stringValue();
 	  }
 	  
 	  /*
