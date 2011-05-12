@@ -15,6 +15,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jsar.client.handler.VisibilityClickHandler;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
+import com.jsar.client.json.RestaurantJson;
+
 import com.jsar.client.unit.YapoolRegisterUnit.RegistrationRequestCallback;
 
 
@@ -114,5 +116,20 @@ public class CreateRestaurantUnit {
 	  public void setVisible(boolean visibility) {
 	  RootPanel.get("displayCreateRestaurantContainer").setVisible(visibility);
 	  }
-	
 }
+class CreateRestaurantClickHandler implements ClickHandler {
+	public RestaurantJson restaurant;
+	public static String SEND_URL = "/yapooldb/";
+
+	public void onClick(ClickEvent event) {
+		HttpInterface.doPostJson(SEND_URL, restaurant,
+				new RestaurantPostRequestCallback());
+	}
+}
+
+class RestaurantPostRequestCallback extends AbstractRequestCallback {
+	public void onResponseReceived(Request request, Response response) {
+		System.out.println(response.toString());
+	}
+}
+
