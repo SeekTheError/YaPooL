@@ -10,7 +10,7 @@ import com.google.gwt.json.client.JSONString;
  */
 public abstract class AbstractJson{
   
-  JSONObject jsonObject=null;
+  public JSONObject jsonObject=null;
   /**
    * use to create a message directly from a json string
    * @param jsonString

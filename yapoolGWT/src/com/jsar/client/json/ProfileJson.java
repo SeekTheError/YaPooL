@@ -9,6 +9,7 @@ public class ProfileJson extends AbstractJson {
 	public static final String PASSED_YAPOOLS = "passedYapools";
 	public static final String CURRENT_YAPOOL = "currentYapool";
 
+	
 	public ProfileJson(String jsonString) {
 		this.jsonObject = JSONParser.parseStrict(jsonString).isObject();
 	}
@@ -19,13 +20,13 @@ public class ProfileJson extends AbstractJson {
 
 	public void archieveYapool() {
 		String currentYapool = getCurrentYapool();
-		setCurrentYapool(null);
+		setCurrentYapool("");
 		jsonObject.put(PASSED_YAPOOLS,
 				getRows().set(getRows().size(), new JSONString(currentYapool)));
 	}
 
 	public void leaveYapool() {
-		setCurrentYapool(null);
+		setCurrentYapool("");
 	}
 
 	public void setCurrentYapool(String currentYapool) {
