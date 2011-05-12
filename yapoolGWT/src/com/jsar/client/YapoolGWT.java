@@ -34,7 +34,6 @@ public class YapoolGWT implements EntryPoint {
 
   private ListYapoolUnit listYapoolUnit;
   private DisplayYapoolUnit displayYapoolUnit;
-
   private NavigationUnit navigationUnit;
 
   /**
