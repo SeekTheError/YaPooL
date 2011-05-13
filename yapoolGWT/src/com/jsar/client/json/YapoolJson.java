@@ -9,6 +9,8 @@ public class YapoolJson extends AbstractJson {
   public static final String DESCRIPTION="description";
   public static final String RESTAURANT= "restaurant";
   public static final String MEMBERS ="members";
+  private static final String EXPECTED_ORDER_DATE = "expectedOrderDate";
+  private static final String PICK_UP_PLACE = "pickUpPlace";
 
  public YapoolJson(){
    this.jsonObject=new JSONObject();
@@ -38,6 +40,22 @@ public class YapoolJson extends AbstractJson {
 
   public void getRestaurant(){
     jsonObject.get(NAME).isString().toString();
+  }
+  
+  public void setExpectedOrderDate(String expectedOrderDate){ 
+    jsonObject.put(EXPECTED_ORDER_DATE,new JSONString(expectedOrderDate));
+  }
+  
+  public String getExpectedOrderDate(){
+    return jsonObject.get(EXPECTED_ORDER_DATE).isString().stringValue();
+  }
+  
+  public String getPickUpPlace(){
+    return jsonObject.get(PICK_UP_PLACE).isString().stringValue();
+  }
+  
+  public void setPickUpPlace(String pickUpPlace){
+    this.jsonObject.put(PICK_UP_PLACE,new JSONString(pickUpPlace));
   }
   
   //TODO : add the members

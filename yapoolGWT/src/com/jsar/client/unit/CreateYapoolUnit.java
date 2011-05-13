@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jsar.client.handler.VisibilityClickHandler;
 import com.jsar.client.http.AbstractRequestCallback;
+import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.YapoolJson;
 
 /**
@@ -88,14 +89,14 @@ public class CreateYapoolUnit {
     createButton = new Button("Create");
 
     verticalPannel.add(nameField);
-    verticalPannel.add(addressField);
+    // verticalPannel.add(addressField);
     verticalPannel.add(telephoneNumberField);
-    verticalPannel.add(membersField);
+    // verticalPannel.add(membersField);
     verticalPannel.add(descriptionField);
     verticalPannel.add(expectedOrderTimeField);
-    verticalPannel.add(stateField);
+    // verticalPannel.add(stateField);
     verticalPannel.add(pickUpPlaceField);
-    verticalPannel.add(finalRatingField);
+    // verticalPannel.add(finalRatingField);
     verticalPannel.add(createButton);
     verticalPannel.add(messageLabel);
 
@@ -105,24 +106,33 @@ public class CreateYapoolUnit {
 
     createButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
+	// TODO: add field checking
 	createButton.setEnabled(false);
 	createButton.setText("Sending...");
 	YapoolJson yapoolJson = new YapoolJson();
 	yapoolJson.setDescription(descriptionField.getText());
 	yapoolJson.setRestaurant(currentRestaurantId);
 	yapoolJson.setName(nameField.getText());
+	yapoolJson.setPickUpPlace(pickUpPlaceField.getText());
+
+	HttpInterface.doPostJson("/yapooldb/", yapoolJson, new CreateYapoolCallbackCallback());
       }
     });
+
   }
 
-  class RegistrationRequestCallback extends AbstractRequestCallback {
+  class CreateYapoolCallbackCallback extends AbstractRequestCallback {
 
     @Override
     public void onResponseReceived(Request request, Response response) {
       String message = response.getHeader("message");
       if (message != null) {
 	messageLabel.setText(message);
+	if (responseIsOk(response)) {
+	  popUpPanel.hide();
+	} else {// TODO: handle errors}
 
+	}
       } else {
 	messageLabel.setText("error, no message to display");
       }
@@ -137,7 +147,7 @@ public class CreateYapoolUnit {
   }
 
   public void createYapool(String currentRestaurantId) {
-    this.currentRestaurantId=currentRestaurantId;
+    this.currentRestaurantId = currentRestaurantId;
     popUpPanel.show();
 
   }
