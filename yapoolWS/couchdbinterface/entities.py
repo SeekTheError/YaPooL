@@ -107,7 +107,7 @@ class Profile(Document):
   def create(self):
     self.type='profile'
     if self.owner :
-      self._id=
+      self._id=self.owner
       self.store(loadDatabase (getServer(),dbname=dblayer.YAPOOL_DB))
       return True
     else : 

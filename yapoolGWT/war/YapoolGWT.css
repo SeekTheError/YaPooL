@@ -1,65 +1,94 @@
-
 h1 {
-  font-size: 2em;
-  font-weight: bold;
+	font-size: 2em;
+	font-weight: bold;
 }
-body {
-	font-size: 20px}
 
-.top_header{width: 1000px;height: 250px; position: fixed;
-	width:100%;
+body {
+	font-size: 20px
+}
+
+table {
+	font-size: 12pt;
+	line-height: 20px;
+	border: 20 px black;
+	}
+
+.top_header {
+	width: 1000px;
+	height: 250px;
+	position: fixed;
+	width: 100%;
 	min-width: 500px;
-	top:0px;
+	top: 0px;
 	z-index: 10;
-	height:60px; 
+	height: 60px;
 	background-color: #777777;
 }
 
-.top_header_left{left: 20px; float: left;}
+.top_header_left {
+	left: 20px;
+	float: left;
+	min-width: 200px;
+}
 
-.top_header_right{right: 20px;float: right;}
+.top_header_right {
+	right: 20px;
+	float: right;
+	min-width: 200px;
+}
 
-
-
-
-
-.content{
-	top: 100px;
-	width:1040px;
+.content {
+	top: 60px;
+	width: 1040px;
 	height: 100%;
 	position: fixed;
-
-	margin-top:20px;
+	margin-top: 20px;
 	margin-bottom: 20px;
 	font-size: 14pt;
 }
 
-.content_left{width: 200px;left: 20px;float: left; position:fixed;border: thin;border-color: black;}
+.navigation_left {
+	width: 200px;
+	left: 20px;
+	float: left;
+	position: fixed;
+	border: thin;
+	border-color: black;
+	border-width: 3px;
+}
 
-.content_right{width: 800px;right: 20px;float:right;position: fixed;}
-
+.content_right {
+	width: 800px;
+	right: 20px;
+	float: right;
+	font-size: 12pt;
+}
 
 .sendButton {
-  display: block;
-  font-size: 16pt;
+	display: block;
+	font-size: 16pt;
 }
 
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
-  width: 400px;
+	width: 400px;
 }
 
 .dialogVPanel {
-  margin: 5px;
+	margin: 5px;
 }
 
 .serverResponseLabelError {
-  color: red;
+	color: red;
 }
 
 /** Set ids using widget.getElement().setId("idOfElement") */
 #closeButton {
-  margin: 15px 6px 6px;
+	margin: 15px 6px 6px;
 }
 
-.register{float:right; display: inline; padding-right: 34px}
+.register {
+	float: right;
+	display: inline;
+	padding-right: 34px
+}

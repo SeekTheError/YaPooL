@@ -10,6 +10,8 @@ import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.RestaurantJson;
 import com.jsar.client.json.SessionJson;
+import com.jsar.client.unit.CreateYapoolUnit;
+import com.jsar.client.unit.DisplayRestaurantUnit;
 import com.jsar.client.unit.ListRestaurantUnit;
 import com.jsar.client.unit.ListYapoolUnit;
 import com.jsar.client.unit.MessageUnit;
@@ -72,7 +74,7 @@ public class YapoolGWT implements EntryPoint {
     return signState;
   }
 
-  /*
+  /**
    * load the different YaPooL html Unit
    */
   private void loadComponent() {
@@ -80,6 +82,8 @@ public class YapoolGWT implements EntryPoint {
     signUnit = new YapoolSignUnit(this);
     listYapoolUnit = new ListYapoolUnit();
     displayYapoolUnit = new DisplayYapoolUnit();
+    new DisplayRestaurantUnit();
+    new CreateYapoolUnit();
    
     
     navigationUnit=new NavigationUnit();

@@ -10,7 +10,9 @@ public class YapoolJson extends AbstractJson {
   public static final String RESTAURANT= "restaurant";
   public static final String MEMBERS ="members";
 
- 
+ public YapoolJson(){
+   this.jsonObject=new JSONObject();
+ }
   
   public YapoolJson(JSONObject temp) {
     this.jsonObject=temp;

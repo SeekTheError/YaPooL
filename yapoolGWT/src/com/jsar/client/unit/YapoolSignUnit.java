@@ -80,7 +80,7 @@ public class YapoolSignUnit {
   }
   private static final String queryUrl = "/_session";
   public void logIn() {
-    
+    messageLabel.setVisible(false);
     if (yapoolGWT.getSignState() == false) {
       String login = loginField.getText();
       String password = passwordField.getText();
