@@ -1,11 +1,14 @@
 package com.jsar.client.unit;
 
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.PasswordTextBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -25,110 +28,124 @@ import com.jsar.client.unit.YapoolRegisterUnit.RegistrationRequestCallback;
  * @author hyahn
  *
  */
+
 public class CreateRestaurantUnit {
+	public static CreateRestaurantUnit  createRestaurantUnit;
 
-	public static final String containerId = "CreateReataurantDiv";
-
-	  private Label messageLabel;
+	/*CreateRestaurantContainer*/
+	  public static String url="/yapooldb/";
+	
+	  private Label messageLabel; //for informing some errors
 	  private Button createButton;
+	  private FlexTable createRestaurantTable; //form table
 	  private PopupPanel popUpPannel;
-
+	  public String getUnitName(){return "createRestaurantUnit";}
+	  public void setVisible(boolean visibility) {
+ 			if (!popUpPannel.isShowing()) {
+ 				loadInitialForm();
+   				popUpPannel.show();
+   			}
+	  }
+	  public void loadInitialForm()
+	  {
+		    createButton.setText("Create");
+		    messageLabel.setText("");
+		    messageLabel.setVisible(false);
+	  }
 	  public CreateRestaurantUnit() {
-
-	    final TextBox nameField = new TextBox();
-	    nameField.setText("Restaurnat Name");
-	   
-	    final TextBox addressField = new TextBox();
-	    addressField.setText("Address of Restaurant");
-	    addressField.setVisible(true);
 	    
-	    final TextBox telephoneNumberField = new TextBox();
-	    telephoneNumberField.setText("00-000-0000");
-	   
-	    final TextBox typeOfFoodField = new TextBox();
-	    typeOfFoodField.setText("Type of Food");
-	    typeOfFoodField.setVisible(true);
-
-	    messageLabel = new Label();
-	    messageLabel.setVisible(false);
+		createRestaurantUnit=this;
+		  
 	    popUpPannel = new PopupPanel();
 	    popUpPannel.setAutoHideEnabled(true);
-
-	    Label displayRegisterPopUp = new Label("Create a restaurant!");
-	    displayRegisterPopUp.addClickHandler(new ClickHandler() {
-
-	      @Override
-	      public void onClick(ClickEvent event) {
-		if (!popUpPannel.isShowing()) {
-		  popUpPannel.show();
-		}
-	      }
-	    });
-
-	    RootPanel.get("displayCreateRestaurantContainer").add(displayRegisterPopUp);
+	    
 	    VerticalPanel verticalPannel = new VerticalPanel();
-	    Label registerLabel = new Label("Create Restaurant",false);
-	    registerLabel.setHorizontalAlignment(null);
-	    verticalPannel.add(registerLabel);
-	    registerLabel.addClickHandler(new VisibilityClickHandler("RestaurantCreationTable"));
-	    
-	    createButton = new Button("Create");
-	    
-	    verticalPannel.add(nameField);
-	    verticalPannel.add(addressField);
-	    verticalPannel.add(telephoneNumberField);
-	    verticalPannel.add(typeOfFoodField);
-	    verticalPannel.add(createButton);
-	    verticalPannel.add(messageLabel);
-
-	    verticalPannel.add(messageLabel);
 	    popUpPannel.add(verticalPannel);
+	    
+	    Label titleLabel = new Label("Create Restaurant",false);
+	    titleLabel.setHorizontalAlignment(null);
+	    verticalPannel.add(titleLabel);
+	    //titleLabel.addClickHandler(new VisibilityClickHandler("RestaurantCreationTable"));
+	    
+	   	createRestaurantTable = new FlexTable();
+	    verticalPannel.add(createRestaurantTable);
+	    
+	    final TextBox nameField = new TextBox();
+	    nameField.setText("");
+	    nameField.setVisible(true);
+	    createRestaurantTable.setText(0, 0, "Name");
+	    createRestaurantTable.setWidget(0, 1, nameField);
+	    
+	    final TextBox typeOfFoodField = new TextBox();
+	    typeOfFoodField.setText("");
+	    typeOfFoodField.setVisible(true);
+ 	    createRestaurantTable.setText(1, 0, "Type Of Food");
+	    createRestaurantTable.setWidget(1, 1, typeOfFoodField);
+	    
+	    //@ TODO telephone number strict form like 
+	    // make users choose one of the following: 
+	    //042, 02, 062 .. ? or allowing 4 digits in the last part.
+	    final TextBox telephoneNumberField = new TextBox();
+	    telephoneNumberField.setText("");
+	    createRestaurantTable.setText(2, 0, "Telephone Number");
+	    createRestaurantTable.setWidget(2, 1, telephoneNumberField);
+	    
+	    final TextBox addressField = new TextBox();
+	    //@ TODO address feasibility? check
+	    addressField.setText("");
+	    addressField.setVisible(true);
+	    createRestaurantTable.setText(3, 0, "Address of Restaurant");
+	    createRestaurantTable.setWidget(3, 1, addressField);
+	   
+	    createButton = new Button("Create");
+	    verticalPannel.add(createButton);
+	    
+	    messageLabel = new Label("");
+	    messageLabel.setVisible(false);
+	    verticalPannel.add(messageLabel);
+	    
 	    popUpPannel.setPopupPosition(450, 200);
 
-	    createButton.addClickHandler(new ClickHandler() {
+	    createButton.addClickHandler(new ClickHandler() 
+	    {
 	      public void onClick(ClickEvent event) {
-	    createButton.setEnabled(false);
-	    createButton.setText("Sending...");
-		//String params = "?registerLogin=" + loginField.getText() + "&register" + "Email=" + emailField.getText()+ "&registerPassword=" + passwordField.getText();
-		//String queryUrl = "/security/register/" + params;
-		//HttpInterface.doGet(queryUrl, new RegistrationRequestCallback());
-	      }
-	    });
+	    	  
+	    	  //TODO: feasiblity check
+	    	  RestaurantJson restaurant=new RestaurantJson();
+	    	  restaurant.setName(nameField.getText());
+	    	  restaurant.setAddress(addressField.getText());
+	    	  restaurant.setTelephoneNumber(telephoneNumberField.getText());
+	    	  ArrayList typeOfFoodList=new ArrayList();
+	    	  typeOfFoodList.add(typeOfFoodField.getText());
+	    	  restaurant.setTypeOfFood(typeOfFoodList);
+	    	  
+	    	  messageLabel.setVisible(false);
+	    	  createButton.setEnabled(false);
+	    	  createButton.setText("Sending...");
+	    	  
+	    	  //TODO: check whether it is exist or not
+	    	      	     
+	    	  HttpInterface.doPostJson(url, restaurant, 
+	    			  new CreateRestaurantRequestCallback());
+	    	
+	    	  //String params = "?registerLogin=" + loginField.getText() + "&register" + "Email=" + emailField.getText()+ "&registerPassword=" + passwordField.getText();
+	    	  //String queryUrl = "/security/register/" + params;
+	    	  //HttpInterface.doGet(queryUrl, new RegistrationRequestCallback());
+	    	  }
+	    });	  
 	  }
-
-	  class RegistrationRequestCallback extends AbstractRequestCallback {
-
-	    @Override
-	    public void onResponseReceived(Request request, Response response) {
-	      String message = response.getHeader("message");
-	      if (message != null) {
-		messageLabel.setText(message);
-
-	      } else {
-		messageLabel.setText("error, no message to display");
-	      }
+	  class CreateRestaurantRequestCallback extends AbstractRequestCallback 
+	  {
+	    public void onResponseReceived(Request request, Response response)
+	    {
+	    	if(responseIsOk(response))
+	    	  messageLabel.setText("creation successful");
+	    	else
+	    		messageLabel.setText("creation failed");
 	      messageLabel.setVisible(true);
 	      createButton.setText("Create");
 	      createButton.setEnabled(true);
-	    }
-	  }
-
-	  public void setVisible(boolean visibility) {
-	  RootPanel.get("displayCreateRestaurantContainer").setVisible(visibility);
+	     }
 	  }
 }
-class CreateRestaurantClickHandler implements ClickHandler {
-	public RestaurantJson restaurant;
-	public static String SEND_URL = "/yapooldb/";
 
-	public void onClick(ClickEvent event) {
-		HttpInterface.doPostJson(SEND_URL, restaurant,
-				new RestaurantPostRequestCallback());
-	}
-}
-
-class RestaurantPostRequestCallback extends AbstractRequestCallback {
-	public void onResponseReceived(Request request, Response response) {
-		System.out.println(response.toString());
-	}
-}

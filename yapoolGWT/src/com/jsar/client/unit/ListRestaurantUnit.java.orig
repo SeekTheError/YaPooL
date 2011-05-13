@@ -18,6 +18,7 @@ import com.jsar.client.json.YapoolJson;
 import com.jsar.client.unit.ListYapoolUnit.DisplayYapoolClickHandler;
 import com.jsar.client.unit.ListYapoolUnit.ListYapoolRequestCallback;
 
+<<<<<<< HEAD
 public class ListRestaurantUnit extends AbstractUnit {
   public static ListRestaurantUnit listRestaurantUnit;
 
@@ -36,19 +37,13 @@ public class ListRestaurantUnit extends AbstractUnit {
     verticalPanel.add(RestaurantListTable);
     RootPanel.get("listRestaurantContainer").add(verticalPanel);
 
- 
-
-    this.SetVisible(false);
-    
-    HttpInterface.doGet("/yapooldb/_design/restaurant/_view/restaurant", new ListRestaurantRequestCallback());
-  }
-  
-  public void loadList(){
-    RestaurantListTable.removeAllRows();
     RestaurantListTable.setText(0, 0, "Restaurant Name");
     RestaurantListTable.setText(0, 1, "TELEPHONE_NUMBER");
     RestaurantListTable.setText(0, 2, "ADDRESS");
     RestaurantListTable.setText(0, 3, "TYPE_OF_FOOD");
+
+    this.SetVisible(false);
+    
     HttpInterface.doGet("/yapooldb/_design/restaurant/_view/restaurant", new ListRestaurantRequestCallback());
   }
 
@@ -68,6 +63,70 @@ public class ListRestaurantUnit extends AbstractUnit {
 	RestaurantListTable.setWidget(rowCounts, 0, nameLabel);
 	RestaurantListTable.setText(rowCounts, 1, restaurant.getTelephoneNumber());
 	RestaurantListTable.setText(rowCounts, 2, restaurant.getAddress());
+=======
+public class ListRestaurantUnit  extends AbstractUnit {
+	  public static ListRestaurantUnit  listRestaurantUnit;
+
+	private Label restaurantNameLabel;
+	  private FlexTable restaurantListTable;
+	  
+	  public String getUnitName(){return "listRestaurantUnit";}
+	  public String getContainerId(){return "listRestaurantContainer";}
+	  
+	  public ListRestaurantUnit() {
+		  	
+		    listRestaurantUnit = this;
+		    restaurantNameLabel = new Label("List of restaurant");
+		    restaurantListTable = new FlexTable();
+		    VerticalPanel verticalPanel = new VerticalPanel();
+		    verticalPanel.add(restaurantNameLabel);
+		    verticalPanel.add(restaurantListTable);
+		    RootPanel.get("listRestaurantContainer").add(verticalPanel);
+		    loadList();
+		  }
+	  public void loadList()
+	  {
+		  restaurantListTable.removeAllRows();
+		  restaurantListTable.setText(0, 0, "Restaurant Name");
+		  restaurantListTable.setText(0, 1, "TELEPHONE_NUMBER");
+		  restaurantListTable.setText(0, 2, "ADDRESS");
+		  restaurantListTable.setText(0, 3, "TYPE_OF_FOOD");
+		  HttpInterface.doGet("yapooldb/_design/restaurant/_view/restaurant", new ListRestaurantRequestCallback());
+	  }
+	  class ListRestaurantRequestCallback extends AbstractRequestCallback {
+
+		    @Override
+		    public void onResponseReceived(Request request, Response response) {
+		      // System.out.println("ListYaPool\n"+response.getText());
+		    JSONArray restaurants = new ViewJson(response.getText()).getRows();
+		    int size = restaurants.size();
+		    for (int i = 0; i < size; i++) {
+			JSONObject temp= 				restaurants.get(i).isObject().get("value").isObject();
+			RestaurantJson restaurant= new RestaurantJson(temp);
+			int rowCounts = restaurantListTable.getRowCount();
+			Label nameLabel=new Label(restaurant.getName());
+			//nameLabel.addClickHandler(new 			//DisplayYRestaurantClickHandler(yapool.getId()));
+			restaurantListTable.setWidget(rowCounts, 0, nameLabel);
+			restaurantListTable.setText(rowCounts, 1, 	restaurant.getTelephoneNumber());
+			restaurantListTable.setText(rowCounts, 2, 	restaurant.getAddress());
+			
+			String typeOfFoods_string=new String();
+			JSONArray typeOfFoods=restaurant.getTypeOfFood().isArray();
+			for(int j=0;j<typeOfFoods.size();++j)
+			{
+				typeOfFoods_string+=typeOfFoods.get(j).isString().stringValue();
+				if(j!=typeOfFoods.size()-1)
+					typeOfFoods_string+=", ";
+			}
+			restaurantListTable.setText(rowCounts, 3,typeOfFoods_string);
+			
+			// System.out.println(yapool.getId());
+		     }
+		   }
+		}
+}  
+class ListRestaurantClickHandler implements ClickHandler {
+>>>>>>> b46d7547637c5f44acef5806106c50706b89d572
 
 	String typeOfFoods_string = new String();
 	JSONArray typeOfFoods = restaurant.getTypeOfFood().isArray();
