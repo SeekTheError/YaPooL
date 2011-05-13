@@ -19,14 +19,11 @@ public class NavigationUnit {
   
   public NavigationUnit(){
     NavigationUnit.navigationUnit=this;   
-   
-
-   
+     
      
    VerticalPanel yapoolPanel=new VerticalPanel();
     Label listYapoolLabel=new Label("list of Yapools");
    listYapoolLabel.addClickHandler(new ClickHandler() {
-	    
 	    @Override
 	    public void onClick(ClickEvent event) {
 	      hideAll();
@@ -40,18 +37,33 @@ public class NavigationUnit {
 
    //Label createYapool=new Label("Create a YaPooL");
     VerticalPanel restaurantPanel=new VerticalPanel();
-   Label listRestaurantLabel=new Label("list of Restaurants");
+   
+    Label listRestaurantLabel=new Label("list of Restaurants");
    listRestaurantLabel.addClickHandler(new ClickHandler() {
 	    public void onClick(ClickEvent event) {
 	      hideAll();
+	      ListRestaurantUnit.listRestaurantUnit.loadList();
 	      ListRestaurantUnit.listRestaurantUnit.SetVisible(true);     
 	    }
 	  });
    restaurantPanel.add(listRestaurantLabel);
+      
+   Label displayCreateRestaurantPopUp= new Label("Create a restaurant!");
+   displayCreateRestaurantPopUp
+   	.addClickHandler(new ClickHandler() {
+   		public void onClick(ClickEvent event) 
+   		{
+   			CreateRestaurantUnit.createRestaurantUnit.setVisible(true);
+   		}	
+   	});
+   restaurantPanel.add(displayCreateRestaurantPopUp);
+   
    RootPanel.get("restaurantNavigationContainer").add(restaurantPanel);
    Label restaurantNavigationLabel=new Label("Restaurant");
    RootPanel.get("restaurantNavigationLabel").add(restaurantNavigationLabel);
 
+   
+   
    Label myPageNavigationLabel=new Label("My Page");
    RootPanel.get("myPageNavigationLabel").add(myPageNavigationLabel);
    VerticalPanel myPagePanel=new VerticalPanel();

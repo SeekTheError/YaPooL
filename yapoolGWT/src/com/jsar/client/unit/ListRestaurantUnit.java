@@ -20,30 +20,32 @@ import com.jsar.client.unit.ListYapoolUnit.ListYapoolRequestCallback;
 public class ListRestaurantUnit  extends AbstractUnit {
 	  public static ListRestaurantUnit  listRestaurantUnit;
 
-	private Label RestaurantNameLabel;
-	  private FlexTable RestaurantListTable;
+	private Label restaurantNameLabel;
+	  private FlexTable restaurantListTable;
 	  
 	  public String getUnitName(){return "listRestaurantUnit";}
 	  public String getContainerId(){return "listRestaurantContainer";}
 	  
 	  public ListRestaurantUnit() {
+		  	
 		    listRestaurantUnit = this;
-		    RestaurantNameLabel = new Label("List of restaurant");
-		    RestaurantListTable = new FlexTable();
+		    restaurantNameLabel = new Label("List of restaurant");
+		    restaurantListTable = new FlexTable();
 		    VerticalPanel verticalPanel = new VerticalPanel();
-		    verticalPanel.add(RestaurantNameLabel);
-		    verticalPanel.add(RestaurantListTable);
+		    verticalPanel.add(restaurantNameLabel);
+		    verticalPanel.add(restaurantListTable);
 		    RootPanel.get("listRestaurantContainer").add(verticalPanel);
-
-		    RestaurantListTable.setText(0, 0, "Restaurant Name");
-		    RestaurantListTable.setText(0, 1, "TELEPHONE_NUMBER");
-		    RestaurantListTable.setText(0, 2, "ADDRESS");
-		    RestaurantListTable.setText(0, 3, "TYPE_OF_FOOD");
-
-
-		   HttpInterface.doGet("yapooldb/_design/restaurant/_view/restaurant", 							new ListRestaurantRequestCallback());
+		    loadList();
 		  }
-	  
+	  public void loadList()
+	  {
+		  restaurantListTable.removeAllRows();
+		  restaurantListTable.setText(0, 0, "Restaurant Name");
+		  restaurantListTable.setText(0, 1, "TELEPHONE_NUMBER");
+		  restaurantListTable.setText(0, 2, "ADDRESS");
+		  restaurantListTable.setText(0, 3, "TYPE_OF_FOOD");
+		  HttpInterface.doGet("yapooldb/_design/restaurant/_view/restaurant", new ListRestaurantRequestCallback());
+	  }
 	  class ListRestaurantRequestCallback extends AbstractRequestCallback {
 
 		    @Override
@@ -54,12 +56,12 @@ public class ListRestaurantUnit  extends AbstractUnit {
 		    for (int i = 0; i < size; i++) {
 			JSONObject temp= 				restaurants.get(i).isObject().get("value").isObject();
 			RestaurantJson restaurant= new RestaurantJson(temp);
-			int rowCounts = RestaurantListTable.getRowCount();
+			int rowCounts = restaurantListTable.getRowCount();
 			Label nameLabel=new Label(restaurant.getName());
 			//nameLabel.addClickHandler(new 			//DisplayYRestaurantClickHandler(yapool.getId()));
-			RestaurantListTable.setWidget(rowCounts, 0, nameLabel);
-			RestaurantListTable.setText(rowCounts, 1, 						restaurant.getTelephoneNumber());
-			RestaurantListTable.setText(rowCounts, 2, 						restaurant.getAddress());
+			restaurantListTable.setWidget(rowCounts, 0, nameLabel);
+			restaurantListTable.setText(rowCounts, 1, 	restaurant.getTelephoneNumber());
+			restaurantListTable.setText(rowCounts, 2, 	restaurant.getAddress());
 			
 			String typeOfFoods_string=new String();
 			JSONArray typeOfFoods=restaurant.getTypeOfFood().isArray();
@@ -69,7 +71,7 @@ public class ListRestaurantUnit  extends AbstractUnit {
 				if(j!=typeOfFoods.size()-1)
 					typeOfFoods_string+=", ";
 			}
-			RestaurantListTable.setText(rowCounts, 3,typeOfFoods_string);
+			restaurantListTable.setText(rowCounts, 3,typeOfFoods_string);
 			
 			// System.out.println(yapool.getId());
 		     }
