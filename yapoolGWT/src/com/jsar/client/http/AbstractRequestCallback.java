@@ -19,7 +19,7 @@ public abstract class AbstractRequestCallback implements RequestCallback {
   }
 
   public static boolean responseIsOk(Response response) {
-    if (response.getStatusCode() == STATUS_CODE_OK)
+    if (response.getStatusCode() == STATUS_CODE_OK || response.getStatusCode() == 201)
       return true;
     else
       return false;

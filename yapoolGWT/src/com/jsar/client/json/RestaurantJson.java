@@ -20,7 +20,7 @@ public class RestaurantJson extends AbstractJson {
   public static final String ADDRESS = "address";
   public static final String TELEPHONE_NUMBER = "telephoneNumber";
   public static final String TYPE_OF_FOOD = "typeOfFood";
-  public static final String TYPE = "TYPE";
+  public static final String TYPE = "type";
 
   public RestaurantJson() {
     jsonObject.put(TYPE, new JSONString("restaurant"));
