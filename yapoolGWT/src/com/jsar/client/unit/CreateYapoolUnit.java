@@ -14,6 +14,8 @@ import com.jsar.client.handler.VisibilityClickHandler;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.YapoolJson;
+import com.jsar.client.util.CheckLoggedIn;
+import com.jsar.client.util.MessageDisplayer;
 
 /**
  * this unit display a Pop Up that allow user to register
@@ -36,50 +38,23 @@ public class CreateYapoolUnit {
   public CreateYapoolUnit() {
     CreateYapoolUnit.createYapoolUnit = this;
 
+    final Label nameLabel = new Label("name");
     final TextBox nameField = new TextBox();
-    nameField.setText("YaPool Name");
 
-    final TextBox addressField = new TextBox();
-    addressField.setText("Address of Restaurant");
-    addressField.setVisible(true);
-
-    final TextBox telephoneNumberField = new TextBox();
-    telephoneNumberField.setText("00-000-0000");
-
-    /*final TextBox restaurantField = new TextBox();
-    restaurantField.setText("restaurant name");
-    restaurantField.setVisible(true);*/
-
-    final TextBox membersField = new TextBox();
-    membersField.setText("member list");
-    membersField.setVisible(true);
-
+    final Label descriptionLabel = new Label("description");
     final TextBox descriptionField = new TextBox();
-    descriptionField.setText("Description of Yapool");
-    descriptionField.setVisible(true);
 
+    final Label expectedOrderTimeLabel = new Label("Expected Order Time");
     final TextBox expectedOrderTimeField = new TextBox();
-    expectedOrderTimeField.setText("Expected Order Time");
-    expectedOrderTimeField.setVisible(true);
 
-    final TextBox stateField = new TextBox();
-    stateField.setText("State");
-    stateField.setVisible(true);
-
+    final Label pickUpPlaceLabel = new Label("Pick Up Place");
     final TextBox pickUpPlaceField = new TextBox();
-    pickUpPlaceField.setText("Pick up place");
-    pickUpPlaceField.setVisible(true);
-
-    final TextBox finalRatingField = new TextBox();
-    finalRatingField.setText("finel rating");
-    finalRatingField.setVisible(true);
 
     messageLabel = new Label();
     messageLabel.setVisible(false);
     popUpPanel = new PopupPanel();
     popUpPanel.setAutoHideEnabled(true);
 
-    // RootPanel.get("displayCreateYaPoolContainer").add(displayRegisterPopUp);
     VerticalPanel verticalPannel = new VerticalPanel();
     Label registerLabel = new Label("Create YaPooL", false);
     registerLabel.setHorizontalAlignment(null);
@@ -88,15 +63,14 @@ public class CreateYapoolUnit {
 
     createButton = new Button("Create");
 
+    verticalPannel.add(nameLabel);
     verticalPannel.add(nameField);
-    // verticalPannel.add(addressField);
-    verticalPannel.add(telephoneNumberField);
-    // verticalPannel.add(membersField);
+    verticalPannel.add(descriptionLabel);
     verticalPannel.add(descriptionField);
+    verticalPannel.add(expectedOrderTimeLabel);
     verticalPannel.add(expectedOrderTimeField);
-    // verticalPannel.add(stateField);
+    verticalPannel.add(pickUpPlaceLabel);
     verticalPannel.add(pickUpPlaceField);
-    // verticalPannel.add(finalRatingField);
     verticalPannel.add(createButton);
     verticalPannel.add(messageLabel);
 
@@ -106,16 +80,35 @@ public class CreateYapoolUnit {
 
     createButton.addClickHandler(new ClickHandler() {
       public void onClick(ClickEvent event) {
-	// TODO: add field checking
-	createButton.setEnabled(false);
-	createButton.setText("Sending...");
+	messageLabel.setVisible(true);
+	if (!CheckLoggedIn.userIsloggedIn()) {
+	  return;
+	}
 	YapoolJson yapoolJson = new YapoolJson();
 	yapoolJson.setDescription(descriptionField.getText());
 	yapoolJson.setRestaurant(currentRestaurantId);
-	yapoolJson.setName(nameField.getText());
+	String yapoolName = nameField.getText();
+	if (yapoolName.equals("")) {
+	  displayErrorMessage("you must enter a YaPooL! name");
+	  return;
+	}
+	yapoolJson.setName(yapoolName);
+	String pickUpPlace = pickUpPlaceField.getText();
+	if (pickUpPlace.equals("")) {
+	  displayErrorMessage("you must enter a pick up place");
+	  return;
+	}
 	yapoolJson.setPickUpPlace(pickUpPlaceField.getText());
 
+	createButton.setEnabled(false);
+	createButton.setText("Sending...");
 	HttpInterface.doPostJson("/yapooldb/", yapoolJson, new CreateYapoolCallbackCallback());
+      }
+
+      private void displayErrorMessage(String string) {
+	messageLabel.setText(string);
+	messageLabel.setVisible(true);
+
       }
     });
 
@@ -125,20 +118,15 @@ public class CreateYapoolUnit {
 
     @Override
     public void onResponseReceived(Request request, Response response) {
-      String message = response.getHeader("message");
-      if (message != null) {
-	messageLabel.setText(message);
-	if (responseIsOk(response)) {
-	  popUpPanel.hide();
-	} else {// TODO: handle errors}
-
-	}
+      if (responseIsOk(response)) {
+	popUpPanel.hide();
+	createButton.setEnabled(true);
+	createButton.setText("Create");
+	MessageDisplayer.DisplayMessage("Yapool Successfully Created, you can access it from your YaPooL! page");
       } else {
-	messageLabel.setText("error, no message to display");
+
       }
-      messageLabel.setVisible(true);
-      createButton.setText("Create");
-      createButton.setEnabled(true);
+
     }
   }
 

@@ -50,7 +50,7 @@ public class ListRestaurantUnit extends AbstractUnit {
 
     @Override
     public void onResponseReceived(Request request, Response response) {
-      System.out.println("ListYaPool\n"+response.getText());
+      //System.out.println("ListYaPool\n"+response.getText());
       JSONArray restaurants = new ViewJson(response.getText()).getRows();
       int size = restaurants.size();
       for (int i = 0; i < size; i++) {
