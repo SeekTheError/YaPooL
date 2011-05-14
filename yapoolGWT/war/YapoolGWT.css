@@ -12,6 +12,12 @@ table {
 	line-height: 20px;
 	border: 20 px black;
 	}
+	
+.wrapper{
+padding-left: 40px;
+padding-right: 40px;
+           
+}
 
 .top_header {
 	width: 1000px;

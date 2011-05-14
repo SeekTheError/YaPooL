@@ -30,68 +30,68 @@
 <!-- to create a completely dynamic UI.        -->
 <!--                                           -->
 <body>
+	<div class="wrapper">
+		<!-- OPTIONAL: include this if you want history support -->
+		<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
+			style="position: absolute; width: 0; height: 0; border: 0"></iframe>
 
-	<!-- OPTIONAL: include this if you want history support -->
-	<iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1'
-		style="position: absolute; width: 0; height: 0; border: 0"></iframe>
+		<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+		<noscript>
+			<div
+				style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+				Your web browser must have JavaScript enabled in order for this
+				application to display correctly.</div>
+		</noscript>
 
-	<!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
-	<noscript>
-		<div
-			style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
-			Your web browser must have JavaScript enabled in order for this
-			application to display correctly.</div>
-	</noscript>
+		<div class="top_header">
+			<div class="top_header_left">
+				<h1>YaPooL!</h1>
+			</div>
+			<div class="top_header_right">
+				<div id="signDiv">
 
-	<div class="top_header">
-		<div class="top_header_left">
-			<h1>YaPooL!</h1>
-		</div>
-		<div class="top_header_right">
-			<div id="signDiv">
-
-				<table id="signTable">
-					<tr>
-						<td><h2 id="signLabelContainer"></h2>
-						</td>
-						<td id="signLoginFieldContainer"></td>
-						<td id="signPasswordFieldContainer"></td>
-						<td id="signButtonContainer"></td>
-					</tr>
+					<table id="signTable">
+						<tr>
+							<td><h2 id="signLabelContainer"></h2></td>
+							<td id="signLoginFieldContainer"></td>
+							<td id="signPasswordFieldContainer"></td>
+							<td id="signButtonContainer"></td>
+						</tr>
 					</table>
-					
+
 					<p class="register" id="displayRegisterButtonContainer"></p>
-				
-				<div id="signMessageLabelContainer"></div>
+
+					<div id="signMessageLabelContainer"></div>
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="content">
-		<div id="navigationUnitContainer" class="navigation_left">
-			<h2 id="yapoolNavigationLabel"></h2>
+		<div class="content">
+			<div id="navigationUnitContainer" class="navigation_left">
+				<h2 id="yapoolNavigationLabel"></h2>
 				<div id="yapoolNavigationContainer"></div>
-			<h2 id="restaurantNavigationLabel"></h2>
+				<h2 id="restaurantNavigationLabel"></h2>
 				<div id="restaurantNavigationContainer"></div>
-			<h2 id="myPageNavigationLabel"></h2>
-			<div id="myPageNavigationContainer"></div>		
-		</div>
-		<div class="content_right">
-			<div id="messageInputContainer"></div>
-			<div id="listYapoolContainer">
-				<h3>List of YaPooL!</h3>
+				<h2 id="myPageNavigationLabel"></h2>
+				<div id="myPageNavigationContainer"></div>
 			</div>
-			<div id="displayYapoolContainer">
-				<h3>Display YaPooL!</h3>
-			</div>
-			<div id="listRestaurantContainer">
-				<h3>List of Restaurant!</h3>
-			</div>
-			<div id="displayRestaurantContainer">
-				<h2 id="restaurantNameLabel"></h2>
-				<h3 id="restaurantTelephoneLabel"></h3>  
-				<p id="restaurantAdress"></p>
-				<div id="restaurantTypeOfFood"></div>
-				<div id="createYapool"></div>
+			<div class="content_right">
+				<div id="messageInputContainer"></div>
+				<div id="listYapoolContainer">
+					<h3>List of YaPooL!</h3>
+				</div>
+				<div id="displayYapoolContainer">
+					<h3>Display YaPooL!</h3>
+				</div>
+				<div id="listRestaurantContainer">
+					<h3>List of Restaurant!</h3>
+				</div>
+				<div id="displayRestaurantContainer">
+					<h2 id="restaurantNameLabel"></h2>
+					<h3 id="restaurantTelephoneLabel"></h3>
+					<p id="restaurantAdress"></p>
+					<div id="restaurantTypeOfFood"></div>
+					<div id="createYapool"></div>
+				</div>
 			</div>
 		</div>
 	</div>
