@@ -14,6 +14,7 @@ public class YapoolJson extends AbstractJson {
 
  public YapoolJson(){
    this.jsonObject=new JSONObject();
+   this.jsonObject.put("type",new JSONString("yapool"));
  }
   
   public YapoolJson(JSONObject temp) {
