@@ -1,26 +1,21 @@
 package com.jsar.client;
 
-import java.util.ArrayList;
-
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
-
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.ProfileJson;
-import com.jsar.client.json.RestaurantJson;
 import com.jsar.client.json.SessionJson;
+import com.jsar.client.unit.CreateRestaurantUnit;
 import com.jsar.client.unit.CreateYapoolUnit;
 import com.jsar.client.unit.DisplayRestaurantUnit;
+import com.jsar.client.unit.DisplayYapoolUnit;
 import com.jsar.client.unit.ListRestaurantUnit;
 import com.jsar.client.unit.ListYapoolUnit;
-import com.jsar.client.unit.MessageUnit;
 import com.jsar.client.unit.NavigationUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
-import com.jsar.client.unit.DisplayYapoolUnit;
-import com.jsar.client.unit.CreateRestaurantUnit;
 
 ;
 /**

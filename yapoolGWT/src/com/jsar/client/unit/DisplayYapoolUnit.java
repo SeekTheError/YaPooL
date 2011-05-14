@@ -25,182 +25,179 @@ import com.jsar.client.json.PostJson;
 
 public class DisplayYapoolUnit extends AbstractUnit {
 
-	public static DisplayYapoolUnit displayYapoolUnit;
-	private Label yapoolNameLabel;
-	private FlexTable postListTable;
-	private PostJson tempMessage = null;
-	private String currentYapoolId;
-	private Button joinButton;
-	private Button leaveButton;
-	private TextBox messageInput;
+  public static DisplayYapoolUnit displayYapoolUnit;
+  private Label yapoolNameLabel;
+  private FlexTable postListTable;
+  private PostJson tempMessage = null;
+  private String currentYapoolId;
+  private Button joinButton;
+  private Button leaveButton;
+  private TextBox messageInput;
 
-	public void displayYapool(String yapoolId) {
-		NavigationUnit.navigationUnit.hideAll();
-		this.SetVisible(true);
+  public void displayYapool(String yapoolId) {
+    NavigationUnit.navigationUnit.hideAll();
+    this.SetVisible(true);
 
-		currentYapoolId = yapoolId;
-		postListTable.removeAllRows();
-		postListTable.setText(0, 0, "User Name");
-		postListTable.setText(0, 1, "Message");
-		HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\""
-				+ yapoolId + "\"", new DisplayYapoolRequestCallback());
-		
-		
-		if(YapoolGWT.currentProfile != null){
-			if(YapoolGWT.currentProfile.getCurrentYapool().equals("")){
-				joinButton.setVisible(true);
-				leaveButton.setVisible(false);
-				messageInput.setVisible(false);
-			}else if(YapoolGWT.currentProfile.getCurrentYapool().equals(currentYapoolId)){
-				joinButton.setVisible(false);
-				leaveButton.setVisible(true);
-				messageInput.setVisible(true);
-			}else{
-				joinButton.setVisible(false);
-				leaveButton.setVisible(false);
-				messageInput.setVisible(false);
-			}
-		}
+    currentYapoolId = yapoolId;
+    postListTable.removeAllRows();
+    postListTable.setText(0, 0, "User Name");
+    postListTable.setText(0, 1, "Message");
+    HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + yapoolId + "\"",
+	new DisplayYapoolRequestCallback());
+
+    if (YapoolGWT.currentProfile != null) {
+      if (YapoolGWT.currentProfile.getCurrentYapool().equals("")) {
+	joinButton.setVisible(true);
+	leaveButton.setVisible(false);
+	messageInput.setVisible(false);
+      } else if (YapoolGWT.currentProfile.getCurrentYapool().equals(currentYapoolId)) {
+	joinButton.setVisible(false);
+	leaveButton.setVisible(true);
+	messageInput.setVisible(true);
+      } else {
+	joinButton.setVisible(false);
+	leaveButton.setVisible(false);
+	messageInput.setVisible(false);
+      }
+    }
+  }
+
+  public DisplayYapoolUnit() {
+    DisplayYapoolUnit.displayYapoolUnit = this;
+    yapoolNameLabel = new Label("Wall Postings");
+    postListTable = new FlexTable();
+    joinButton = new Button("Join");
+    leaveButton = new Button("Leave");
+    messageInput = new TextBox();
+
+    VerticalPanel verticalPanel = new VerticalPanel();
+    verticalPanel.add(yapoolNameLabel);
+    verticalPanel.add(postListTable);
+    verticalPanel.add(messageInput);
+    verticalPanel.add(joinButton);
+    verticalPanel.add(leaveButton);
+
+    RootPanel.get("displayYapoolContainer").add(verticalPanel);
+
+    messageInput.addKeyDownHandler(new KeyDownHandler() {
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+	if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
+	  if (messageInput.getText() == "")
+	    return;
+	  PostJson newPost = new PostJson();
+	  newPost.setMessage(messageInput.getText());
+	  newPost.setYapoolId(currentYapoolId);
+	  if (YapoolGWT.currentSession.getName() == null) {
+	    Window.alert("You need to log in first!");
+	    return;
+	  }
+	  newPost.setUser(YapoolGWT.currentSession.getName());
+	  messageInput.setText("");
+	  // System.out.println(newPost);
+	  tempMessage = newPost;
+	  HttpInterface.doPostJson("/yapooldb/", newPost, new MessageRequestCallback());
 	}
+      }
+    });
 
-	public DisplayYapoolUnit() {
-		DisplayYapoolUnit.displayYapoolUnit = this;
-		yapoolNameLabel = new Label("Wall Postings");
-		postListTable = new FlexTable();
-		joinButton = new Button("Join");
-		leaveButton = new Button("Leave");
-		messageInput = new TextBox();
-		
-		VerticalPanel verticalPanel = new VerticalPanel();
-		verticalPanel.add(yapoolNameLabel);
-		verticalPanel.add(postListTable);
-		verticalPanel.add(messageInput);
-		verticalPanel.add(joinButton);
-		verticalPanel.add(leaveButton);
-		
-		RootPanel.get("displayYapoolContainer").add(verticalPanel);
+    joinButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+	// TODO Auto-generated method stub
+	// joinButton.setVisible(false);
 
-		messageInput.addKeyDownHandler(new KeyDownHandler() {
-			@Override
-			public void onKeyDown(KeyDownEvent event) {
-				if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-					if (messageInput.getText() == "")
-						return;
-					PostJson newPost = new PostJson();
-					newPost.setMessage(messageInput.getText());
-					newPost.setYapoolId(currentYapoolId);
-					if (YapoolGWT.currentSession.getName() == null) {
-						Window.alert("You need to log in first!");
-						return;
-					}
-					newPost.setUser(YapoolGWT.currentSession.getName());
-					messageInput.setText("");
-					// System.out.println(newPost);
-					tempMessage = newPost;
-					HttpInterface.doPostJson("/yapooldb/", newPost,
-							new MessageRequestCallback());
-				}
-			}
-		});
-		
-		joinButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				//joinButton.setVisible(false);
-				
-				HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new AbstractRequestCallback() {
-					@Override
-					public void onResponseReceived(Request request, Response response) {
-						//System.out.println("Current Profile: \n" + response.getText());
-						ProfileJson profile = new ProfileJson(response.getText());
-						if(profile.getCurrentYapool().equals("")){
-							//System.out.println("No Current Yapool");
-							joinButton.setVisible(false);
-							profile.setCurrentYapool(currentYapoolId);
-							HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback(){
-								@Override
-								public void onResponseReceived(Request request, Response response) {
-									System.out.println(response.toString());
-									System.out.println("Joined Successfully");
-								}							
-							}); //http doPostJson Ends
-							messageInput.setVisible(true);
-							leaveButton.setVisible(true);
-						} //if ends					
-					}
-				}); //http doGet ends
-			} // On Click Ends
-		}); // ClickHandler Ends
-
-		leaveButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				// TODO Auto-generated method stub
-				//joinButton.setVisible(false);
-				
-				HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new AbstractRequestCallback() {
-					@Override
-					public void onResponseReceived(Request request, Response response) {
-						//System.out.println("Current Profile: \n" + response.getText());
-						ProfileJson profile = new ProfileJson(response.getText());
-						if(profile.getCurrentYapool().equals(currentYapoolId)){
-							//System.out.println("No Current Yapool");
-							leaveButton.setVisible(false);
-							profile.setCurrentYapool("");
-							HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback(){
-								@Override
-								public void onResponseReceived(Request request, Response response) {
-									System.out.println(response.toString());
-									System.out.println("Left Successfully");
-								}							
-							}); //http doPostJson Ends
-							messageInput.setVisible(false);
-							joinButton.setVisible(true);
-						} //if ends					
-					}
-				}); //http doGet ends
-			} // On Click Ends
-		}); // ClickHandler Ends
-		
-		this.SetVisible(false);
-	}
-
-	public class DisplayYapoolRequestCallback extends AbstractRequestCallback {
-
+	HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new AbstractRequestCallback() {
+	  @Override
+	  public void onResponseReceived(Request request, Response response) {
+	    // System.out.println("Current Profile: \n" + response.getText());
+	    ProfileJson profile = new ProfileJson(response.getText());
+	    if (profile.getCurrentYapool().equals("")) {
+	      // System.out.println("No Current Yapool");
+	      joinButton.setVisible(false);
+	      profile.setCurrentYapool(currentYapoolId);
+	      HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback() {
 		@Override
 		public void onResponseReceived(Request request, Response response) {
-			System.out.println("ListYaPool\n" + response.getText());
-			JSONArray yapools = new ViewJson(response.getText()).getRows();
-
-			int size = yapools.size();
-			for (int i = 0; i < size; i++) {
-				JSONObject temp = yapools.get(i).isObject().get("value")
-						.isObject();
-				PostJson post = new PostJson(temp);
-				int rowCounts = postListTable.getRowCount();
-				postListTable.setText(rowCounts, 0, post.getUser());
-				postListTable.setText(rowCounts, 1, post.getMessage());
-				System.out.println(post.getId());
-			}
+		  System.out.println(response.toString());
+		  System.out.println("Joined Successfully");
 		}
-	}
+	      }); // http doPostJson Ends
+	      messageInput.setVisible(true);
+	      leaveButton.setVisible(true);
+	    } // if ends
+	  }
+	}); // http doGet ends
+      } // On Click Ends
+    }); // ClickHandler Ends
 
-	public class MessageRequestCallback extends AbstractRequestCallback {
+    leaveButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+	// TODO Auto-generated method stub
+	// joinButton.setVisible(false);
 
+	HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new AbstractRequestCallback() {
+	  @Override
+	  public void onResponseReceived(Request request, Response response) {
+	    //System.out.println("Current Profile: \n" + response.getText());
+	    ProfileJson profile = new ProfileJson(response.getText());
+	    if (profile.getCurrentYapool().equals(currentYapoolId)) {
+	      // System.out.println("No Current Yapool");
+	      leaveButton.setVisible(false);
+	      profile.setCurrentYapool("");
+	      HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback() {
 		@Override
 		public void onResponseReceived(Request request, Response response) {
-			System.out.println(response.toString());
-			System.out.println("added Successfully");
-
-			int rowCounts = postListTable.getRowCount();
-			postListTable.setText(rowCounts, 0, tempMessage.getUser());
-			postListTable.setText(rowCounts, 1, tempMessage.getMessage());
+		  System.out.println(response.toString());
+		  System.out.println("Left Successfully");
 		}
-	}
+	      }); // http doPostJson Ends
+	      messageInput.setVisible(false);
+	      joinButton.setVisible(true);
+	    } // if ends
+	  }
+	}); // http doGet ends
+      } // On Click Ends
+    }); // ClickHandler Ends
 
-	@Override
-	public String getContainerId() {
-		return "displayYapoolContainer";
-	}
+    this.SetVisible(false);
+  }
+
+  public class DisplayYapoolRequestCallback extends AbstractRequestCallback {
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      //System.out.println("ListYaPool\n" + response.getText());
+      JSONArray yapools = new ViewJson(response.getText()).getRows();
+
+      int size = yapools.size();
+      for (int i = 0; i < size; i++) {
+	JSONObject temp = yapools.get(i).isObject().get("value").isObject();
+	PostJson post = new PostJson(temp);
+	int rowCounts = postListTable.getRowCount();
+	postListTable.setText(rowCounts, 0, post.getUser());
+	postListTable.setText(rowCounts, 1, post.getMessage());
+	//System.out.println(post.getId());
+      }
+    }
+  }
+
+  public class MessageRequestCallback extends AbstractRequestCallback {
+
+    @Override
+    public void onResponseReceived(Request request, Response response) {
+      //System.out.println(response.toString());
+      //System.out.println("added Successfully");
+
+      int rowCounts = postListTable.getRowCount();
+      postListTable.setText(rowCounts, 0, tempMessage.getUser());
+      postListTable.setText(rowCounts, 1, tempMessage.getMessage());
+    }
+  }
+
+  @Override
+  public String getContainerId() {
+    return "displayYapoolContainer";
+  }
 }

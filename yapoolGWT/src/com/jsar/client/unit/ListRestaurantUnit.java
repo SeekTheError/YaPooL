@@ -14,14 +14,11 @@ import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.RestaurantJson;
 import com.jsar.client.json.ViewJson;
-import com.jsar.client.json.YapoolJson;
-import com.jsar.client.unit.ListYapoolUnit.DisplayYapoolClickHandler;
-import com.jsar.client.unit.ListYapoolUnit.ListYapoolRequestCallback;
 
 public class ListRestaurantUnit extends AbstractUnit {
   public static ListRestaurantUnit listRestaurantUnit;
 
-  private Label RestaurantNameLabel;
+  //private Label RestaurantNameLabel;
   private FlexTable RestaurantListTable;
 
 

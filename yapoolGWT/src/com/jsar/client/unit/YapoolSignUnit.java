@@ -17,9 +17,6 @@ import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.EntryImpl;
 import com.jsar.client.http.HttpDataFormatter;
 import com.jsar.client.http.HttpInterface;
-import com.jsar.client.json.ProfileJson;
-import com.jsar.client.json.SessionJson;
-
 public class YapoolSignUnit {
 
   private Label messageLabel;
