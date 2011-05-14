@@ -1,11 +1,16 @@
 package com.jsar.client.unit;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -35,6 +40,8 @@ public class CreateYapoolUnit {
 
   private String currentRestaurantId;
 
+  private ListBox expectedOrderTimeList;
+
   public CreateYapoolUnit() {
     CreateYapoolUnit.createYapoolUnit = this;
 
@@ -45,7 +52,16 @@ public class CreateYapoolUnit {
     final TextBox descriptionField = new TextBox();
 
     final Label expectedOrderTimeLabel = new Label("Expected Order Time");
-    final TextBox expectedOrderTimeField = new TextBox();
+    final Label textIn = new Label("in ");
+    final Label hours = new Label(" hours");
+    final HorizontalPanel orderTimePanel = new HorizontalPanel();
+    expectedOrderTimeList = new ListBox();
+    for (int i = 1; i < 13; i++) {
+      expectedOrderTimeList.addItem(String.valueOf(i));
+    }
+    orderTimePanel.add(textIn);
+    orderTimePanel.add(expectedOrderTimeList);
+    orderTimePanel.add(hours);
 
     final Label pickUpPlaceLabel = new Label("Pick Up Place");
     final TextBox pickUpPlaceField = new TextBox();
@@ -68,7 +84,7 @@ public class CreateYapoolUnit {
     verticalPannel.add(descriptionLabel);
     verticalPannel.add(descriptionField);
     verticalPannel.add(expectedOrderTimeLabel);
-    verticalPannel.add(expectedOrderTimeField);
+    verticalPannel.add(orderTimePanel);
     verticalPannel.add(pickUpPlaceLabel);
     verticalPannel.add(pickUpPlaceField);
     verticalPannel.add(createButton);
@@ -99,6 +115,13 @@ public class CreateYapoolUnit {
 	  return;
 	}
 	yapoolJson.setPickUpPlace(pickUpPlaceField.getText());
+
+	String hoursString = expectedOrderTimeList.getValue(expectedOrderTimeList.getSelectedIndex());
+
+	GregorianCalendar gc = new GregorianCalendar();
+	gc.add(GregorianCalendar.HOUR, Integer.valueOf(hoursString));
+	Date expectedOrderTime = gc.getTime();
+	yapoolJson.setExpectedOrderDate(expectedOrderTime.toString());
 
 	createButton.setEnabled(false);
 	createButton.setText("Sending...");
