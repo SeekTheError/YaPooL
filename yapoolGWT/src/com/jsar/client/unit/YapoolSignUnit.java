@@ -17,6 +17,8 @@ import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.EntryImpl;
 import com.jsar.client.http.HttpDataFormatter;
 import com.jsar.client.http.HttpInterface;
+import com.jsar.client.json.ProfileJson;
+import com.jsar.client.json.SessionJson;
 
 public class YapoolSignUnit {
 
@@ -90,6 +92,7 @@ public class YapoolSignUnit {
       String data = HttpDataFormatter.buildQueryString(entries);
 
       HttpInterface.doPost(queryUrl, data, new SignRequestCallback());
+	    
     } else {
       HttpInterface.doDelete(queryUrl, new SignRequestCallback());
     }
@@ -101,7 +104,8 @@ public class YapoolSignUnit {
     public void onResponseReceived(Request request, Response response) {
       if (yapoolGWT.getSignState() == false) {
 	if (SignRequestCallback.responseIsOk(response)) {
-	  yapoolGWT.reloadSession();
+	  yapoolGWT.reloadSession();	  
+  
 	} else if (!SignRequestCallback.responseIsOk(response)) {
 	  // TODO format this error message
 	  messageLabel.setVisible(true);
@@ -118,6 +122,7 @@ public class YapoolSignUnit {
     signLabel.setText("Sign In");
     RootPanel.get("signLoginFieldContainer").setVisible(true);
     RootPanel.get("signPasswordFieldContainer").setVisible(true);
+    
   }
 
   public void signIn() {

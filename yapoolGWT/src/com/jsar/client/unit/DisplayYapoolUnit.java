@@ -32,6 +32,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	private String currentYapoolId;
 	private Button joinButton;
 	private Button leaveButton;
+	private TextBox messageInput;
 
 	public void displayYapool(String yapoolId) {
 		NavigationUnit.navigationUnit.hideAll();
@@ -43,6 +44,23 @@ public class DisplayYapoolUnit extends AbstractUnit {
 		postListTable.setText(0, 1, "Message");
 		HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\""
 				+ yapoolId + "\"", new DisplayYapoolRequestCallback());
+		
+		
+		if(YapoolGWT.currentProfile != null){
+			if(YapoolGWT.currentProfile.getCurrentYapool().equals("")){
+				joinButton.setVisible(true);
+				leaveButton.setVisible(false);
+				messageInput.setVisible(false);
+			}else if(YapoolGWT.currentProfile.getCurrentYapool().equals(currentYapoolId)){
+				joinButton.setVisible(false);
+				leaveButton.setVisible(true);
+				messageInput.setVisible(true);
+			}else{
+				joinButton.setVisible(false);
+				leaveButton.setVisible(false);
+				messageInput.setVisible(false);
+			}
+		}
 	}
 
 	public DisplayYapoolUnit() {
@@ -51,7 +69,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 		postListTable = new FlexTable();
 		joinButton = new Button("Join");
 		leaveButton = new Button("Leave");
-		final TextBox messageInput = new TextBox();
+		messageInput = new TextBox();
 		
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.add(yapoolNameLabel);
@@ -59,7 +77,6 @@ public class DisplayYapoolUnit extends AbstractUnit {
 		verticalPanel.add(messageInput);
 		verticalPanel.add(joinButton);
 		verticalPanel.add(leaveButton);
-		leaveButton.setVisible(false);
 		
 		RootPanel.get("displayYapoolContainer").add(verticalPanel);
 
@@ -92,10 +109,60 @@ public class DisplayYapoolUnit extends AbstractUnit {
 				// TODO Auto-generated method stub
 				//joinButton.setVisible(false);
 				
-				HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new CurrentSessionRequestCallback());
-			}
-		});
+				HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new AbstractRequestCallback() {
+					@Override
+					public void onResponseReceived(Request request, Response response) {
+						//System.out.println("Current Profile: \n" + response.getText());
+						ProfileJson profile = new ProfileJson(response.getText());
+						if(profile.getCurrentYapool().equals("")){
+							//System.out.println("No Current Yapool");
+							joinButton.setVisible(false);
+							profile.setCurrentYapool(currentYapoolId);
+							HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback(){
+								@Override
+								public void onResponseReceived(Request request, Response response) {
+									System.out.println(response.toString());
+									System.out.println("Joined Successfully");
+								}							
+							}); //http doPostJson Ends
+							messageInput.setVisible(true);
+							leaveButton.setVisible(true);
+						} //if ends					
+					}
+				}); //http doGet ends
+			} // On Click Ends
+		}); // ClickHandler Ends
 
+		leaveButton.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				// TODO Auto-generated method stub
+				//joinButton.setVisible(false);
+				
+				HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new AbstractRequestCallback() {
+					@Override
+					public void onResponseReceived(Request request, Response response) {
+						//System.out.println("Current Profile: \n" + response.getText());
+						ProfileJson profile = new ProfileJson(response.getText());
+						if(profile.getCurrentYapool().equals(currentYapoolId)){
+							//System.out.println("No Current Yapool");
+							leaveButton.setVisible(false);
+							profile.setCurrentYapool("");
+							HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback(){
+								@Override
+								public void onResponseReceived(Request request, Response response) {
+									System.out.println(response.toString());
+									System.out.println("Left Successfully");
+								}							
+							}); //http doPostJson Ends
+							messageInput.setVisible(false);
+							joinButton.setVisible(true);
+						} //if ends					
+					}
+				}); //http doGet ends
+			} // On Click Ends
+		}); // ClickHandler Ends
+		
 		this.SetVisible(false);
 	}
 
@@ -129,46 +196,6 @@ public class DisplayYapoolUnit extends AbstractUnit {
 			int rowCounts = postListTable.getRowCount();
 			postListTable.setText(rowCounts, 0, tempMessage.getUser());
 			postListTable.setText(rowCounts, 1, tempMessage.getMessage());
-		}
-	}
-	
-	public class CurrentSessionRequestCallback extends AbstractRequestCallback {
-		@Override
-		public void onResponseReceived(Request request, Response response) {
-			System.out.println("Current Profile: \n" + response.getText());
-			ProfileJson profile = new ProfileJson(response.getText());
-			if(profile.getCurrentYapool().equals("")){
-				System.out.println("No Current Yapool");
-				joinButton.setVisible(false);
-				profile.setCurrentYapool(currentYapoolId);
-				leaveButton.setVisible(true);
-				HttpInterface.doPostJson("/yapooldb/", profile, new ProfileRequestCallback());
-			}
-			
-			
-			//int size = yapools.size();
-			//for (int i = 0; i < size; i++) {
-			//	JSONObject temp = yapools.get(i).isObject().get("value")
-			//			.isObject();
-			//	PostJson post = new PostJson(temp);
-			//	int rowCounts = postListTable.getRowCount();
-			//	postListTable.setText(rowCounts, 0, post.getUser());
-			//	postListTable.setText(rowCounts, 1, post.getMessage());
-			//	System.out.println(post.getId());
-			//}
-		}
-	}
-	
-	public class ProfileRequestCallback extends AbstractRequestCallback {
-
-		@Override
-		public void onResponseReceived(Request request, Response response) {
-			System.out.println(response.toString());
-			System.out.println("added Successfully");
-
-			//int rowCounts = postListTable.getRowCount();
-			//postListTable.setText(rowCounts, 0, tempMessage.getUser());
-			//postListTable.setText(rowCounts, 1, tempMessage.getMessage());
 		}
 	}
 
