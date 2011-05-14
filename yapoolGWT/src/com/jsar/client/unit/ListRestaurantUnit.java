@@ -35,12 +35,9 @@ public class ListRestaurantUnit extends AbstractUnit {
     VerticalPanel verticalPanel = new VerticalPanel();
     verticalPanel.add(RestaurantListTable);
     RootPanel.get("listRestaurantContainer").add(verticalPanel);
-
- 
-
     this.SetVisible(false);
     
-    HttpInterface.doGet("/yapooldb/_design/restaurant/_view/restaurant", new ListRestaurantRequestCallback());
+    
   }
   
   public void loadList(){
