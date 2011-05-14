@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.RestaurantJson;
+import com.jsar.client.util.MessageDisplayer;
 
 /**
  * this unit display a Pop Up that allow user to register
@@ -32,16 +33,23 @@ public class CreateRestaurantUnit {
   /* CreateRestaurantContainer */
   public static String url = "/yapooldb/";
 
+  private FlexTable createRestaurantTable; // form table
+  private TextBox nameField = new TextBox();
+  private int indexStartingTypesOfFood;
+  // in the createRestaurantTable;
+  // which row index at which the delete button clicked?
+  private ArrayList typesOfFoodTextBoxes;
+  private ListBox telephoneNumber_first;
+  private TextBox telephoneNumber_middle;
+  private TextBox telephoneNumber_last;
+  private TextBox addressField;
+  
   private Label messageLabel; // for informing some errors
   private Button createButton;
   private Button addTypeOfFoodButton;
-  private FlexTable createRestaurantTable; // form table
+  
   private PopupPanel popUpPannel;
-  private int indexStartingTypesOfFood;
-  // in the createRestaurantTable;
-  private int indexDeletingTypeOfFood;
-  // which row index at which the delete button clicked?
-  private ArrayList typesOfFoodTextBoxes;
+
 
   public String getUnitName() {
     return "createRestaurantUnit";
@@ -55,8 +63,23 @@ public class CreateRestaurantUnit {
   }
 
   public void loadInitialForm() {
+    nameField.setText("");
+    for(int i=1;i<typesOfFoodTextBoxes.size();++i)
+    {
+      createRestaurantTable.removeRow(indexStartingTypesOfFood+1);
+      typesOfFoodTextBoxes.remove(i);
+    }    
+    ((TextBox)typesOfFoodTextBoxes.get(0)).setText("");
     createButton.setText("Create");
     createButton.setEnabled(true);
+    
+    telephoneNumber_first.
+      setItemSelected(
+          telephoneNumber_first.getSelectedIndex(), false);
+    telephoneNumber_middle.setText("");
+    telephoneNumber_last.setText("");
+    addressField.setText("");
+    
     messageLabel.setText("");
     messageLabel.setVisible(false);
   }
@@ -78,7 +101,6 @@ public class CreateRestaurantUnit {
     createRestaurantTable = new FlexTable();
     verticalPannel.add(createRestaurantTable);
 
-    final TextBox nameField = new TextBox();
     nameField.setText("");
     nameField.setVisible(true);
     createRestaurantTable.setText(0, 0, "Name");
@@ -105,16 +127,16 @@ public class CreateRestaurantUnit {
     // 042, 02, 062 .. ? or allowing 4 digits in the last part.
 
     final HorizontalPanel telephoneNumber_panel = new HorizontalPanel();
-    final ListBox telephoneNumber_first = new ListBox();
+    telephoneNumber_first = new ListBox();
     telephoneNumber_first.addItem("041");
     telephoneNumber_first.addItem("042");
     telephoneNumber_first.addItem("043");
     telephoneNumber_first.setVisibleItemCount(1);
-    final TextBox telephoneNumber_middle = new TextBox();
+    telephoneNumber_middle = new TextBox();
     telephoneNumber_middle.setMaxLength(4);
     telephoneNumber_middle.setWidth("3em");
     telephoneNumber_middle.setText("0000");
-    final TextBox telephoneNumber_last = new TextBox();
+    telephoneNumber_last = new TextBox();
     telephoneNumber_last.setMaxLength(4);
     telephoneNumber_last.setWidth("3em");
     telephoneNumber_last.setText("0000");
@@ -126,7 +148,7 @@ public class CreateRestaurantUnit {
     createRestaurantTable.setText(2, 0, "Telephone Number");
     createRestaurantTable.setWidget(2, 1, telephoneNumber_panel);
 
-    final TextBox addressField = new TextBox();
+    addressField = new TextBox();
     // @ TODO address feasibility? check
     addressField.setText("");
     addressField.setVisible(true);
@@ -167,7 +189,6 @@ public class CreateRestaurantUnit {
         restaurant.setTelephoneNumber(telephoneNumber);
         ArrayList<String> typeOfFoodList = new ArrayList<String>();
         typeOfFoodList = getTypesOfFood(typesOfFoodTextBoxes);
-        typeOfFoodList.add(typeOfFoodField.getText());
         restaurant.setTypeOfFood(typeOfFoodList);
 
         messageLabel.setVisible(false);
@@ -185,12 +206,10 @@ public class CreateRestaurantUnit {
       // TODO deal with bugs when not in sign-in state & clicking the button
       System.out.println(response.getText());
       if (responseIsOk(response)) {
-        // TODO: clear the fields
-        messageLabel.setText("creation successful");
+        MessageDisplayer.DisplayMessage(
+            "Restaurant information Successfully Added.");
         ListRestaurantUnit.listRestaurantUnit.loadList();
         popUpPannel.hide();
-        // TODO display a message in the main page
-
       } else {
         // TODO: more exactly, check whether it is exist or not
         messageLabel
@@ -215,15 +234,17 @@ public class CreateRestaurantUnit {
       createRestaurantTable.insertRow(indexStartingTypesOfFood
           + typesOfFoodTextBoxes.size());
       HorizontalPanel typeOfFoodPanel = new HorizontalPanel();
-      TextBox newTypeOfFood = new TextBox();
+      final TextBox newTypeOfFood = new TextBox();
       newTypeOfFood.setText("");
       newTypeOfFood.setVisible(true);
       typeOfFoodPanel.add(newTypeOfFood);
       Button deleteButton = new Button("x");
-      deleteButton.addClickHandler(new DeleteTypeOfFoodButtonClickHandler() {
+      deleteButton.addClickHandler(new ClickHandler() {
         public void onClick(ClickEvent event) {
-          createRestaurantTable.removeRow(indexStartingTypesOfFood
-              + typesOfFoodTextBoxes.size());
+          int rowIndexTextBox=indexStartingTypesOfFood+
+            typesOfFoodTextBoxes.indexOf(newTypeOfFood);
+          createRestaurantTable.removeRow(rowIndexTextBox);
+          
           typesOfFoodTextBoxes.remove(newTypeOfFood);
         }
       });
