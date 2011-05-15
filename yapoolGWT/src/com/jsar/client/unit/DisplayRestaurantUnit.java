@@ -6,10 +6,12 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.jsar.client.YapoolGWT;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.RestaurantJson;
@@ -79,7 +81,11 @@ public class DisplayRestaurantUnit extends AbstractUnit {
 
       @Override
       public void onClick(ClickEvent event) {
-	CreateYapoolUnit.createYapoolUnit.createYapool(currentRestaurantId);
+    	  if(YapoolGWT.currentProfile.getCurrentYapool().equals(""))
+    		  CreateYapoolUnit.createYapoolUnit.createYapool(currentRestaurantId);
+    	  else{
+    		  Window.alert("You already have a joined YaPooL!");
+    	  }
 
       }
     });
