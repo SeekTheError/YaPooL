@@ -150,3 +150,10 @@ html,body {
 	}
 	
 	
+.gwt-PopupPanel{
+	background-color: white;
+	border: solid;
+	border-width: medium;
+	border-color: aqua;
+	}
+	

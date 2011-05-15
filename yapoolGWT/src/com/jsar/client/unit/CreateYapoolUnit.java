@@ -72,6 +72,7 @@ public class CreateYapoolUnit {
 		messageLabel = new Label();
 		messageLabel.setVisible(false);
 		popUpPanel = new PopupPanel();
+		System.out.println(popUpPanel.getElement().getClassName());
 		popUpPanel.setAutoHideEnabled(true);
 
 		VerticalPanel verticalPannel = new VerticalPanel();
