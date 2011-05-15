@@ -51,18 +51,37 @@ table {
 
 .content {
 	padding-right: 20px;
-	padding-left: 20px;
 	padding-top: 10px;
-	font-size: 14pt;
 	height: 100%;
 }
 
 .navigation_left {
-	width: 200px;
+	width: 240px;
 	float: left;
 	border: thin;
 	border-color: black;
-	border-width: 3px;
+	border-width: 1px;
+	border-style: solid;
+}
+
+.navigationHeader{
+	padding-left: 15px;
+	padding-right:20px
+}
+
+
+.navigationLabel {
+	float: left;
+	font-size: 15pt;
+	padding: 20px;
+	width: 200px;
+}
+
+.navigationLabel:hover {
+	float: left;
+	font-size: 15pt;
+	width: 200px;
+	background-color: orange;
 }
 
 .content_right {
@@ -80,11 +99,11 @@ table {
 	height: 25px;
 }
 
-.footer_content{
- 	background-color: #777777;
+.footer_content {
+	background-color: #777777;
 	margin-right: 25px;
-	margin-left:40px;
-	padding-right:40px;
+	margin-left: 40px;
+	padding-right: 40px;
 	height: 100%;
 	text-align: right;
 }

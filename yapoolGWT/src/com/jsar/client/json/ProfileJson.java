@@ -66,7 +66,10 @@ public class ProfileJson extends AbstractJson {
 	}
 
 	public String getCurrentYapool() {
+	        if(jsonObject.containsKey(CURRENT_YAPOOL))
 		return jsonObject.get(CURRENT_YAPOOL).isString().stringValue();
+	        else
+	          return "";
 	}
 
 	public void setAge(String age) {
