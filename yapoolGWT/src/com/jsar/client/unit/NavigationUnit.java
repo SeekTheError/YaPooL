@@ -74,8 +74,8 @@ public class NavigationUnit {
 			public void onClick(ClickEvent event) {
 				System.out.println("viewProfile Ŭ��");
 				hideAll();
-				ViewMyProfileUnit.viewMyProfileUnit.viewProfile("hyahn");
-				ViewMyProfileUnit.viewMyProfileUnit.SetVisible(true);
+				ProfileUnit.viewMyProfileUnit.viewProfile("hyahn");
+				ProfileUnit.viewMyProfileUnit.SetVisible(true);
 			}
 		});
 		myPagePanel.add(displayMyProfilePopUp);

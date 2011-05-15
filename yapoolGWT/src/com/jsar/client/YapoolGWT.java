@@ -17,7 +17,7 @@ import com.jsar.client.unit.ListYapoolUnit;
 import com.jsar.client.unit.NavigationUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
-import com.jsar.client.unit.ViewMyProfileUnit;
+import com.jsar.client.unit.ProfileUnit;
 
 ;
 /**
