@@ -88,17 +88,18 @@ public class YapoolJson extends AbstractJson {
 		return jsonObject.get("owner").isString().stringValue();
 	}
 
-	public void setMembers(ArrayList<String> members) {
+	public void setMembers(JSONArray members) {
 		JSONArray jsonArray = new JSONArray();
 		for (int i = 0; i < members.size(); ++i) {
-			jsonArray.set(i, new JSONString((String) members.get(i)));
+			jsonArray.set(i, new JSONString(members.get(i).isString().stringValue()));
 		}
 		jsonObject.put(MEMBERS, jsonArray);
 	}
 
 	public void addMember(String member) {
-		jsonObject.put(MEMBERS,
-				getMembers().set(getMembers().size(), new JSONString(member)));
+		JSONArray jsonArray = getMembers();
+		jsonArray.set(jsonArray.size(), new JSONString(member));
+		jsonObject.put(MEMBERS, jsonArray);
 	}
 
 	public JSONArray getMembers() {
