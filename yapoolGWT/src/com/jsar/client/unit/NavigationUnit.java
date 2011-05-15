@@ -89,7 +89,7 @@ public class NavigationUnit {
 		DisplayYapoolUnit.displayYapoolUnit.SetVisible(false);
 		ListRestaurantUnit.listRestaurantUnit.SetVisible(false);
 		DisplayRestaurantUnit.displayRestaurantUnit.SetVisible(false);
-		ViewMyProfileUnit.viewMyProfileUnit.SetVisible(false);
+		//ViewMyProfileUnit.viewMyProfileUnit.SetVisible(false);
 	}
 
 }
