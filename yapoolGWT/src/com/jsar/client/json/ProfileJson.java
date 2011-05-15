@@ -43,6 +43,7 @@ public class ProfileJson extends AbstractJson {
 		setAddress("");
 		setTelephone("");
 		setIntro("");
+		jsonObject.put("owner",new JSONString(YapoolGWT.currentSession.getName()));
 		jsonObject.put(PASSED_YAPOOLS, new JSONArray());
 		jsonObject.put(INTERESTS, new JSONArray());
 		jsonObject.put(FRIENDS, new JSONArray());

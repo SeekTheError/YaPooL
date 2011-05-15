@@ -21,7 +21,7 @@ import com.jsar.client.http.HttpInterface;
 /**
  * 
  * @author rem
- *
+ * 
  */
 public class YapoolSignUnit {
 
@@ -33,6 +33,7 @@ public class YapoolSignUnit {
   private YapoolGWT yapoolGWT;
 
   private SignButtonClickHandler signButtonClickHandler;
+  private Label myYapoolLabel;
 
   public YapoolSignUnit(YapoolGWT yapoolGWT) {
     this.yapoolGWT = yapoolGWT;
@@ -44,8 +45,9 @@ public class YapoolSignUnit {
     signButton = new Button("");
     signLabel = new Label("");
     signLabel.setVisible(true);
- 
-
+    myYapoolLabel = new Label("My YaPooL!");
+    myYapoolLabel.setVisible(false);
+    RootPanel.get("signMyYapool").add(myYapoolLabel);
     RootPanel.get("signLabelContainer").add(signLabel);
     RootPanel.get("signLoginFieldContainer").add(loginField);
     RootPanel.get("signPasswordFieldContainer").add(passwordField);
@@ -72,10 +74,17 @@ public class YapoolSignUnit {
       }
     });
 
+    myYapoolLabel.addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(ClickEvent event) {
+	DisplayYapoolUnit.displayYapoolUnit.displayYapool(YapoolGWT.currentProfile.getCurrentYapool());
+
+      }
+    });
   }
 
   class SignButtonClickHandler implements ClickHandler {
-    
 
     @Override
     public void onClick(ClickEvent event) {
@@ -83,7 +92,9 @@ public class YapoolSignUnit {
 
     }
   }
+
   private static final String queryUrl = "/_session";
+
   public void logIn() {
     messageLabel.setVisible(false);
     if (yapoolGWT.getSignState() == false) {
@@ -95,7 +106,7 @@ public class YapoolSignUnit {
       String data = HttpDataFormatter.buildQueryString(entries);
 
       HttpInterface.doPost(queryUrl, data, new SignRequestCallback());
-	    
+
     } else {
       HttpInterface.doDelete(queryUrl, new SignRequestCallback());
     }
@@ -107,8 +118,8 @@ public class YapoolSignUnit {
     public void onResponseReceived(Request request, Response response) {
       if (yapoolGWT.getSignState() == false) {
 	if (SignRequestCallback.responseIsOk(response)) {
-	  yapoolGWT.reloadSession();	  
-  
+	  yapoolGWT.reloadSession();
+
 	} else if (!SignRequestCallback.responseIsOk(response)) {
 	  // TODO format this error message
 	  messageLabel.setVisible(true);
@@ -125,16 +136,22 @@ public class YapoolSignUnit {
     signLabel.setText("Sign In");
     RootPanel.get("signLoginFieldContainer").setVisible(true);
     RootPanel.get("signPasswordFieldContainer").setVisible(true);
-    
+    myYapoolLabel.setVisible(false);
+
   }
 
   public void signIn() {
-
     loginField.setText("");
     signButton.setText("sign out");
     signLabel.setText(yapoolGWT.getCurrentSession().getName());
     RootPanel.get("signLoginFieldContainer").setVisible(false);
     RootPanel.get("signPasswordFieldContainer").setVisible(false);
+  }
+
+  public void displayCurrentYapoolButton() {
+    if (!YapoolGWT.currentProfile.getCurrentYapool().equals("")) {
+      myYapoolLabel.setVisible(true);
+    }
   }
 
 }

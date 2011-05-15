@@ -54,7 +54,17 @@ table {
 	padding-right: 20px;
 	padding-top: 10px;
 	height: 100%;
+	
+	
 }
+
+
+.content_right {
+	width: 800px;
+	font-size: 12pt;
+	float: right;
+}
+
 
 .navigation_left {
 	width: 240px;
@@ -88,12 +98,8 @@ table {
 	cursor: pointer;
 }
 
-.content_right {
-	width: 800px;
-	right: 20px;
-	float: right;
-	font-size: 12pt;
-}
+.
+
 
 .push {
 	height: 25px;
