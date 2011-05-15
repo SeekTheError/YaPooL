@@ -27,7 +27,7 @@ import com.jsar.client.json.PostJson;
 import com.jsar.client.unit.ListRestaurantUnit.ListRestaurantRequestCallback;
 
 
-public class ViewMyProfileUnit{
+public class ViewMyProfileUnit extends AbstractUnit{
 
 	/*
 	 * 	private static final String CURRENT_YAPOOL = "currentYapool";
@@ -66,12 +66,11 @@ public class ViewMyProfileUnit{
 	  private TextBox interestsInput;
 	  private TextBox friendsInput;
 	  
-	  private PopupPanel popUpPannel;
 	  
 	  private FlexTable profileTable;
 	  
 	  public ViewMyProfileUnit()
-	  {
+	  {	
 		    viewMyProfileUnit = this;
 		    nameLabel = new Label("Name : ");
 		    ageLabel = new Label("Age : ");
@@ -97,19 +96,10 @@ public class ViewMyProfileUnit{
 		    
 		    VerticalPanel verticalPanel = new VerticalPanel();
 		    verticalPanel.add(profileTable);
-		  	popUpPannel.add(verticalPanel);
 		    RootPanel.get("displayYapoolContainer").add(verticalPanel);
 		    this.SetVisible(false);
 	  }
-	  
-	  public void SetVisible(boolean visibility) {
-		    if (!popUpPannel.isShowing()) {
-		    viewProfile("hyahn");
-		      System.out.println("dfdfdfdfdfs");
-		      popUpPannel.show();
-		    }
-		  }
-	  
+
 	  
 	  public void viewProfile(String userId) {
 		  
@@ -149,5 +139,12 @@ public class ViewMyProfileUnit{
 			}
 		      }
 		    });
-		  }
+		 }
+
+
+	  @Override
+	  public String getContainerId() {
+	    // TODO Auto-generated method stub
+	    return null;
+	  }
 }

@@ -110,7 +110,7 @@ public class YapoolGWT implements EntryPoint {
     createRestaurantUnit = new CreateRestaurantUnit();
     navigationUnit = new NavigationUnit();
     
-    new ViewMyProfileUnit();
+    //new ViewMyProfileUnit();
   }
 
   public SessionJson getCurrentSession() {

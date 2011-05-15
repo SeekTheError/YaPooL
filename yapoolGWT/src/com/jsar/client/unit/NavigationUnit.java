@@ -36,12 +36,14 @@ public class NavigationUnit {
     yapoolPanel.add(listYapoolLabel);
     RootPanel.get("yapoolNavigationContainer").add(yapoolPanel);
     Label yapoolNavigatonLabel = new Label("YaPooLs");
+    yapoolNavigatonLabel.getElement().setClassName("navigationLabel");
     RootPanel.get("yapoolNavigationLabel").add(yapoolNavigatonLabel);
 
 		// Label createYapool=new Label("Create a YaPooL");
 		VerticalPanel restaurantPanel = new VerticalPanel();
 
-		Label listRestaurantLabel = new Label("list of Restaurants");
+		Label listRestaurantLabel = new Label("Browse Restaurants");
+		listRestaurantLabel.getElement().setClassName("navigationLabel");
 		listRestaurantLabel.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				hideAll();
@@ -53,6 +55,7 @@ public class NavigationUnit {
 		restaurantPanel.add(listRestaurantLabel);
 
 		Label displayCreateRestaurantPopUp = new Label("Create a restaurant!");
+		displayCreateRestaurantPopUp.getElement().setClassName("navigationLabel");
 		displayCreateRestaurantPopUp.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				CreateRestaurantUnit.createRestaurantUnit.setVisible(true);
@@ -70,7 +73,7 @@ public class NavigationUnit {
 		Label displayMyProfilePopUp = new Label("view my profiles");
 		displayMyProfilePopUp.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				System.out.println("viewProfile Å¬¸¯");
+				System.out.println("viewProfile Å¬ï¿½ï¿½");
 				hideAll();
 				ViewMyProfileUnit.viewMyProfileUnit.viewProfile("hyahn");
 				ViewMyProfileUnit.viewMyProfileUnit.SetVisible(true);
