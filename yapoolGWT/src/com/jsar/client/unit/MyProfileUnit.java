@@ -2,6 +2,8 @@ package com.jsar.client.unit;
 
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.json.ProfileJson;
 
@@ -11,6 +13,15 @@ public class MyProfileUnit extends AbstractUnit {
   
   public MyProfileUnit(){
     myProfileUnit=this;
+    
+    
+    
+    
+    
+    VerticalPanel verticalPanel=new VerticalPanel();
+    RootPanel.get("myProfileContainer").add(verticalPanel);
+    
+    
   }
   
   public void displayProfile(String owner) {

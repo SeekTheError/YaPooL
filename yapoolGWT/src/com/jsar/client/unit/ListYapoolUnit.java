@@ -26,6 +26,7 @@ public class ListYapoolUnit extends AbstractUnit {
     yapoolNameLabel = new Label("List of yapool");
     
     yapoolListTable = new FlexTable();
+    yapoolListTable.getElement().setClassName("listYapoolTable");
     yapoolListTable.getElement().setClassName("yapoolTable");
     VerticalPanel verticalPanel = new VerticalPanel();
     verticalPanel.add(yapoolNameLabel);
