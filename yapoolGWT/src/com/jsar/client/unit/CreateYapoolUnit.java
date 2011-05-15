@@ -161,21 +161,20 @@ public class CreateYapoolUnit {
 		@Override
 		public void onResponseReceived(Request request, Response response) {
 			if (responseIsOk(response)) {
-				popUpPanel.hide();
-				createButton.setEnabled(true);
-				createButton.setText("Create");
-				MessageDisplayer
-						.DisplayMessage("Yapool Successfully Created, you can access it from your YaPooL! page");
-				
+
 				YapoolGWT.currentProfile.setCurrentYapool(id);
 				HttpInterface.doPostJson("/yapooldb/", YapoolGWT.currentProfile, new AbstractRequestCallback() {
 	    			@Override
 	    			public void onResponseReceived(Request request, Response response) {
 	    			  System.out.println(response.toString());
 	    			  System.out.println("Created Successfully");
+	  					popUpPanel.hide();
+	  					createButton.setEnabled(true);
+	  					createButton.setText("Create");
+	    			  MessageDisplayer.DisplayMessage("Yapool Successfully Created, you can access it from your YaPooL! page");
 	    			}
 	    		}); // http doPostJson Ends
-				
+						
 			} else {
 
 			}
