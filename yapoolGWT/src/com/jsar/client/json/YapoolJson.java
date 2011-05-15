@@ -59,6 +59,13 @@ public class YapoolJson extends AbstractJson {
     this.jsonObject.put(PICK_UP_PLACE,new JSONString(pickUpPlace));
   }
   
+  public void  setOwner(String owner){
+	    jsonObject.put("owner",new JSONString(owner));
+  }
+  public String getOwner(String owner){
+	  return jsonObject.get("owner").isString().stringValue();
+  }
+  
   
   
   //TODO : add the members

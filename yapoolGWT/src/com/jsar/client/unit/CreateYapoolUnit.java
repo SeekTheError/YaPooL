@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
+import com.jsar.client.YapoolGWT;
 import com.jsar.client.handler.VisibilityClickHandler;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
@@ -31,143 +32,149 @@ import com.jsar.client.util.MessageDisplayer;
  */
 
 public class CreateYapoolUnit {
-  public static CreateYapoolUnit createYapoolUnit;
+	public static CreateYapoolUnit createYapoolUnit;
 
-  // public static final String containerIopUpPaneld = "CreateYaPoolUDiv";
+	// public static final String containerIopUpPaneld = "CreateYaPoolUDiv";
 
-  private Label messageLabel;
-  private Button createButton;
-  private PopupPanel popUpPanel;
+	private Label messageLabel;
+	private Button createButton;
+	private PopupPanel popUpPanel;
 
-  private String currentRestaurantId;
+	private String currentRestaurantId;
 
-  private ListBox expectedOrderTimeList;
+	private ListBox expectedOrderTimeList;
 
-  public CreateYapoolUnit() {
-    CreateYapoolUnit.createYapoolUnit = this;
+	public CreateYapoolUnit() {
+		CreateYapoolUnit.createYapoolUnit = this;
 
-    final Label nameLabel = new Label("name");
-    final TextBox nameField = new TextBox();
+		final Label nameLabel = new Label("name");
+		final TextBox nameField = new TextBox();
 
-    final Label descriptionLabel = new Label("description");
-    final TextBox descriptionField = new TextBox();
+		final Label descriptionLabel = new Label("description");
+		final TextBox descriptionField = new TextBox();
 
-    final Label expectedOrderTimeLabel = new Label("Expected Order Time");
-    final Label textIn = new Label("in ");
-    final Label hours = new Label(" hours");
-    final HorizontalPanel orderTimePanel = new HorizontalPanel();
-    expectedOrderTimeList = new ListBox();
-    for (int i = 1; i < 12; i++) {
-      expectedOrderTimeList.addItem(String.valueOf(i));
-    }
-    orderTimePanel.add(textIn);
-    orderTimePanel.add(expectedOrderTimeList);
-    orderTimePanel.add(hours);
+		final Label expectedOrderTimeLabel = new Label("Expected Order Time");
+		final Label textIn = new Label("in ");
+		final Label hours = new Label(" hours");
+		final HorizontalPanel orderTimePanel = new HorizontalPanel();
+		expectedOrderTimeList = new ListBox();
+		for (int i = 1; i < 12; i++) {
+			expectedOrderTimeList.addItem(String.valueOf(i));
+		}
+		orderTimePanel.add(textIn);
+		orderTimePanel.add(expectedOrderTimeList);
+		orderTimePanel.add(hours);
 
-    final Label pickUpPlaceLabel = new Label("Pick Up Place");
-    final TextBox pickUpPlaceField = new TextBox();
+		final Label pickUpPlaceLabel = new Label("Pick Up Place");
+		final TextBox pickUpPlaceField = new TextBox();
 
-    messageLabel = new Label();
-    messageLabel.setVisible(false);
-    popUpPanel = new PopupPanel();
-    popUpPanel.setAutoHideEnabled(true);
+		messageLabel = new Label();
+		messageLabel.setVisible(false);
+		popUpPanel = new PopupPanel();
+		popUpPanel.setAutoHideEnabled(true);
 
-    VerticalPanel verticalPannel = new VerticalPanel();
-    Label registerLabel = new Label("Create YaPooL", false);
-    registerLabel.setHorizontalAlignment(null);
-    verticalPannel.add(registerLabel);
-    registerLabel.addClickHandler(new VisibilityClickHandler("YaPooLCreationTable"));
+		VerticalPanel verticalPannel = new VerticalPanel();
+		Label registerLabel = new Label("Create YaPooL", false);
+		registerLabel.setHorizontalAlignment(null);
+		verticalPannel.add(registerLabel);
+		registerLabel.addClickHandler(new VisibilityClickHandler(
+				"YaPooLCreationTable"));
 
-    createButton = new Button("Create");
+		createButton = new Button("Create");
 
-    verticalPannel.add(nameLabel);
-    verticalPannel.add(nameField);
-    verticalPannel.add(descriptionLabel);
-    verticalPannel.add(descriptionField);
-    verticalPannel.add(expectedOrderTimeLabel);
-    verticalPannel.add(orderTimePanel);
-    verticalPannel.add(pickUpPlaceLabel);
-    verticalPannel.add(pickUpPlaceField);
-    verticalPannel.add(createButton);
-    verticalPannel.add(messageLabel);
+		verticalPannel.add(nameLabel);
+		verticalPannel.add(nameField);
+		verticalPannel.add(descriptionLabel);
+		verticalPannel.add(descriptionField);
+		verticalPannel.add(expectedOrderTimeLabel);
+		verticalPannel.add(orderTimePanel);
+		verticalPannel.add(pickUpPlaceLabel);
+		verticalPannel.add(pickUpPlaceField);
+		verticalPannel.add(createButton);
+		verticalPannel.add(messageLabel);
 
-    verticalPannel.add(messageLabel);
-    popUpPanel.add(verticalPannel);
-    popUpPanel.setPopupPosition(450, 200);
+		verticalPannel.add(messageLabel);
+		popUpPanel.add(verticalPannel);
+		popUpPanel.setPopupPosition(450, 200);
 
-    createButton.addClickHandler(new ClickHandler() {
-      public void onClick(ClickEvent event) {
-	messageLabel.setVisible(true);
-	if (!CheckLoggedIn.userIsloggedIn()) {
-	  return;
+		createButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				messageLabel.setVisible(true);
+				if (!CheckLoggedIn.userIsloggedIn()) {
+					return;
+				}
+				YapoolJson yapoolJson = new YapoolJson();
+				yapoolJson.setDescription(descriptionField.getText());
+				yapoolJson.setRestaurant(currentRestaurantId);
+				String yapoolName = nameField.getText();
+				if (yapoolName.equals("")) {
+					displayErrorMessage("you must enter a YaPooL! name");
+					return;
+				}
+				yapoolJson.setName(yapoolName);
+				String pickUpPlace = pickUpPlaceField.getText();
+				if (pickUpPlace.equals("")) {
+					displayErrorMessage("you must enter a pick up place");
+					return;
+				}
+				yapoolJson.setPickUpPlace(pickUpPlaceField.getText());
+
+				String hoursString = expectedOrderTimeList
+						.getValue(expectedOrderTimeList.getSelectedIndex());
+
+				Date expectedOrderTime = new Date();
+				int hours = expectedOrderTime.getHours();
+				int delta = Integer.valueOf(hoursString);
+				if (hours + delta > 23) {
+					CalendarUtil.addDaysToDate(expectedOrderTime, 1);
+					expectedOrderTime.setHours(expectedOrderTime.getHours()
+							- 23 + delta);
+				} else {
+					expectedOrderTime.setHours(hours + delta);
+				}
+				yapoolJson.setExpectedOrderDate(expectedOrderTime.toString());
+
+				yapoolJson.setOwner(YapoolGWT.currentSession.getName());
+				createButton.setEnabled(false);
+				createButton.setText("Sending...");
+				HttpInterface.doPostJson("/yapooldb/", yapoolJson,
+						new CreateYapoolCallbackCallback());
+			}
+
+			private void displayErrorMessage(String string) {
+				messageLabel.setText(string);
+				messageLabel.setVisible(true);
+
+			}
+		});
+
 	}
-	YapoolJson yapoolJson = new YapoolJson();
-	yapoolJson.setDescription(descriptionField.getText());
-	yapoolJson.setRestaurant(currentRestaurantId);
-	String yapoolName = nameField.getText();
-	if (yapoolName.equals("")) {
-	  displayErrorMessage("you must enter a YaPooL! name");
-	  return;
+
+	class CreateYapoolCallbackCallback extends AbstractRequestCallback {
+
+		@Override
+		public void onResponseReceived(Request request, Response response) {
+			if (responseIsOk(response)) {
+				popUpPanel.hide();
+				createButton.setEnabled(true);
+				createButton.setText("Create");
+				MessageDisplayer
+						.DisplayMessage("Yapool Successfully Created, you can access it from your YaPooL! page");
+			} else {
+
+			}
+
+		}
 	}
-	yapoolJson.setName(yapoolName);
-	String pickUpPlace = pickUpPlaceField.getText();
-	if (pickUpPlace.equals("")) {
-	  displayErrorMessage("you must enter a pick up place");
-	  return;
+
+	public void setVisible(boolean visibility) {
+		RootPanel.get("displayCreateYaPoolContainer").setVisible(visibility);
 	}
-	yapoolJson.setPickUpPlace(pickUpPlaceField.getText());
 
-	String hoursString = expectedOrderTimeList.getValue(expectedOrderTimeList.getSelectedIndex());
+	public void createYapool(String currentRestaurantId) {
+		this.currentRestaurantId = currentRestaurantId;
+		popUpPanel.show();
 
-	Date expectedOrderTime = new Date();
-	int hours = expectedOrderTime.getHours();
-	int delta = Integer.valueOf(hoursString);
-	if (hours + delta > 23) {
-	  CalendarUtil.addDaysToDate(expectedOrderTime, 1);
-	  expectedOrderTime.setHours(expectedOrderTime.getHours() - 23 + delta);
-	} else {
-	  expectedOrderTime.setHours(hours + delta);
 	}
-	yapoolJson.setExpectedOrderDate(expectedOrderTime.toString());
-
-	createButton.setEnabled(false);
-	createButton.setText("Sending...");
-	HttpInterface.doPostJson("/yapooldb/", yapoolJson, new CreateYapoolCallbackCallback());
-      }
-
-      private void displayErrorMessage(String string) {
-	messageLabel.setText(string);
-	messageLabel.setVisible(true);
-
-      }
-    });
-
-  }
-
-  class CreateYapoolCallbackCallback extends AbstractRequestCallback {
-
-    @Override
-    public void onResponseReceived(Request request, Response response) {
-      if (responseIsOk(response)) {
-	popUpPanel.hide();
-	createButton.setEnabled(true);
-	createButton.setText("Create");
-	MessageDisplayer.DisplayMessage("Yapool Successfully Created, you can access it from your YaPooL! page");
-      } else {
-
-      }
-
-    }
-  }
-
-  public void setVisible(boolean visibility) {
-    RootPanel.get("displayCreateYaPoolContainer").setVisible(visibility);
-  }
-
-  public void createYapool(String currentRestaurantId) {
-    this.currentRestaurantId = currentRestaurantId;
-    popUpPanel.show();
-
-  }
 
 }
