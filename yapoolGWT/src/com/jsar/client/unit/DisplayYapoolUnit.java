@@ -23,6 +23,7 @@ import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.ProfileJson;
 import com.jsar.client.json.ViewJson;
 import com.jsar.client.json.PostJson;
+import com.jsar.client.json.YapoolJson;
 
 public class DisplayYapoolUnit extends AbstractUnit {
 
@@ -114,14 +115,32 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	    if (profile.getCurrentYapool().equals("")) {
 	      // System.out.println("No Current Yapool");
 	      joinButton.setVisible(false);
+	      
+	      //Update Profile - CurrentYapool
 	      profile.setCurrentYapool(currentYapoolId);
 	      HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback() {
-		@Override
-		public void onResponseReceived(Request request, Response response) {
-		  System.out.println(response.toString());
-		  System.out.println("Joined Successfully");
-		}
+			@Override
+			public void onResponseReceived(Request request, Response response) {
+			  System.out.println(response.toString());
+			  System.out.println("Current Yapool is set Successfully");
+			}
 	      }); // http doPostJson Ends
+	      
+	      HttpInterface.doGet("/yapooldb/" + currentYapoolId, new AbstractRequestCallback() {
+	    	  @Override
+	    	  public void onResponseReceived(Request request, Response response) {
+	    		  YapoolJson yapool = new YapoolJson(response.getText());
+	    		  yapool.addMember(YapoolGWT.currentProfile.getId());
+	    		  HttpInterface.doPostJson("/yapooldb/", yapool, new AbstractRequestCallback() {
+	    				@Override	
+	    				public void onResponseReceived(Request request, Response response) {
+	    				  System.out.println(response.toString());
+	    				  System.out.println("Joined Successfully");
+	    				}
+	    		  }); // http doPostJson Ends
+	    	  }
+	      }); // doGet - Current Yapool Ends
+	      
 	      messageInput.setVisible(true);
 	      leaveButton.setVisible(true);
 	    } // if ends

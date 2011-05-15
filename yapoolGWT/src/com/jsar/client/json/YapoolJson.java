@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 
 public class YapoolJson extends AbstractJson {
 
@@ -19,10 +21,15 @@ public class YapoolJson extends AbstractJson {
 	public YapoolJson() {
 		this.jsonObject = new JSONObject();
 		this.jsonObject.put("type", new JSONString("yapool"));
+		this.jsonObject.put(MEMBERS, new JSONArray());
 	}
 
 	public YapoolJson(JSONObject temp) {
 		this.jsonObject = temp;
+	}
+
+	public YapoolJson(String jsonString) {
+		this.jsonObject = JSONParser.parseStrict(jsonString).isObject();
 	}
 
 	public void setName(String name) {
@@ -88,15 +95,16 @@ public class YapoolJson extends AbstractJson {
 		}
 		jsonObject.put(MEMBERS, jsonArray);
 	}
-	
-	public void addMembers(String member) {
-		jsonObject.put(
-				MEMBERS,
-				getMembers().set(getMembers().size(),
-						new JSONString(member)));
+
+	public void addMember(String member) {
+		jsonObject.put(MEMBERS,
+				getMembers().set(getMembers().size(), new JSONString(member)));
 	}
 
 	public JSONArray getMembers() {
+		JSONValue object = jsonObject.get(MEMBERS);
+		if (object == null)
+			jsonObject.put(MEMBERS, new JSONArray());
 		return jsonObject.get(MEMBERS).isArray();
 	}
 
