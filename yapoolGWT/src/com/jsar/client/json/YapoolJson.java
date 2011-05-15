@@ -84,7 +84,7 @@ public class YapoolJson extends AbstractJson {
 		jsonObject.put("owner", new JSONString(owner));
 	}
 
-	public String getOwner(String owner) {
+	public String getOwner() {
 		return jsonObject.get("owner").isString().stringValue();
 	}
 
