@@ -7,7 +7,11 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.user.client.Window;
 import com.jsar.client.YapoolGWT;
 import com.jsar.client.json.AbstractJson;
-
+/**
+ * 
+ * @author rem
+ *
+ */
 public class HttpInterface {
 
   @SuppressWarnings("unused")

@@ -1,2 +1,0 @@
-serviceClass: com.jsar.client.GreetingService
-path: 6A891DAC02EFC671FE39C8060E5C68A4.gwt.rpc

@@ -59,6 +59,8 @@ public class YapoolJson extends AbstractJson {
     this.jsonObject.put(PICK_UP_PLACE,new JSONString(pickUpPlace));
   }
   
+  
+  
   //TODO : add the members
 
   

@@ -2,6 +2,11 @@ package com.jsar.client.json;
 
 import com.google.gwt.json.client.JSONString;
 
+/**
+ * 
+ * @author rem
+ *
+ */
 public class MessageJson extends AbstractJson {
 
   public static final String MESSAGE = "message";

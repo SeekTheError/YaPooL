@@ -4,8 +4,11 @@ import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.RequestCallback;
 import com.google.gwt.http.client.RequestTimeoutException;
 import com.google.gwt.http.client.Response;
-
-//TODO implement a way to read
+/**
+ * 
+ * @author rem
+ *
+ */
 public abstract class AbstractRequestCallback implements RequestCallback {
 
   private static final int STATUS_CODE_OK = 200;

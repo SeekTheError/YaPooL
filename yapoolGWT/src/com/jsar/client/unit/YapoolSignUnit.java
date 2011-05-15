@@ -17,6 +17,12 @@ import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.EntryImpl;
 import com.jsar.client.http.HttpDataFormatter;
 import com.jsar.client.http.HttpInterface;
+
+/**
+ * 
+ * @author rem
+ *
+ */
 public class YapoolSignUnit {
 
   private Label messageLabel;

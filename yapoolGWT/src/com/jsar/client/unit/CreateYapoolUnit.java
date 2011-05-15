@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.jsar.client.handler.VisibilityClickHandler;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
@@ -56,7 +57,7 @@ public class CreateYapoolUnit {
     final Label hours = new Label(" hours");
     final HorizontalPanel orderTimePanel = new HorizontalPanel();
     expectedOrderTimeList = new ListBox();
-    for (int i = 1; i < 13; i++) {
+    for (int i = 1; i < 12; i++) {
       expectedOrderTimeList.addItem(String.valueOf(i));
     }
     orderTimePanel.add(textIn);
@@ -118,9 +119,15 @@ public class CreateYapoolUnit {
 
 	String hoursString = expectedOrderTimeList.getValue(expectedOrderTimeList.getSelectedIndex());
 
-	GregorianCalendar gc = new GregorianCalendar();
-	gc.add(GregorianCalendar.HOUR, Integer.valueOf(hoursString));
-	Date expectedOrderTime = gc.getTime();
+	Date expectedOrderTime = new Date();
+	int hours = expectedOrderTime.getHours();
+	int delta = Integer.valueOf(hoursString);
+	if (hours + delta > 23) {
+	  CalendarUtil.addDaysToDate(expectedOrderTime, 1);
+	  expectedOrderTime.setHours(expectedOrderTime.getHours() - 23 + delta);
+	} else {
+	  expectedOrderTime.setHours(hours + delta);
+	}
 	yapoolJson.setExpectedOrderDate(expectedOrderTime.toString());
 
 	createButton.setEnabled(false);
