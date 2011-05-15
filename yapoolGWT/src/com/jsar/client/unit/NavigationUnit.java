@@ -67,7 +67,7 @@ public class NavigationUnit {
     Label restaurantNavigationLabel = new Label("Restaurant");
     RootPanel.get("restaurantNavigationLabel").add(restaurantNavigationLabel);
 
-    Label myPageNavigationLabel = new Label("EditProfile");
+    Label myPageNavigationLabel = new Label("Edit My Profile");
     myPageNavigationLabel.getElement().setClassName("navigationLabel");
     myPageNavigationLabel.addClickHandler(new ClickHandler() {
 
@@ -82,9 +82,11 @@ public class NavigationUnit {
 
       }
     });
-    Label myPageLabel = new Label("My Page");
-    RootPanel.get("myPageNavigationLabel").add(myPageLabel);
+    Label usersLabel = new Label("Users");
+    RootPanel.get("myPageNavigationLabel").add(usersLabel);
     Label myProfileLabel = new Label("My Profile");
+    myProfileLabel.getElement().setClassName("navigationLabel");
+    RootPanel.get("myProfileNavigetion").add(myProfileLabel);
     myProfileLabel.addClickHandler(new ClickHandler() {
 
       @Override
