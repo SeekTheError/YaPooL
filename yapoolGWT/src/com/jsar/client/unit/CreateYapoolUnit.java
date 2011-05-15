@@ -135,6 +135,7 @@ public class CreateYapoolUnit {
 				yapoolJson.setExpectedOrderDate(expectedOrderTime.toString());
 
 				yapoolJson.setOwner(YapoolGWT.currentSession.getName());
+				yapoolJson.setState("open");
 				createButton.setEnabled(false);
 				createButton.setText("Sending...");
 				HttpInterface.doPostJson("/yapooldb/", yapoolJson,
