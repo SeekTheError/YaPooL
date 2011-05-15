@@ -51,6 +51,9 @@ public class DisplayYapoolUnit extends AbstractUnit {
     joinButton = new Button("Join");
     leaveButton = new Button("Leave");
     messageInput = new TextBox();
+    joinButton.setVisible(false);
+	leaveButton.setVisible(false);
+	messageInput.setVisible(false);
     
 
     VerticalPanel verticalPanel = new VerticalPanel();
@@ -134,15 +137,17 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	    HttpInterface.doGet("/yapooldb/" + currentYapoolId, new AbstractRequestCallback() {
 	      @Override
 	      public void onResponseReceived(Request request, Response response) {
-		YapoolJson yapool = new YapoolJson(response.getText());
-		yapool.addMember(YapoolGWT.currentProfile.getId());
-		HttpInterface.doPostJson("/yapooldb/", yapool, new AbstractRequestCallback() {
-		  @Override
-		  public void onResponseReceived(Request request, Response response) {
-		    System.out.println(response.toString());
-		    System.out.println("Joined Successfully");
-		  }
-		});
+			YapoolJson yapool = new YapoolJson(response.getText());
+			yapool.addMember(YapoolGWT.currentProfile.getId());
+			
+			HttpInterface.doPostJson("/yapooldb/", yapool, new AbstractRequestCallback() {
+			  @Override
+			  public void onResponseReceived(Request request, Response response) {
+			    System.out.println(response.toString());
+			    System.out.println("Joined Successfully");
+			  }
+			});
+			
 	      }
 	    });
 	    messageInput.setVisible(true);
