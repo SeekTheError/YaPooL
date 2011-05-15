@@ -3,6 +3,7 @@ package com.jsar.client;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
+import com.google.gwt.json.client.JSONParser;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.ProfileJson;
@@ -65,9 +66,23 @@ public class YapoolGWT implements EntryPoint {
 	  HttpInterface.doGet("/yapooldb/" + currentSession.getName() + "/", new AbstractRequestCallback() {
 	    @Override
 	    public void onResponseReceived(Request request2, Response response2) {
-	      System.out.println("Current Session Name?: " + currentSession.getName());
-	      System.out.println("Current Profile?: \n" + response2.getText());
-	      currentProfile = new ProfileJson(response2.getText());
+	    	//String a = response2.getText().toString();
+	    	//System.out.println("_------a: " + a);
+	    	
+	    	if(JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")){
+	    		currentProfile = new ProfileJson();
+	    		HttpInterface.doPostJson("/yapooldb/", currentProfile, new AbstractRequestCallback() {
+	    			@Override
+	    			public void onResponseReceived(Request request, Response response) {
+	    			  System.out.println(response.toString());
+	    			  System.out.println("Created Successfully");
+	    			}
+	    		      }); // http doPostJson Ends
+	    	}else{
+		      System.out.println("Current Session Name?: " + currentSession.getName());
+		      System.out.println("Current Profile?: \n" + response2.getText());
+		      currentProfile = new ProfileJson(response2.getText());
+	    	}
 	    }
 	  });
 	} else {
@@ -139,9 +154,22 @@ public class YapoolGWT implements EntryPoint {
 	  HttpInterface.doGet("/yapooldb/" + currentSession.getName() + "/", new AbstractRequestCallback() {
 	    @Override
 	    public void onResponseReceived(Request request2, Response response2) {
-	      System.out.println("Current Session Name?: " + currentSession.getName());
-	      System.out.println("Current Profile?: \n" + response2.getText());
-	      currentProfile = new ProfileJson(response2.getText());
+	    	//String a = response2.getText().toString();
+	    	//System.out.println("_------a: " + a);
+	    	if(JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")){
+	    		currentProfile = new ProfileJson();
+	    		HttpInterface.doPostJson("/yapooldb/", currentProfile, new AbstractRequestCallback() {
+	    			@Override
+	    			public void onResponseReceived(Request request, Response response) {
+	    			  System.out.println(response.toString());
+	    			  System.out.println("Created Successfully");
+	    			}
+	    		      }); // http doPostJson Ends
+	    	}else{
+		      System.out.println("Current Session Name?: " + currentSession.getName());
+		      System.out.println("Current Profile?: \n" + response2.getText());
+		      currentProfile = new ProfileJson(response2.getText());
+	    	}
 	    }
 	  });
 
