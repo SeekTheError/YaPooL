@@ -6,6 +6,7 @@ import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
+import com.google.gwt.json.client.JSONValue;
 import com.jsar.client.YapoolGWT;
 
 public class ProfileJson extends AbstractJson {
@@ -23,14 +24,11 @@ public class ProfileJson extends AbstractJson {
 	private static final String PASSED_YAPOOLS = "passedYapools";
 	private static final String INTERESTS = "interests";
 	private static final String FRIENDS = "friends";
-
 	
     public ProfileJson(JSONObject temp) {
 		    this.jsonObject=temp;
 		  }
 
-	  
-	  
 	public ProfileJson(String jsonString) {
 		this.jsonObject = JSONParser.parseStrict(jsonString).isObject();
 	}
@@ -52,16 +50,19 @@ public class ProfileJson extends AbstractJson {
 	}
 
 	public JSONArray getPassedYapools() {
+		JSONValue object = jsonObject.get(PASSED_YAPOOLS);
+		if (object == null)
+			jsonObject.put(PASSED_YAPOOLS, new JSONArray());
 		return jsonObject.get(PASSED_YAPOOLS).isArray();
 	}
-
+	
 	public void archieveYapool() {
 		String currentYapool = getCurrentYapool();
 		setCurrentYapool("");
-		jsonObject.put(
-				PASSED_YAPOOLS,
-				getPassedYapools().set(getPassedYapools().size(),
-						new JSONString(currentYapool)));
+		
+		JSONArray jsonArray = getPassedYapools();
+		jsonArray.set(jsonArray.size(), new JSONString(currentYapool));
+		jsonObject.put(PASSED_YAPOOLS, jsonArray);
 	}
 
 	public void leaveYapool() {
