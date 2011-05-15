@@ -9,6 +9,7 @@ import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONArray;
 import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -39,11 +40,9 @@ public class DisplayYapoolUnit extends AbstractUnit {
     this.SetVisible(true);
 
     currentYapoolId = yapoolId;
-    postListTable.removeAllRows();
-    postListTable.setText(0, 0, "User Name");
-    postListTable.setText(0, 1, "Message");
+
     HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + yapoolId + "\"",
-	new DisplayYapoolRequestCallback());
+	new DisplayYapoolPostRequestCallback());
 
     if (YapoolGWT.currentProfile != null) {
       if (YapoolGWT.currentProfile.getCurrentYapool().equals("")) {
@@ -140,7 +139,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName() + "/", new AbstractRequestCallback() {
 	  @Override
 	  public void onResponseReceived(Request request, Response response) {
-	    //System.out.println("Current Profile: \n" + response.getText());
+	    // System.out.println("Current Profile: \n" + response.getText());
 	    ProfileJson profile = new ProfileJson(response.getText());
 	    if (profile.getCurrentYapool().equals(currentYapoolId)) {
 	      // System.out.println("No Current Yapool");
@@ -164,31 +163,46 @@ public class DisplayYapoolUnit extends AbstractUnit {
     this.SetVisible(false);
   }
 
-  public class DisplayYapoolRequestCallback extends AbstractRequestCallback {
-
+  static int lastPostCount=-1;
+  public class DisplayYapoolPostRequestCallback extends AbstractRequestCallback {
     @Override
     public void onResponseReceived(Request request, Response response) {
-      //System.out.println("ListYaPool\n" + response.getText());
       JSONArray yapools = new ViewJson(response.getText()).getRows();
-
       int size = yapools.size();
-      for (int i = 0; i < size; i++) {
-	JSONObject temp = yapools.get(i).isObject().get("value").isObject();
-	PostJson post = new PostJson(temp);
-	int rowCounts = postListTable.getRowCount();
-	postListTable.setText(rowCounts, 0, post.getUser());
-	postListTable.setText(rowCounts, 1, post.getMessage());
-	//System.out.println(post.getId());
+      if (size>lastPostCount) {
+	postListTable.removeAllRows();
+	postListTable.setText(0, 0, "User Name");
+	postListTable.setText(0, 1, "Message");
+	for (int i = 0; i < size; i++) {
+	  JSONObject temp = yapools.get(i).isObject().get("value").isObject();
+	  PostJson post = new PostJson(temp);
+	  int rowCounts = postListTable.getRowCount();
+	  postListTable.setText(rowCounts, 0, post.getUser());
+	  postListTable.setText(rowCounts, 1, post.getMessage());
+	}
       }
+      Timer t = new UpdatePostTimer();
+      t.schedule(800);
     }
+  }
+
+  public class UpdatePostTimer extends Timer {
+
+    @Override
+    public void run() {
+      HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + currentYapoolId + "\"",
+	  new DisplayYapoolPostRequestCallback());
+
+    }
+
   }
 
   public class MessageRequestCallback extends AbstractRequestCallback {
 
     @Override
     public void onResponseReceived(Request request, Response response) {
-      //System.out.println(response.toString());
-      //System.out.println("added Successfully");
+      // System.out.println(response.toString());
+      // System.out.println("added Successfully");
 
       int rowCounts = postListTable.getRowCount();
       postListTable.setText(rowCounts, 0, tempMessage.getUser());

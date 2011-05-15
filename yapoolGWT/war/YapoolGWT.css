@@ -31,7 +31,6 @@ table {
 
 .top_header {
 	width: 1200px;
-	height: 250px;
 	min-width: 500px;
 	z-index: 10;
 	height: 60px;
@@ -47,6 +46,7 @@ table {
 .top_header_right {
 	float: right;
 	min-width: 200px;
+	height: 60px;
 }
 
 .content {

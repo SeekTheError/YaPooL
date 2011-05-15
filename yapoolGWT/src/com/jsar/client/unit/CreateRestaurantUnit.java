@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jsar.client.http.AbstractRequestCallback;
@@ -38,7 +37,7 @@ public class CreateRestaurantUnit {
   private int indexStartingTypesOfFood;
   // in the createRestaurantTable;
   // which row index at which the delete button clicked?
-  private ArrayList typesOfFoodTextBoxes;
+  private ArrayList<TextBox> typesOfFoodTextBoxes;
   private ListBox telephoneNumber_first;
   private TextBox telephoneNumber_middle;
   private TextBox telephoneNumber_last;
@@ -110,7 +109,7 @@ public class CreateRestaurantUnit {
     typeOfFoodPanel.add(new Label("Type Of Food"));
     addTypeOfFoodButton = new Button("+");
     addTypeOfFoodButton.addClickHandler(new AddTypeOfFoodButtonClickHandler());
-    typesOfFoodTextBoxes = new ArrayList();
+    typesOfFoodTextBoxes = new ArrayList<TextBox>();
     typeOfFoodPanel.add(addTypeOfFoodButton);
     indexStartingTypesOfFood = 1;
     final TextBox typeOfFoodField = new TextBox();
