@@ -24,6 +24,13 @@ public class ProfileJson extends AbstractJson {
 	private static final String INTERESTS = "interests";
 	private static final String FRIENDS = "friends";
 
+	
+    public ProfileJson(JSONObject temp) {
+		    this.jsonObject=temp;
+		  }
+
+	  
+	  
 	public ProfileJson(String jsonString) {
 		this.jsonObject = JSONParser.parseStrict(jsonString).isObject();
 	}
