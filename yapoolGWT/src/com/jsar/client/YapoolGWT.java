@@ -17,6 +17,7 @@ import com.jsar.client.unit.ListYapoolUnit;
 import com.jsar.client.unit.NavigationUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
+import com.jsar.client.unit.ViewMyProfileUnit;
 
 ;
 /**
@@ -66,10 +67,7 @@ public class YapoolGWT implements EntryPoint {
 	  HttpInterface.doGet("/yapooldb/" + currentSession.getName() + "/", new AbstractRequestCallback() {
 	    @Override
 	    public void onResponseReceived(Request request2, Response response2) {
-	    	//String a = response2.getText().toString();
-	    	//System.out.println("_------a: " + a);
-	    	
-	    	if(JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")){
+	    		if(JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")){
 	    		currentProfile = new ProfileJson();
 	    		HttpInterface.doPostJson("/yapooldb/", currentProfile, new AbstractRequestCallback() {
 	    			@Override
@@ -111,7 +109,8 @@ public class YapoolGWT implements EntryPoint {
     listRestaurantUnit = new ListRestaurantUnit();
     createRestaurantUnit = new CreateRestaurantUnit();
     navigationUnit = new NavigationUnit();
-
+    
+    new ViewMyProfileUnit();
   }
 
   public SessionJson getCurrentSession() {
