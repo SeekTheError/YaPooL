@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.jsar.client.util.CheckLoggedIn;
 
 /**
  * 
@@ -38,58 +39,73 @@ public class NavigationUnit {
     Label yapoolNavigatonLabel = new Label("YaPooLs");
     RootPanel.get("yapoolNavigationLabel").add(yapoolNavigatonLabel);
 
-		// Label createYapool=new Label("Create a YaPooL");
-		VerticalPanel restaurantPanel = new VerticalPanel();
+    // Label createYapool=new Label("Create a YaPooL");
+    VerticalPanel restaurantPanel = new VerticalPanel();
 
-		Label listRestaurantLabel = new Label("Browse Restaurants");
-		listRestaurantLabel.getElement().setClassName("navigationLabel");
-		listRestaurantLabel.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				hideAll();
-				ListRestaurantUnit.listRestaurantUnit.loadList();
-				ListRestaurantUnit.listRestaurantUnit.SetVisible(true);
+    Label listRestaurantLabel = new Label("Browse Restaurants");
+    listRestaurantLabel.getElement().setClassName("navigationLabel");
+    listRestaurantLabel.addClickHandler(new ClickHandler() {
+      public void onClick(ClickEvent event) {
+	hideAll();
+	ListRestaurantUnit.listRestaurantUnit.loadList();
+	ListRestaurantUnit.listRestaurantUnit.SetVisible(true);
 
-			}
-		});
-		restaurantPanel.add(listRestaurantLabel);
+      }
+    });
+    restaurantPanel.add(listRestaurantLabel);
 
-		Label displayCreateRestaurantPopUp = new Label("Create a restaurant!");
-		displayCreateRestaurantPopUp.getElement().setClassName("navigationLabel");
-		displayCreateRestaurantPopUp.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				CreateRestaurantUnit.createRestaurantUnit.setVisible(true);
-			}
-		});
-		restaurantPanel.add(displayCreateRestaurantPopUp);
+    Label displayCreateRestaurantPopUp = new Label("Create a restaurant!");
+    displayCreateRestaurantPopUp.getElement().setClassName("navigationLabel");
+    displayCreateRestaurantPopUp.addClickHandler(new ClickHandler() {
+      public void onClick(ClickEvent event) {
+	CreateRestaurantUnit.createRestaurantUnit.setVisible(true);
+      }
+    });
+    restaurantPanel.add(displayCreateRestaurantPopUp);
 
-		RootPanel.get("restaurantNavigationContainer").add(restaurantPanel);
-		Label restaurantNavigationLabel = new Label("Restaurant");
-		RootPanel.get("restaurantNavigationLabel").add(
-				restaurantNavigationLabel);
+    RootPanel.get("restaurantNavigationContainer").add(restaurantPanel);
+    Label restaurantNavigationLabel = new Label("Restaurant");
+    RootPanel.get("restaurantNavigationLabel").add(restaurantNavigationLabel);
 
-		VerticalPanel myPagePanel = new VerticalPanel();
-		Label myPageNavigationLabel = new Label("My Page");
-		Label displayMyProfilePopUp = new Label("view my profiles");
-		displayMyProfilePopUp.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				System.out.println("viewProfile Ŭ��");
-				hideAll();
-				ProfileUnit.viewMyProfileUnit.viewProfile("hyahn");
-				ProfileUnit.viewMyProfileUnit.SetVisible(true);
-			}
-		});
-		myPagePanel.add(displayMyProfilePopUp);
-		RootPanel.get("myPageNavigationLabel").add(myPageNavigationLabel);
-		RootPanel.get("myPageNavigationContainer").add(myPagePanel);
+    Label myPageNavigationLabel = new Label("EditProfile");
+    myPageNavigationLabel.getElement().setClassName("navigationLabel");
+    myPageNavigationLabel.addClickHandler(new ClickHandler() {
 
+      @Override
+      public void onClick(ClickEvent event) {
+	if (!CheckLoggedIn.userIsloggedIn()) {
+	  return;
 	}
+	NavigationUnit.navigationUnit.hideAll();
+	EditProfileUnit.editProfileUnit.SetVisible(true);
+	EditProfileUnit.editProfileUnit.loadProfile();
 
-	public void hideAll() {
-		ListYapoolUnit.listYapoolUnit.SetVisible(false);
-		DisplayYapoolUnit.displayYapoolUnit.SetVisible(false);
-		ListRestaurantUnit.listRestaurantUnit.SetVisible(false);
-		DisplayRestaurantUnit.displayRestaurantUnit.SetVisible(false);
-		//ViewMyProfileUnit.viewMyProfileUnit.SetVisible(false);
-	}
+      }
+    });
+    Label myPageLabel = new Label("My Page");
+    RootPanel.get("myPageNavigationLabel").add(myPageLabel);
+    Label myProfileLabel = new Label("My Profile");
+    myProfileLabel.addClickHandler(new ClickHandler() {
+
+      @Override
+      public void onClick(ClickEvent event) {
+	NavigationUnit.navigationUnit.hideAll();
+	MyProfileUnit.myProfileUnit.SetVisible(true);
+
+      }
+    });
+
+    RootPanel.get("editProfileNavigation").add(myPageNavigationLabel);
+
+  }
+
+  public void hideAll() {
+    ListYapoolUnit.listYapoolUnit.SetVisible(false);
+    DisplayYapoolUnit.displayYapoolUnit.SetVisible(false);
+    ListRestaurantUnit.listRestaurantUnit.SetVisible(false);
+    DisplayRestaurantUnit.displayRestaurantUnit.SetVisible(false);
+    EditProfileUnit.editProfileUnit.SetVisible(false);
+    MyProfileUnit.myProfileUnit.SetVisible(false);
+  }
 
 }

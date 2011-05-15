@@ -14,10 +14,11 @@ import com.jsar.client.unit.DisplayRestaurantUnit;
 import com.jsar.client.unit.DisplayYapoolUnit;
 import com.jsar.client.unit.ListRestaurantUnit;
 import com.jsar.client.unit.ListYapoolUnit;
+import com.jsar.client.unit.MyProfileUnit;
 import com.jsar.client.unit.NavigationUnit;
 import com.jsar.client.unit.YapoolRegisterUnit;
 import com.jsar.client.unit.YapoolSignUnit;
-import com.jsar.client.unit.ProfileUnit;
+import com.jsar.client.unit.EditProfileUnit;
 
 ;
 /**
@@ -36,14 +37,7 @@ public class YapoolGWT implements EntryPoint {
   YapoolRegisterUnit registerUnit;
   YapoolSignUnit signUnit;
   private boolean signState = false;
-
   private boolean componentLoaded = false;
-
-  private ListYapoolUnit listYapoolUnit;
-  private ListRestaurantUnit listRestaurantUnit;
-  private DisplayYapoolUnit displayYapoolUnit;
-  private NavigationUnit navigationUnit;
-  private CreateRestaurantUnit createRestaurantUnit;
 
   /**
    * This is the entry point method.
@@ -67,20 +61,20 @@ public class YapoolGWT implements EntryPoint {
 	  HttpInterface.doGet("/yapooldb/" + currentSession.getName() + "/", new AbstractRequestCallback() {
 	    @Override
 	    public void onResponseReceived(Request request2, Response response2) {
-	    		if(JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")){
-	    		currentProfile = new ProfileJson();
-	    		HttpInterface.doPostJson("/yapooldb/", currentProfile, new AbstractRequestCallback() {
-	    			@Override
-	    			public void onResponseReceived(Request request, Response response) {
-	    			  System.out.println(response.toString());
-	    			  System.out.println("Created Successfully");
-	    			}
-	    		      }); // http doPostJson Ends
-	    	}else{
-		      System.out.println("Current Session Name?: " + currentSession.getName());
-		      System.out.println("Current Profile?: \n" + response2.getText());
-		      currentProfile = new ProfileJson(response2.getText());
-	    	}
+	      if (JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")) {
+		currentProfile = new ProfileJson();
+		HttpInterface.doPostJson("/yapooldb/", currentProfile, new AbstractRequestCallback() {
+		  @Override
+		  public void onResponseReceived(Request request, Response response) {
+		    System.out.println(response.toString());
+		    System.out.println("Created Successfully");
+		  }
+		}); // http doPostJson Ends
+	      } else {
+		System.out.println("Current Session Name?: " + currentSession.getName());
+		System.out.println("Current Profile?: \n" + response2.getText());
+		currentProfile = new ProfileJson(response2.getText());
+	      }
 	    }
 	  });
 	} else {
@@ -102,15 +96,15 @@ public class YapoolGWT implements EntryPoint {
   private void loadComponent() {
     registerUnit = new YapoolRegisterUnit();
     signUnit = new YapoolSignUnit(this);
-    listYapoolUnit = new ListYapoolUnit();
-    displayYapoolUnit = new DisplayYapoolUnit();
+    new ListYapoolUnit();
+    new DisplayYapoolUnit();
     new DisplayRestaurantUnit();
     new CreateYapoolUnit();
-    listRestaurantUnit = new ListRestaurantUnit();
-    createRestaurantUnit = new CreateRestaurantUnit();
-    navigationUnit = new NavigationUnit();
-    
-    //new ViewMyProfileUnit();
+    new ListRestaurantUnit();
+    new CreateRestaurantUnit();
+    new NavigationUnit();
+    new EditProfileUnit();
+    new MyProfileUnit();
   }
 
   public SessionJson getCurrentSession() {
@@ -153,22 +147,22 @@ public class YapoolGWT implements EntryPoint {
 	  HttpInterface.doGet("/yapooldb/" + currentSession.getName() + "/", new AbstractRequestCallback() {
 	    @Override
 	    public void onResponseReceived(Request request2, Response response2) {
-	    	//String a = response2.getText().toString();
-	    	//System.out.println("_------a: " + a);
-	    	if(JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")){
-	    		currentProfile = new ProfileJson();
-	    		HttpInterface.doPostJson("/yapooldb/", currentProfile, new AbstractRequestCallback() {
-	    			@Override
-	    			public void onResponseReceived(Request request, Response response) {
-	    			  System.out.println(response.toString());
-	    			  System.out.println("Created Successfully");
-	    			}
-	    		      }); // http doPostJson Ends
-	    	}else{
-		      System.out.println("Current Session Name?: " + currentSession.getName());
-		      System.out.println("Current Profile?: \n" + response2.getText());
-		      currentProfile = new ProfileJson(response2.getText());
-	    	}
+	      // String a = response2.getText().toString();
+	      // System.out.println("_------a: " + a);
+	      if (JSONParser.parseStrict(response2.getText()).isObject().containsKey("error")) {
+		currentProfile = new ProfileJson();
+		HttpInterface.doPostJson("/yapooldb/", currentProfile, new AbstractRequestCallback() {
+		  @Override
+		  public void onResponseReceived(Request request, Response response) {
+		    System.out.println(response.toString());
+		    System.out.println("Created Successfully");
+		  }
+		}); // http doPostJson Ends
+	      } else {
+		System.out.println("Current Session Name?: " + currentSession.getName());
+		System.out.println("Current Profile?: \n" + response2.getText());
+		currentProfile = new ProfileJson(response2.getText());
+	      }
 	    }
 	  });
 

@@ -42,7 +42,7 @@ public abstract class AbstractJson{
   public void  setOwner(String owner){
     jsonObject.put("owner",new JSONString(owner));
   }
-  public String getOwner(String owner){
+  public String getOwner(){
     return jsonObject.get("owner").isString().stringValue();
   }
 
