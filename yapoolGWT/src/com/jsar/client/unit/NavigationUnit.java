@@ -36,7 +36,6 @@ public class NavigationUnit {
     yapoolPanel.add(listYapoolLabel);
     RootPanel.get("yapoolNavigationContainer").add(yapoolPanel);
     Label yapoolNavigatonLabel = new Label("YaPooLs");
-    yapoolNavigatonLabel.getElement().setClassName("navigationLabel");
     RootPanel.get("yapoolNavigationLabel").add(yapoolNavigatonLabel);
 
 		// Label createYapool=new Label("Create a YaPooL");
