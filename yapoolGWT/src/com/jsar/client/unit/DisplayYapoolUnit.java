@@ -35,30 +35,37 @@ public class DisplayYapoolUnit extends AbstractUnit {
 
   public static DisplayYapoolUnit displayYapoolUnit;
   private Label yapoolNameLabel;
+  private Label postTableLabel;
   private FlexTable postListTable;
   private PostJson tempMessage = null;
   private String currentYapoolId;
   private Button joinButton;
   private Button leaveButton;
   private TextBox messageInput;
+  private FlexTable memberListTable;
+  private YapoolJson currentYapool;
 
   /**
    * constructor class
    */
   public DisplayYapoolUnit() {
     DisplayYapoolUnit.displayYapoolUnit = this;
-    yapoolNameLabel = new Label("Wall Postings");
+    yapoolNameLabel = new Label();
+    postTableLabel = new Label("Wall Postings");
     postListTable = new FlexTable();
     joinButton = new Button("Join");
     leaveButton = new Button("Leave");
     messageInput = new TextBox();
+    memberListTable = new FlexTable();
+    
     joinButton.setVisible(false);
 	leaveButton.setVisible(false);
 	messageInput.setVisible(false);
     
-
     VerticalPanel verticalPanel = new VerticalPanel();
     verticalPanel.add(yapoolNameLabel);
+    verticalPanel.add(memberListTable);
+    verticalPanel.add(postTableLabel);
     verticalPanel.add(postListTable);
     verticalPanel.add(messageInput);
     verticalPanel.add(joinButton);
@@ -76,6 +83,10 @@ public class DisplayYapoolUnit extends AbstractUnit {
     NavigationUnit.navigationUnit.hideAll();
     this.SetVisible(true);
     currentYapoolId = yapoolId;
+    
+    HttpInterface.doGet("/yapooldb/" + currentYapoolId,
+    		new LoadYapoolRequestCallback());
+
     HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + yapoolId + "\"",
 	new DisplayYapoolPostRequestCallback());
 
@@ -132,10 +143,12 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	    HttpInterface.doPostJson("/yapooldb/", profile, new AbstractRequestCallback() {
 	      @Override
 	      public void onResponseReceived(Request request, Response response) {
+	    	  
 	    	  System.out.println(response.toString());
 	    	  System.out.println("Current Yapool is set Successfully");
 	      }
 	    }); // http doPostJson Ends
+	    YapoolGWT.currentProfile = profile;
 	    
 	    // Update Yapool - Add this user to the Yapool
 	    HttpInterface.doGet("/yapooldb/" + currentYapoolId, new AbstractRequestCallback() {
@@ -183,6 +196,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	    	  System.out.println("Current Yapool is set to empty.");
 	      }
 	    });
+	    YapoolGWT.currentProfile = profile;
 	    
 	    // Update Yapool - Add this user to the Yapool
 	    HttpInterface.doGet("/yapooldb/" + currentYapoolId, new AbstractRequestCallback() {
@@ -222,23 +236,49 @@ public class DisplayYapoolUnit extends AbstractUnit {
   }
 
   static int lastPostCount = -1;
-
+  static int lastMemberCount = -1;
+  
+  public class LoadYapoolRequestCallback extends AbstractRequestCallback {
+  	@Override
+	public void onResponseReceived(Request request, Response response) {
+  		currentYapool = new YapoolJson(response.getText());
+  		yapoolNameLabel.setText(currentYapool.getName());
+  		
+  		JSONArray members = currentYapool.getMembers();
+		int size = members.size();
+		if(size != lastMemberCount){
+			lastMemberCount = size;
+			memberListTable.removeAllRows();
+			memberListTable.setText(0, 0, "Members:");
+			memberListTable.setText(0, 1, "*" + currentYapool.getOwner());
+			for (int i = 0; i < size; i++) {
+				  //JSONObject temp = members.get(i).isObject().get("value").isObject();
+				  //PostJson post = new PostJson(temp);
+				  int rowCounts = memberListTable.getRowCount();
+				  memberListTable.setText(rowCounts, 0, "");
+				  memberListTable.setText(rowCounts, 1, members.get(i).isString().stringValue());
+			}
+		}
+	}
+  }
+  
   public class DisplayYapoolPostRequestCallback extends AbstractRequestCallback {
     @Override
     public void onResponseReceived(Request request, Response response) {
       JSONArray yapools = new ViewJson(response.getText()).getRows();
       int size = yapools.size();
       if (size > lastPostCount) {
-	postListTable.removeAllRows();
-	postListTable.setText(0, 0, "User Name");
-	postListTable.setText(0, 1, "Message");
-	for (int i = 0; i < size; i++) {
-	  JSONObject temp = yapools.get(i).isObject().get("value").isObject();
-	  PostJson post = new PostJson(temp);
-	  int rowCounts = postListTable.getRowCount();
-	  postListTable.setText(rowCounts, 0, post.getUser());
-	  postListTable.setText(rowCounts, 1, post.getMessage());
-	}
+    	  lastPostCount = size;
+		postListTable.removeAllRows();
+		postListTable.setText(0, 0, "User Name");
+		postListTable.setText(0, 1, "Message");
+		for (int i = 0; i < size; i++) {
+		  JSONObject temp = yapools.get(i).isObject().get("value").isObject();
+		  PostJson post = new PostJson(temp);
+		  int rowCounts = postListTable.getRowCount();
+		  postListTable.setText(rowCounts, 0, post.getUser());
+		  postListTable.setText(rowCounts, 1, post.getMessage());
+		}
       }
       Timer t = new UpdatePostTimer();
       t.schedule(1000);
@@ -255,6 +295,9 @@ public class DisplayYapoolUnit extends AbstractUnit {
     public void run() {
       HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + currentYapoolId + "\"",
 	  new DisplayYapoolPostRequestCallback());
+      
+      HttpInterface.doGet("/yapooldb/" + currentYapoolId,
+      		new LoadYapoolRequestCallback());
     }
   }
 
