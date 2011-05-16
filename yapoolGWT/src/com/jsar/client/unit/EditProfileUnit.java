@@ -1,5 +1,7 @@
 package com.jsar.client.unit;
 
+import java.util.ArrayList;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
@@ -28,18 +30,22 @@ public class EditProfileUnit extends AbstractUnit {
   private Label telephone_numberLabel;
   private Label introductionLabel;
   private Label interestsLabel;
+  private Label idLabel;
+  
   private TextBox ageInput;
   private TextBox majorInput;
   private TextBox addressInput;
   private TextBox telephone_numberInput;
   private TextArea introductionInput;
-  private TextBox interestsInput;
+  private TextArea interestsInput;
 
   private ProfileJson currentProfile;
 
   public EditProfileUnit() {
     editProfileUnit = this;
     this.SetVisible(false);
+    
+    idLabel= new Label();
     ageLabel = new Label("Age : ");
     ageInput = new TextBox();
 
@@ -55,13 +61,14 @@ public class EditProfileUnit extends AbstractUnit {
     introductionLabel = new Label("Introduction : ");
     introductionInput = new TextArea();
     interestsLabel = new Label("Interests : ");
-    interestsInput = new TextBox();
+    interestsInput = new TextArea();
     // TODO fix this fix a proper interesting food list
 
     VerticalPanel verticalPanel = new VerticalPanel();
 
     // TODO Auto-generated method stub
-
+    verticalPanel.add(new Label("ID : "));
+    verticalPanel.add(idLabel);
     verticalPanel.add(ageLabel);
     verticalPanel.add(ageInput);
     verticalPanel.add(majorLabel);
@@ -74,6 +81,7 @@ public class EditProfileUnit extends AbstractUnit {
     verticalPanel.add(introductionInput);
     verticalPanel.add(interestsLabel);
     verticalPanel.add(interestsInput);
+    verticalPanel.add(new Label("* Insert interests splited by ','"));
 
     RootPanel.get("editProfileContainer").add(verticalPanel);
 
@@ -83,7 +91,8 @@ public class EditProfileUnit extends AbstractUnit {
   }
 
   public void loadProfile() {
-    HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName(), new LoadProfileCallback());
+    HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName(),
+        new LoadProfileCallback());
   }
 
   public class LoadProfileCallback extends AbstractRequestCallback {
@@ -92,20 +101,28 @@ public class EditProfileUnit extends AbstractUnit {
     public void onResponseReceived(Request request, Response response) {
       ProfileJson profile = new ProfileJson(response.getText());
       currentProfile = profile;
+      idLabel.setText(currentProfile.getId());
       ageInput.setText(profile.getAge());
-
       majorInput.setText(profile.getMajor());
-
       addressInput.setText(profile.getAddress());
-
       telephone_numberInput.setText(profile.getTelephone());
-
       introductionInput.setText(profile.getIntro());
 
-      // !!!!! TODO fix this fix a proper interesting food list
-      // interestsInput.setText(profile.getInterests());
-
-
+      JSONArray interests_jsonArray = profile.getInterests();
+      String interests=new String("");
+      String item=new String();
+      if(interests_jsonArray != null)
+      {
+        for (int j = 0; j < interests_jsonArray.size(); ++j) 
+        {
+          item=interests_jsonArray.get(j).isString().stringValue();
+          interests+=item.replaceAll("[ ]+", " "); 
+          if(j!=interests_jsonArray.size()-1){
+            interests+=", ";
+          }
+        }
+      }
+      interestsInput.setText(interests);
     }
   }
 
@@ -119,23 +136,28 @@ public class EditProfileUnit extends AbstractUnit {
       profileJson.setAddress(addressInput.getText());
       profileJson.setTelephone(telephone_numberInput.getText());
       profileJson.setIntro(introductionInput.getText());
-      JSONArray Interests = profileJson.getInterests();
-      int Interests_size = Interests.size();
-      for (int i = 0; i < Interests_size; i++) {
-	//passedYapoolsInput.setText(Interests.get(i).isString().stringValue().toString());
+
+      String interests_string=interestsInput.getText();
+      String[] interests_array=interests_string.split(",");
+      ArrayList<String> interests_arrayList= new ArrayList<String>();
+      for(int i=0; i<interests_array.length; ++i){
+        interests_arrayList.add(interests_array[i].trim());
       }
+      profileJson.setInterests(interests_arrayList);
+      
+      HttpInterface.doPostJson("/yapooldb/", profileJson,
+          new AbstractRequestCallback() {
 
-      HttpInterface.doPostJson("/yapooldb/", profileJson, new AbstractRequestCallback() {
+            @Override
+            public void onResponseReceived(Request request, Response response) {
+              if (responseIsOk(response)) {
+                MessageDisplayer.DisplayMessage("Profile Successfully Edited");
+              }
+              MyProfileUnit.myProfileUnit.displayProfile(currentProfile
+                  .getOwner());
 
-	@Override
-	public void onResponseReceived(Request request, Response response) {
-	  if (responseIsOk(response)) {
-	    MessageDisplayer.DisplayMessage("Profile Successfully Edited");
-	  }
-	  MyProfileUnit.myProfileUnit.displayProfile(currentProfile.getOwner());
-
-	}
-      });
+            }
+          });
     }
 
   }
