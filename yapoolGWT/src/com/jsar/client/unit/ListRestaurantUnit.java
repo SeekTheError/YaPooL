@@ -40,9 +40,9 @@ public class ListRestaurantUnit extends AbstractUnit {
   public void loadList(){
     RestaurantListTable.removeAllRows();
     RestaurantListTable.setText(0, 0, "Restaurant Name");
-    RestaurantListTable.setText(0, 1, "TELEPHONE_NUMBER");
-    RestaurantListTable.setText(0, 2, "ADDRESS");
-    RestaurantListTable.setText(0, 3, "TYPE_OF_FOOD");
+    RestaurantListTable.setText(0, 1, "Telephone #");
+    RestaurantListTable.setText(0, 2, "Address");
+    RestaurantListTable.setText(0, 3, "Food Tags");
     HttpInterface.doGet("/yapooldb/_design/restaurant/_view/restaurant", new ListRestaurantRequestCallback());
   }
 
