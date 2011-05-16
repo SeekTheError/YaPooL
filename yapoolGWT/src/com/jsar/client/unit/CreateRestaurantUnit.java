@@ -222,8 +222,10 @@ public class CreateRestaurantUnit {
 
   ArrayList<String> getTypesOfFood(ArrayList<TextBox> typesOfFoodTextBoxes) {
     ArrayList<String> typesOfFoodStrings = new ArrayList<String>();
-    for (int i = 0; i < typesOfFoodTextBoxes.size(); ++i)
-      typesOfFoodStrings.add(typesOfFoodTextBoxes.get(i).getText());
+    for (int i = 0; i < typesOfFoodTextBoxes.size(); ++i){
+    	if(!typesOfFoodTextBoxes.get(i).getText().equals(""))
+    		typesOfFoodStrings.add(typesOfFoodTextBoxes.get(i).getText());
+    }
     return typesOfFoodStrings;
   }
 

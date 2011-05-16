@@ -2,9 +2,14 @@ package com.jsar.client.unit;
 
 import java.util.ArrayList;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
+import com.google.gwt.json.client.JSONParser;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
@@ -14,7 +19,9 @@ import com.jsar.client.YapoolGWT;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.ProfileJson;
+import com.jsar.client.json.YapoolJson;
 import com.jsar.client.unit.EditProfileUnit.LoadProfileCallback;
+import com.jsar.client.unit.ListYapoolUnit.ListAllYapoolRequestCallback;
 import com.jsar.client.util.MessageDisplayer;
 
 public class MyProfileUnit extends AbstractUnit {
@@ -29,11 +36,12 @@ public class MyProfileUnit extends AbstractUnit {
   private ArrayList<Label> interests;
   private Label currentYaPooL;
   private ArrayList<Label> passedYaPooL;
-  private ArrayList<Label> friends;
+
 
   
   public MyProfileUnit(){
     myProfileUnit=this;
+    
     VerticalPanel profilePanel=new VerticalPanel();
     profileTable= new FlexTable();
     profilePanel.add(profileTable);
@@ -46,31 +54,39 @@ public class MyProfileUnit extends AbstractUnit {
     interests=new ArrayList<Label>();
     currentYaPooL=new Label();
     passedYaPooL=new ArrayList<Label>();
-    friends=new ArrayList<Label>();
-    
-    
+
     
     this.SetVisible(false);
            
   }
-  public void displayProfile(String owner) {
-    ///  
+  public void displayProfile(String userId) 
+  {
+    DisplayProfileCallBack profileReq=new DisplayProfileCallBack();
+    profileReq.userId=userId;
+    HttpInterface.doGet("/yapooldb/" + userId, profileReq);  
     
   }
   public void loadProfile() {
-    
-    HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName(), new DisplayProfileCallBack());
+    if(YapoolGWT.currentSession.getName()==null)
+    {
+      Window.alert("you need to be logged in to do this action");
+      return;
+    }
+    displayProfile(YapoolGWT.currentSession.getName());
   }
    
   public class DisplayProfileCallBack extends AbstractRequestCallback{
         
-    @Override
+    public String userId=new String();
     public void onResponseReceived(Request request, Response response) {
       /*
-      if (! responseIsOk(response)) {
-        MessageDisplayer.DisplayMessage(
-            "Profile information currently not available");
-      }*/
+      if(! responseIsOk(response)) {
+          Window.alert("The user does not exist");
+          return;
+      }
+      */
+      
+ 
       profileTable.removeAllRows();
       profileTable.setText(0,0,"Age:");
       profileTable.setWidget(0, 1, age);
@@ -95,12 +111,8 @@ public class MyProfileUnit extends AbstractUnit {
       profileTable.setWidget(6, 1, currentYaPooL);
       
       profileTable.setText(7, 0, "Passed YaPooL!:");
-      HorizontalPanel passedYaPooLPanel=new HorizontalPanel();
+      final HorizontalPanel passedYaPooLPanel=new HorizontalPanel();
       profileTable.setWidget(7, 1, passedYaPooLPanel);
-      
-      profileTable.setText(8, 0, "Friends: ");
-      HorizontalPanel friendsPanel=new HorizontalPanel();
-      profileTable.setWidget(8, 1,friendsPanel);
       
       ProfileJson profileJson=new ProfileJson(response.getText());
       age.setText(profileJson.getAge());
@@ -110,6 +122,7 @@ public class MyProfileUnit extends AbstractUnit {
       introduction.setText(profileJson.getIntro());
       
       JSONArray interests_jsonArray = profileJson.getInterests();
+      interests.clear();
       if(interests_jsonArray != null)
       {
         for (int j = 0; j < interests_jsonArray.size(); ++j) {
@@ -117,42 +130,64 @@ public class MyProfileUnit extends AbstractUnit {
               new Label(interests_jsonArray.get(j).isString().stringValue())
               );
           interestsPanel.add(interests.get(j));
-        }
+          if(j!=interests_jsonArray.size()-1){
+            interestsPanel.add(new Label(", "));
+          }
+         }
       }
       else {
         interestsPanel.add(new Label(" - "));
       }
       
-      currentYaPooL.setText(profileJson.getCurrentYapool());
+      if(!profileJson.getCurrentYapool().trim().equals("")){
+        final String yapoolId=profileJson.getCurrentYapool();
+        HttpInterface.doGet("/yapooldb/"+yapoolId, 
+            new AbstractRequestCallback() {
+              public void onResponseReceived(Request request, Response response) {
+                YapoolJson yapool=new YapoolJson(response.getText());
+                Label yapoolNameLabel=new Label(yapool.getName());
+                currentYaPooL.setText("'"+yapool.getName()+"'");
+                
+              }
+        });
+        
+          currentYaPooL.addClickHandler(new ClickHandler() {
+            public void onClick(ClickEvent event) {
+              DisplayYapoolUnit.displayYapoolUnit.displayYapool(yapoolId);
+            }
+          });
+      }
+      else{
+         currentYaPooL.setText("No Current Yapool");
+      }
+    
       
+      
+      passedYaPooL.clear();
       JSONArray passedYaPooL_jsonArray = profileJson.getPassedYapools();
       if(passedYaPooL_jsonArray != null)
       {
-        for (int j = 0; j < passedYaPooL_jsonArray.size(); ++j) {
-          passedYaPooL.add(
-              new Label(passedYaPooL_jsonArray.get(j).isString().stringValue())
-              );
-          passedYaPooLPanel.add(passedYaPooL.get(j));
+        final int numPassed=passedYaPooL_jsonArray.size();
+        for (int j = 0; j < numPassed; ++j) {
+          final int idx=j;
+          final Label yapoolNameLabel=new Label();
+          passedYaPooLPanel.add(yapoolNameLabel);
+          if( idx!=numPassed-1){
+            passedYaPooLPanel.add(new Label(","));
+          }
+          HttpInterface.doGet("/yapooldb/"+passedYaPooL_jsonArray.get(idx).isString().stringValue(), 
+              new AbstractRequestCallback() {
+                public void onResponseReceived(Request request, Response response) {
+                  YapoolJson yapool=new YapoolJson(response.getText());
+                  yapoolNameLabel.setText(yapool.getName());
+                  passedYaPooL.add(yapoolNameLabel); 
+                }
+          });         
         }
       }
-      else {
+      else{
         passedYaPooLPanel.add(new Label(" - "));
       }
-      
-      JSONArray friends_jsonArray = profileJson.getFriends();
-      if(friends_jsonArray != null)
-      {
-        for (int j = 0; j < friends_jsonArray.size(); ++j) {
-          friends.add(
-              new Label(friends_jsonArray.get(j).isString().stringValue())
-              );
-          friendsPanel.add(friends.get(j));
-        }
-      }
-      else {
-        friendsPanel.add(new Label(" - "));
-      }
-      
       
       profileTable.insertRow(0);
       profileTable.setText(0, 0, "ID: ");
@@ -165,4 +200,7 @@ public class MyProfileUnit extends AbstractUnit {
   public String getContainerId() {
     return "myProfileContainer";
   }
+
+
+  
 }/*public class MyProfileUnit*/
