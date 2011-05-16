@@ -76,7 +76,7 @@ public class YapoolSignUnit {
       }
     });
 
-    myYapoolLabel.getElement().setClassName("navigationLabel");
+    myYapoolLabel.getElement().setClassName("myYapoolLabel");
     myYapoolLabel.addClickHandler(new ClickHandler() {
 
       @Override

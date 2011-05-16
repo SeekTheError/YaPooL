@@ -69,8 +69,9 @@ public class DisplayYapoolUnit extends AbstractUnit {
     doneButton = new Button("Done");
 
     messageInput = new TextBox();
+    ScrollPanel memberScrollPanel= new ScrollPanel();
+    
     memberListTable = new FlexTable();
-    memberListTable.getElement().setClassName("displayYapoolMemberTable");
     currentYapool = new YapoolJson();
 
     joinButton.setVisible(false);
@@ -81,7 +82,11 @@ public class DisplayYapoolUnit extends AbstractUnit {
 
     RootPanel.get("displayYapoolName").add(yapoolNameLabel);
 
-    RootPanel.get("displayYapoolContent").add(memberListTable);
+    memberScrollPanel.add(memberListTable);
+    memberScrollPanel.setHeight("80px");
+    memberScrollPanel.setWidth("80px");
+    memberScrollPanel.getElement().setClassName(memberScrollPanel.getElement().getClassName()+"displayYapoolMemberTable");
+    RootPanel.get("displayYapoolContent").add(memberScrollPanel);
     RootPanel.get("displayYapoolContent").add(stateLabel);
     RootPanel.get("displayYapoolContent").add(joinButton);
     RootPanel.get("displayYapoolContent").add(leaveButton);
@@ -96,6 +101,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
     postScrollPanel.setHeight("250px");
     postScrollPanel.setWidth("500px");
     Label chatLabel=new Label("Chat With the Members");
+    chatLabel.getElement().setClassName("displayYapoolChatLabel");
     verticalPanel.add(postScrollPanel);
     verticalPanel.add(messageInput);
     RootPanel.get("displayYapoolWall").add(chatLabel);
@@ -316,13 +322,11 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	lastMemberCount = size;
 	lastState = state;
 	memberListTable.removeAllRows();
-	memberListTable.setText(0, 0, "Members:");
-	memberListTable.setText(0, 1, "*" + currentYapool.getOwner());
+	memberListTable.setText(0, 0, "*" + currentYapool.getOwner());
 
 	for (int i = 0; i < size; i++) {
 	  int rowCounts = memberListTable.getRowCount();
-	  memberListTable.setText(rowCounts, 0, "");
-	  memberListTable.setText(rowCounts, 1, members.get(i).isString().stringValue());
+	  memberListTable.setText(rowCounts, 0, members.get(i).isString().stringValue());
 	}
 
 	if (state.equals("done")) {
