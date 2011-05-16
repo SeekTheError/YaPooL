@@ -58,11 +58,12 @@ public class MyProfileUnit extends AbstractUnit {
     
   }
   public void loadProfile() {
+    
     HttpInterface.doGet("/yapooldb/" + YapoolGWT.currentSession.getName(), new DisplayProfileCallBack());
   }
    
   public class DisplayProfileCallBack extends AbstractRequestCallback{
-
+        
     @Override
     public void onResponseReceived(Request request, Response response) {
       /*
@@ -151,8 +152,11 @@ public class MyProfileUnit extends AbstractUnit {
       else {
         friendsPanel.add(new Label(" - "));
       }
- 
       
+      
+      profileTable.insertRow(0);
+      profileTable.setText(0, 0, "ID: ");
+      profileTable.setWidget(0, 1, new Label(profileJson.getId()));
            
     }/*onResponseReceived*/    
   }/*DisplayProfileCallBack*/
