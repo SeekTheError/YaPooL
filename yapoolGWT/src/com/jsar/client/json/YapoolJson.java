@@ -17,7 +17,8 @@ public class YapoolJson extends AbstractJson {
 	private static final String EXPECTED_ORDER_DATE = "expectedOrderDate";
 	private static final String PICK_UP_PLACE = "pickUpPlace";
 	private static final String STATE = "state";
-
+	private static final String TAGS = "tags";
+	
 	public YapoolJson() {
 		this.jsonObject = new JSONObject();
 		this.jsonObject.put("type", new JSONString("yapool"));
@@ -107,6 +108,19 @@ public class YapoolJson extends AbstractJson {
 		if (object == null)
 			jsonObject.put(MEMBERS, new JSONArray());
 		return jsonObject.get(MEMBERS).isArray();
+	}
+	
+	public void addTag(String tag) {
+		JSONArray jsonArray = getTags();
+		jsonArray.set(jsonArray.size(), new JSONString(tag));
+		jsonObject.put(TAGS, jsonArray);
+	}
+
+	public JSONArray getTags() {
+		JSONValue object = jsonObject.get(TAGS);
+		if (object == null)
+			jsonObject.put(TAGS, new JSONArray());
+		return jsonObject.get(TAGS).isArray();
 	}
 
 }
