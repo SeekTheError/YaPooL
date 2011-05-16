@@ -70,7 +70,8 @@ public class ListYapoolUnit extends AbstractUnit {
   public void listYapools(ListType type) {
 	//Add Elements to tagPanel
 	HttpInterface.doGet("/yapooldb/_design/yapoolId/_view/by_tag?group=true", new ListTagsRequestCallback());
-	    
+
+	tagPanel.clear();
 	yapoolListTable.removeAllRows();
     yapoolListTable.setText(0, 0, "YaPool Name");
     yapoolListTable.setText(0, 1, "YaPool Description");
@@ -83,6 +84,7 @@ public class ListYapoolUnit extends AbstractUnit {
     else if (type == ListType.RECOMMENDED) {
     	HttpInterface.doGet("/yapooldb/_design/yapool/_view/by_id", new ListAllYapoolRequestCallback());
     }
+    
   }
 
   public class ListAllYapoolRequestCallback extends AbstractRequestCallback {
@@ -176,6 +178,9 @@ public class ListYapoolUnit extends AbstractUnit {
   public void displayYapoolList(JSONArray yapools) {
     
 	  yapoolListTable.removeAllRows();
+	    yapoolListTable.setText(0, 0, "YaPool Name");
+	    yapoolListTable.setText(0, 1, "YaPool Description");
+	    yapoolListTable.setText(0, 2, "Tags");
 	  int size = yapools.size();
     for (int i = 0; i < size; i++) {
       JSONObject temp = yapools.get(i).isObject().get("value").isObject();
