@@ -159,3 +159,32 @@ html,body {
 	background-color: orange;
 	cursor: pointer;
 }
+
+.displayYapooLHeader {
+	width: 600px;
+	height: 32px;
+	
+}
+
+.displayYapoolTitle {
+	float: left;
+	width: 250px;
+	height: 30px;
+}
+
+.displayYapoolName {
+	padding-left: 200px;
+	padding-top:20px;
+	width: 250px;
+	height: 30px;
+	position: absolute;
+	font-size: 14pt;
+}
+
+
+.displayYapoolContent{
+width: 600px;
+height: 400px;
+float: left;
+
+}

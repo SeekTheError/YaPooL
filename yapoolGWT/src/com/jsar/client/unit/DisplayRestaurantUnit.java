@@ -51,7 +51,7 @@ public class DisplayRestaurantUnit extends AbstractUnit {
 	RootPanel pannel = RootPanel.get("restaurantTypeOfFood");
 	int size = pannel.getWidgetCount();
 	for (int i = 0; i < size; i++) {
-	  pannel.remove(pannel.getWidget(i));
+	  //pannel.remove(pannel.getWidget(i));
 	}
 	JSONArray typeOfFood = restaurantJson.getTypeOfFood();
 	size = typeOfFood.size();
