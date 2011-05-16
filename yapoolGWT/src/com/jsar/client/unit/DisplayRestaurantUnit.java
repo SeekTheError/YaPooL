@@ -46,6 +46,7 @@ public class DisplayRestaurantUnit extends AbstractUnit {
 
       @Override
       public void onResponseReceived(Request request, Response response) {
+
 		RestaurantJson restaurantJson = new RestaurantJson(response.getText());
 		restaurantName.setText(restaurantJson.getName());
 		restaurantAdress.setText(restaurantJson.getAddress());
@@ -62,6 +63,7 @@ public class DisplayRestaurantUnit extends AbstractUnit {
 		}
 		
 		DisplayRestaurantUnit.displayRestaurantUnit.SetVisible(true);
+
       }
     });
   }

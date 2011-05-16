@@ -73,12 +73,12 @@ public class NavigationUnit {
 
       @Override
       public void onClick(ClickEvent event) {
-	if (!CheckLoggedIn.userIsloggedIn()) {
-	  return;
-	}
-	NavigationUnit.navigationUnit.hideAll();
-	EditProfileUnit.editProfileUnit.SetVisible(true);
-	EditProfileUnit.editProfileUnit.loadProfile();
+    	if (!CheckLoggedIn.userIsloggedIn()) {
+    	  return;
+    	}
+    	NavigationUnit.navigationUnit.hideAll();
+    	EditProfileUnit.editProfileUnit.SetVisible(true);
+    	EditProfileUnit.editProfileUnit.loadProfile();
 
       }
     });
@@ -93,7 +93,7 @@ public class NavigationUnit {
       public void onClick(ClickEvent event) {
 	NavigationUnit.navigationUnit.hideAll();
 	MyProfileUnit.myProfileUnit.SetVisible(true);
-
+	MyProfileUnit.myProfileUnit.loadProfile();
       }
     });
 
