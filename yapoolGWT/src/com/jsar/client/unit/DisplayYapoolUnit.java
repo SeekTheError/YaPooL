@@ -191,6 +191,8 @@ public class DisplayYapoolUnit extends AbstractUnit {
 																						.toString());
 																		System.out
 																				.println("Joined Successfully");
+																		YapoolGWT.currentProfile.setCurrentYapool(currentYapoolId);
+																		YapoolSignUnit.yapoolSignUnit.displayCurrentYapoolButton();
 																	}
 																});
 
@@ -286,6 +288,8 @@ public class DisplayYapoolUnit extends AbstractUnit {
 																						.toString());
 																		System.out
 																				.println("Left Successfully");
+																		YapoolGWT.currentProfile.setCurrentYapool("");
+																		YapoolSignUnit.yapoolSignUnit.displayCurrentYapoolButton();
 																	}
 																});
 
@@ -388,6 +392,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 												public void onResponseReceived(Request request,	Response response) {
 													System.out.println(response.toString());
 													System.out.println("Archieved YaPooL Successfully");
+													YapoolSignUnit.yapoolSignUnit.displayCurrentYapoolButton();
 												}
 											});
 

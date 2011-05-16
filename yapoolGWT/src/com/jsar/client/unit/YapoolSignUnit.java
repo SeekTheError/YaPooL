@@ -24,6 +24,7 @@ import com.jsar.client.http.HttpInterface;
  * 
  */
 public class YapoolSignUnit {
+  public static YapoolSignUnit yapoolSignUnit;
 
   private Label messageLabel;
   private Button signButton;
@@ -37,6 +38,7 @@ public class YapoolSignUnit {
 
   public YapoolSignUnit(YapoolGWT yapoolGWT) {
     this.yapoolGWT = yapoolGWT;
+    YapoolSignUnit.yapoolSignUnit=this;
 
     loginField = new TextBox();
     passwordField = new PasswordTextBox();
@@ -152,6 +154,8 @@ public class YapoolSignUnit {
   public void displayCurrentYapoolButton() {
     if (!YapoolGWT.currentProfile.getCurrentYapool().equals("")) {
       myYapoolLabel.setVisible(true);
+    } else {
+      myYapoolLabel.setVisible(false);
     }
   }
 
