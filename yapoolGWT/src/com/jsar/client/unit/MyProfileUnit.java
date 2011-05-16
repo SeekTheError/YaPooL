@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.http.client.Request;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.json.client.JSONArray;
@@ -36,12 +37,12 @@ public class MyProfileUnit extends AbstractUnit {
   private ArrayList<Label> interests;
   private Label currentYaPooL;
   private ArrayList<Label> passedYaPooL;
-
+  private HandlerRegistration currentYaPoolClick;
 
   
   public MyProfileUnit(){
     myProfileUnit=this;
-    
+
     VerticalPanel profilePanel=new VerticalPanel();
     profileTable= new FlexTable();
     profilePanel.add(profileTable);
@@ -139,8 +140,9 @@ public class MyProfileUnit extends AbstractUnit {
         interestsPanel.add(new Label(" - "));
       }
       
+      final String yapoolId=profileJson.getCurrentYapool();
       if(!profileJson.getCurrentYapool().trim().equals("")){
-        final String yapoolId=profileJson.getCurrentYapool();
+        
         HttpInterface.doGet("/yapooldb/"+yapoolId, 
             new AbstractRequestCallback() {
               public void onResponseReceived(Request request, Response response) {
@@ -150,22 +152,27 @@ public class MyProfileUnit extends AbstractUnit {
                 
               }
         });
-        
+          currentYaPooL=new Label();
+          profileTable.setWidget(6, 1, currentYaPooL);
           currentYaPooL.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
-              DisplayYapoolUnit.displayYapoolUnit.displayYapool(yapoolId);
+              if(!yapoolId.equals(""))
+                DisplayYapoolUnit.displayYapoolUnit.displayYapool(yapoolId);
             }
           });
       }
       else{
-         currentYaPooL.setText("No Current Yapool");
+        currentYaPooL=new Label();
+        profileTable.setWidget(6, 1, currentYaPooL);
+        currentYaPooL.setText("No Current Yapool");
+        //yapoolId = "";
       }
     
       
       
       passedYaPooL.clear();
       JSONArray passedYaPooL_jsonArray = profileJson.getPassedYapools();
-      if(passedYaPooL_jsonArray != null)
+      if( passedYaPooL_jsonArray.size() > 0)
       {
         final int numPassed=passedYaPooL_jsonArray.size();
         for (int j = 0; j < numPassed; ++j) {
@@ -179,8 +186,11 @@ public class MyProfileUnit extends AbstractUnit {
               new AbstractRequestCallback() {
                 public void onResponseReceived(Request request, Response response) {
                   YapoolJson yapool=new YapoolJson(response.getText());
-                  yapoolNameLabel.setText(yapool.getName());
-                  passedYaPooL.add(yapoolNameLabel); 
+                  if(yapool.getName()!=null) 
+                  {
+                    yapoolNameLabel.setText(yapool.getName());
+                    passedYaPooL.add(yapoolNameLabel); 
+                  }                  
                 }
           });         
         }
