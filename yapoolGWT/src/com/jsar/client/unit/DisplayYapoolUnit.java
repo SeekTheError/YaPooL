@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jsar.client.YapoolGWT;
@@ -35,7 +36,6 @@ public class DisplayYapoolUnit extends AbstractUnit {
 
   public static DisplayYapoolUnit displayYapoolUnit;
   private Label yapoolNameLabel;
-  private Label postTableLabel;
   private FlexTable postListTable;
   private PostJson tempMessage = null;
   private String currentYapoolId;
@@ -43,10 +43,12 @@ public class DisplayYapoolUnit extends AbstractUnit {
   private Button leaveButton;
   private Button closeButton;
   private Button doneButton;
+  private ScrollPanel postScrollPanel;
 
   private TextBox messageInput;
   private FlexTable memberListTable;
   private YapoolJson currentYapool;
+  private Label stateLabel;
 
   /**
    * constructor class
@@ -55,16 +57,20 @@ public class DisplayYapoolUnit extends AbstractUnit {
     DisplayYapoolUnit.displayYapoolUnit = this;
     yapoolNameLabel = new Label();
     yapoolNameLabel.getElement().setClassName("displayYapoolName");
-    postTableLabel = new Label("Wall Postings");
     postListTable = new FlexTable();
-    joinButton = new Button("Join");
-    leaveButton = new Button("Leave");
+    postListTable.getElement().setClassName("displayYapoolPostTable");
+    joinButton = new Button("Join this YaPooL!");
+    joinButton.getElement().setClassName("displayYapoolButton");
+    leaveButton = new Button("Leave this YaPooL!");
+    leaveButton.getElement().setClassName("displayYapoolButton");
+    stateLabel = new Label();
 
     closeButton = new Button("Close");
     doneButton = new Button("Done");
 
     messageInput = new TextBox();
     memberListTable = new FlexTable();
+    memberListTable.getElement().setClassName("displayYapoolMemberTable");
     currentYapool = new YapoolJson();
 
     joinButton.setVisible(false);
@@ -76,13 +82,26 @@ public class DisplayYapoolUnit extends AbstractUnit {
     RootPanel.get("displayYapoolName").add(yapoolNameLabel);
 
     RootPanel.get("displayYapoolContent").add(memberListTable);
-    RootPanel.get("displayYapoolContent").add(postTableLabel);
-    RootPanel.get("displayYapoolContent").add(postListTable);
-    RootPanel.get("displayYapoolContent").add(messageInput);
+    RootPanel.get("displayYapoolContent").add(stateLabel);
     RootPanel.get("displayYapoolContent").add(joinButton);
     RootPanel.get("displayYapoolContent").add(leaveButton);
     RootPanel.get("displayYapoolContent").add(closeButton);
     RootPanel.get("displayYapoolContent").add(doneButton);
+    
+    VerticalPanel verticalPanel=new VerticalPanel();
+    
+    postScrollPanel=new ScrollPanel();
+    postScrollPanel.add(postListTable);
+    postScrollPanel.setVisible(true);
+    postScrollPanel.setHeight("250px");
+    postScrollPanel.setWidth("500px");
+    Label chatLabel=new Label("Chat With the Members");
+    verticalPanel.add(postScrollPanel);
+    verticalPanel.add(messageInput);
+    RootPanel.get("displayYapoolWall").add(chatLabel);
+    RootPanel.get("displayYapoolWall").add(postScrollPanel);
+    RootPanel.get("displayYapoolWall").add(messageInput);
+
 
     messageInput.addKeyDownHandler(new PostMessageKeydowndHandler());
     joinButton.addClickHandler(new JoinYapoolClickHandler());
@@ -97,16 +116,11 @@ public class DisplayYapoolUnit extends AbstractUnit {
     NavigationUnit.navigationUnit.hideAll();
     this.SetVisible(true);
     currentYapoolId = yapoolId;
-
+    postListTable.removeAllRows();
+    
     HttpInterface.doGet("/yapooldb/" + currentYapoolId, new LoadYapoolRequestCallback());
-
-    // System.out.println("this is currentYapool: " + currentYapool);
-
     HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + yapoolId + "\"",
 	new DisplayYapoolPostRequestCallback());
-
-    // System.out.println("this is currentYapool: " + currentYapool);
-
   }
 
   public class PostMessageKeydowndHandler implements KeyDownHandler {
@@ -283,27 +297,29 @@ public class DisplayYapoolUnit extends AbstractUnit {
     @Override
     public void onResponseReceived(Request request, Response response) {
       currentYapool = new YapoolJson(response.getText());
-
       yapoolNameLabel.setText(currentYapool.getName());
-
-      // System.out.println("this is currentYapool in the callback" +
-      // currentYapool);
-
       JSONArray members = currentYapool.getMembers();
       int size = members.size();
       String state = currentYapool.getState();
+      if (state.equals("open")) {
+	stateLabel.setText("Open");
+	stateLabel.getElement().setClassName("displayYapoolState open");
+      } else if (state.equals("close")) {
+	stateLabel.setText("Close");
+	stateLabel.getElement().setClassName("displayYapoolState close");
+      } else if (state.equals("done")) {
+	stateLabel.setText("Done");
+	stateLabel.getElement().setClassName("displayYapoolState done");
+      }
+      
       if (size != lastMemberCount || !state.equals(lastState)) {
 	lastMemberCount = size;
 	lastState = state;
 	memberListTable.removeAllRows();
-	memberListTable.setText(0, 0, "State:");
-	memberListTable.setText(0, 1, currentYapool.getState());
-	memberListTable.setText(1, 0, "Members:");
-	memberListTable.setText(1, 1, "*" + currentYapool.getOwner());
+	memberListTable.setText(0, 0, "Members:");
+	memberListTable.setText(0, 1, "*" + currentYapool.getOwner());
+
 	for (int i = 0; i < size; i++) {
-	  // JSONObject temp =
-	  // members.get(i).isObject().get("value").isObject();
-	  // PostJson post = new PostJson(temp);
 	  int rowCounts = memberListTable.getRowCount();
 	  memberListTable.setText(rowCounts, 0, "");
 	  memberListTable.setText(rowCounts, 1, members.get(i).isString().stringValue());
@@ -411,9 +427,10 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	  postListTable.setText(rowCounts, 0, post.getUser());
 	  postListTable.setText(rowCounts, 1, post.getMessage());
 	}
+	postScrollPanel.scrollToBottom();
       }
       Timer t = new UpdatePostTimer();
-      t.schedule(1000);
+      t.schedule(200);
     }
   }
 
@@ -427,19 +444,21 @@ public class DisplayYapoolUnit extends AbstractUnit {
 
     @Override
     public void run() {
+      if(RootPanel.get(getContainerId()).isVisible()&& currentYapool!=null){
+      
       HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + currentYapoolId + "\"",
 	  new DisplayYapoolPostRequestCallback());
-
       HttpInterface.doGet("/yapooldb/" + currentYapoolId, new LoadYapoolRequestCallback());
-    }
+    }}
   }
 
   public class WritePostRequestCallback extends AbstractRequestCallback {
     @Override
     public void onResponseReceived(Request request, Response response) {
-      int rowCounts = postListTable.getRowCount();
+     int rowCounts = postListTable.getRowCount();
       postListTable.setText(rowCounts, 0, tempMessage.getUser());
       postListTable.setText(rowCounts, 1, tempMessage.getMessage());
+      postScrollPanel.scrollToBottom();
     }
   }
 

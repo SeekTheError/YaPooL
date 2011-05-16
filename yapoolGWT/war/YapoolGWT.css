@@ -32,7 +32,7 @@ html,body {
 	min-width: 500px;
 	z-index: 10;
 	height: 60px;
-	background-color: #777777;
+	background-color: #41627E;
 }
 
 .top_header_left {
@@ -97,10 +97,11 @@ html,body {
 }
 
 .footer_content {
-	background-color: #777777;
+	background-color: #41627E;
 	margin-right: 25px;
 	margin-left: 40px;
 	padding-right: 40px;
+	margin-top: 4px;
 	height: 100%;
 	text-align: right;
 }
@@ -142,7 +143,9 @@ html,body {
 	background-color: white;
 	border: solid;
 	border-width: medium;
-	border-color: aqua;
+	border-color: #5CB3FF;
+	padding: 10px;
+	font-size: 14pt;
 }
 
 .selectorLabel {
@@ -163,7 +166,6 @@ html,body {
 .displayYapooLHeader {
 	width: 600px;
 	height: 32px;
-	
 }
 
 .displayYapoolTitle {
@@ -174,17 +176,65 @@ html,body {
 
 .displayYapoolName {
 	padding-left: 200px;
-	padding-top:20px;
+	padding-top: 20px;
 	width: 250px;
 	height: 30px;
 	position: absolute;
 	font-size: 14pt;
 }
 
+.displayYapoolContent {
+	width: 600px;
+	float: left;
+}
 
-.displayYapoolContent{
-width: 600px;
-height: 400px;
-float: left;
+.displayYapoolState {
+	margin-left: 230px;
+	width: 50px;
+	font-size: 15pt;
+	padding: 4px;
+	border-style: groove;
+}
 
+.open {
+	background-color: green;
+}
+
+.close {
+	background-color: red;
+}
+
+.done {
+	background-color: gray;
+}
+
+.displayYapoolMemberTable {
+	float: left;
+	font-size: 14pt;
+}
+
+.displayYapoolWall {
+	margin-top: 140px;
+	height: 200px;
+}
+
+.displayYapoolPostTable {
+	float: left;
+	font-size: 14pt;
+}
+
+.displayYapoolButton {
+	margin-left: 107px;
+	margin-top: 10px;
+}
+
+.postTableLabel {
+	margin: 10px;
+	font-size: 14pt;
+}
+
+.displayYapoolChatLabel {
+	font-size: 14pt;
+	padding: 4px;
+	
 }
