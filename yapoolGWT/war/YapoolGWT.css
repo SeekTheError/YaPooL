@@ -7,18 +7,13 @@ html,body {
 	font-size: medium;
 	height: 100%;
 	font-size: 10pt;
-	
 }
 
-
-
-
-.yapoolListTable { 
+.yapoolListTable {
 	font-size: 14pt;
 	line-height: 20px;
 	border: 20 px black;
-
-	}
+}
 
 .wrapper {
 	padding-top: 0px;
@@ -56,17 +51,13 @@ html,body {
 	padding-right: 20px;
 	padding-top: 10px;
 	height: 100%;
-	
-	
 }
-
 
 .content_right {
 	width: 800px;
 	font-size: 12pt;
 	float: right;
 }
-
 
 .navigation_left {
 	width: 240px;
@@ -88,7 +79,6 @@ html,body {
 	padding: 20px;
 	width: 200px;
 }
-
 
 .navigationLabel:hover {
 	float: left;
@@ -144,16 +134,28 @@ html,body {
 	padding-right: 34px
 }
 
-.listYapoolTable{
+.listYapoolTable {
 	font-size: 14pt;
-	
-	}
-	
-	
-.gwt-PopupPanel{
+}
+
+.gwt-PopupPanel {
 	background-color: white;
 	border: solid;
 	border-width: medium;
 	border-color: aqua;
-	}
-	
+}
+
+.selectorLabel {
+	font-size: 13pt;
+	padding: 10px;
+	border-width: 2px;
+	border-color: black;
+	border-style: solid;
+	border-right-width: 1px;
+	margin-bottom: 10px;
+}
+
+.selectorLabel:hover {
+	background-color: orange;
+	cursor: pointer;
+}
