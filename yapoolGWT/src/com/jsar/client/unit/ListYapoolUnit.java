@@ -70,7 +70,8 @@ public class ListYapoolUnit extends AbstractUnit {
   public void listYapools(ListType type) {
 	//Add Elements to tagPanel
 	HttpInterface.doGet("/yapooldb/_design/yapoolId/_view/by_tag?group=true", new ListTagsRequestCallback());
-	    
+
+	tagPanel.clear();
 	yapoolListTable.removeAllRows();
     yapoolListTable.setText(0, 0, "YaPool Name");
     yapoolListTable.setText(0, 1, "YaPool Description");
@@ -83,6 +84,7 @@ public class ListYapoolUnit extends AbstractUnit {
     else if (type == ListType.RECOMMENDED) {
     	HttpInterface.doGet("/yapooldb/_design/yapool/_view/by_id", new ListAllYapoolRequestCallback());
     }
+    
   }
 
   public class ListAllYapoolRequestCallback extends AbstractRequestCallback {
@@ -113,62 +115,19 @@ public class ListYapoolUnit extends AbstractUnit {
 	    	  tagLabel.addClickHandler(new ClickHandler() {
 	    	    @Override
 	    	    public void onClick(ClickEvent event) {
-	    	        HttpInterface.doGet("/yapooldb/_design/yapoolId/_view/by_tag?group=true&key=\"" + tagLabel.getText() + "\"", new AbstractRequestCallback() {
+	    	        HttpInterface.doGet("/yapooldb/_design/yapool/_view/by_tag?key=\"" + tagLabel.getText() + "\"", new AbstractRequestCallback() {
 						@Override
 						public void onResponseReceived(Request request, Response response) {
-							ViewJson tempTag = new ViewJson(response.getText());
-							JSONArray resultArray = tempTag.getRows();
-							JSONArray yapoolIdList = resultArray.get(0).isObject().get("value").isArray();
-							//System.out.println("yapoolListSize: " + String.valueOf(yapoolIdList.size()));
-							final ArrayList<String> idList = new ArrayList<String>();
-							
-					    	for (int j = 0; j < yapoolIdList.size(); j++) {
-					    	  idList.add(yapoolIdList.get(j).isString().stringValue());
-					    	}
-					    	//System.out.println("response: " + response.getText());
-					    	//for(int k = 0; k<idList.size(); k++)
-					    	//	System.out.println(idList.get(k));
-					    	
-			    	        HttpInterface.doGet("/yapooldb/_design/yapool/_view/by_id", new AbstractRequestCallback() {
-								@Override
-								public void onResponseReceived(Request request, Response response) {
-									JSONArray unsortedYapools = new ViewJson(response.getText()).getRows();
-									JSONArray sortedYapools = new JSONArray();
-									int index = 0;
-									int size = unsortedYapools.size();
-									
-									for(int k = 0; k<idList.size(); k++)
-							    		System.out.println(idList.get(k));
-									
-								    for (int i = 0; i < size; i++) {
-								      JSONObject temp = unsortedYapools.get(i).isObject();
-								      YapoolJson yapool = new YapoolJson(temp.get("value").isObject());
-								      for(int j=0; j<idList.size(); j++){
-									      if(idList.get(j).equals(yapool.getId())){
-									    	  System.out.println("here!!" + index);
-									    	  sortedYapools.isArray().set(index, temp);
-									    	  index++;
-									      }
-								      }
-								    }
-								    //for(int k = 0; k<sortedYapools.size(); k++)
-							    	  //System.out.println(sortedYapools.get(k).isObject().get("value").isObject());
-								    //for (int i = 0; i < sortedYapools.size() ; i++) {
-									//    JSONObject temp = sortedYapools.get(i).isObject();
-									//    YapoolJson yapool = new YapoolJson(temp);
-									    //System.out.println("ID: " + yapool.getId());  
-								    //}
-								    displayYapoolList(sortedYapools);
-								}
-							});
-							//System.out.println("YaPooL is CLOSED");
+							JSONArray yapools = new ViewJson(response.getText()).getRows();
+							displayYapoolList(yapools);
 						}
-					});
+	    	        });
 	    	    }
 	    	  });
-	    	  tagPanel.add(tagLabel);
-	    	  tagPanel.add(divider);
-	      }
+		    	  tagPanel.add(tagLabel);
+		    	  if (i != size - 1)
+		    	  tagPanel.add(divider);
+	    	    }
 	      //displayYapoolList(yapools);
 	    }
   }
@@ -176,6 +135,9 @@ public class ListYapoolUnit extends AbstractUnit {
   public void displayYapoolList(JSONArray yapools) {
     
 	  yapoolListTable.removeAllRows();
+	    yapoolListTable.setText(0, 0, "YaPool Name");
+	    yapoolListTable.setText(0, 1, "YaPool Description");
+	    yapoolListTable.setText(0, 2, "Tags");
 	  int size = yapools.size();
     for (int i = 0; i < size; i++) {
       JSONObject temp = yapools.get(i).isObject().get("value").isObject();

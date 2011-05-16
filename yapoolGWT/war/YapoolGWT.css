@@ -9,6 +9,11 @@ html,body {
 	font-size: 10pt;
 }
 
+.myYapoolLabel{
+font-size: large;
+font-family: serif;
+}
+
 .yapoolListTable {
 	font-size: 14pt;
 	line-height: 20px;
@@ -24,12 +29,20 @@ html,body {
 	height: auto !important;
 	height: 100%;
 	margin: 0 auto -25px;
-	width: 1200px;
+	width: auto;
+}
+
+.logo {
+	font-size: 30pt;
+	font-weight: bold;
+	color: black;
+	font-style: normal;
+	padding: 20px;
+	margin-top: 10px;
 }
 
 .top_header {
-	width: 1200px;
-	min-width: 500px;
+	width: 100%;
 	z-index: 10;
 	height: 60px;
 	background-color: #41627E;
@@ -37,13 +50,11 @@ html,body {
 
 .top_header_left {
 	float: left;
-	min-width: 200px;
 	padding-left: 20px;
 }
 
 .top_header_right {
 	float: right;
-	min-width: 200px;
 	height: 60px;
 }
 
@@ -94,11 +105,12 @@ html,body {
 
 .footer {
 	height: 25px;
+	width: auto;
 }
 
 .footer_content {
 	background-color: #41627E;
-	margin-right: 25px;
+	margin-right: 40px;
 	margin-left: 40px;
 	padding-right: 40px;
 	margin-top: 4px;
@@ -214,7 +226,7 @@ html,body {
 }
 
 .displayYapoolWall {
-	margin-top: 140px;
+	margin-top: 160px;
 	height: 200px;
 }
 
@@ -236,5 +248,31 @@ html,body {
 .displayYapoolChatLabel {
 	font-size: 14pt;
 	padding: 4px;
+}
+
+@media screen and (max-device-width: 600px) {
+	/*--- iPhone only CSS here ---*/
+	
+	.body {
+		font-size: medium;
+		width: 600px;
+	}
+	.content_right {
+		float: none;
+		width: 400px;
+	}
+	.top_header {
+		float: none;
+		width: 400px;
+	}
+	.footer {
+		display: none;
+	}
+	.navigation_left {
+		display: none;
+	}
+	.displayYapooLHeader {
+	height: 32px;
+}
 	
 }
