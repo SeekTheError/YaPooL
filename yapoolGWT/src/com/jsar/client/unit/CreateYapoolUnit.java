@@ -21,6 +21,7 @@ import com.jsar.client.handler.VisibilityClickHandler;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.YapoolJson;
+import com.jsar.client.unit.ListYapoolUnit.ListType;
 import com.jsar.client.util.CheckLoggedIn;
 import com.jsar.client.util.MessageDisplayer;
 
@@ -145,7 +146,7 @@ public class CreateYapoolUnit {
 				createButton.setText("Sending...");
 				HttpInterface.doPostJson("/yapooldb/", yapoolJson,
 						new CreateYapoolCallbackCallback());
-				ListYapoolUnit.listYapoolUnit.listYapools();
+				ListYapoolUnit.listYapoolUnit.listYapools(ListType.ALL);
 			}
 
 			private void displayErrorMessage(String string) {
