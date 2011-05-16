@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.jsar.client.unit.ListYapoolUnit.ListType;
 import com.jsar.client.util.CheckLoggedIn;
 
 /**
@@ -32,6 +33,7 @@ public class NavigationUnit {
       public void onClick(ClickEvent event) {
 	hideAll();
 	ListYapoolUnit.listYapoolUnit.SetVisible(true);
+	ListYapoolUnit.listYapoolUnit.listYapools(ListType.ALL);
       }
     });
     yapoolPanel.add(listYapoolLabel);

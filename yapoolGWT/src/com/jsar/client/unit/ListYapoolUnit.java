@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
@@ -23,7 +24,7 @@ public class ListYapoolUnit extends AbstractUnit {
 
   private Label allYapoolNameLabel;
   private FlexTable yapoolListTable;
-  private HorizontalPanel tagPanel;
+  private VerticalPanel tagPanel;
   private String tagName;
   private String yapoolList;
   
@@ -50,18 +51,30 @@ public class ListYapoolUnit extends AbstractUnit {
 	listYapools(ListType.RECOMMENDED);
       }
     });
-    horizontalPanel.add(allYapoolNameLabel);
-    horizontalPanel.add(recommendedYapools);
+    //horizontalPanel.add(allYapoolNameLabel);
+    //horizontalPanel.add(recommendedYapools);
     
     //Adding Tag Panel
-    tagPanel = new HorizontalPanel();
+    tagPanel = new VerticalPanel();
+    
     
     yapoolListTable = new FlexTable();
+    
     yapoolListTable.getElement().setClassName("yapoolTable");
     VerticalPanel verticalPanel = new VerticalPanel();
     verticalPanel.add(horizontalPanel);
-    verticalPanel.add(tagPanel);
-    verticalPanel.add(yapoolListTable);
+    RootPanel.get("listYapoolTags").add(tagPanel);
+    VerticalPanel vp=new VerticalPanel();
+    ScrollPanel scrollPanel= new ScrollPanel();
+    scrollPanel.setVisible(true);
+    
+    scrollPanel.add(yapoolListTable);
+    scrollPanel.setHeight("400px");
+    vp.add(scrollPanel);
+    FlexTable table=new FlexTable();
+
+    verticalPanel.add(table);
+    verticalPanel.add(vp);
     RootPanel.get("listYapoolContainer").add(verticalPanel);
     listYapools(ListType.ALL);
 
@@ -73,18 +86,11 @@ public class ListYapoolUnit extends AbstractUnit {
 
 	tagPanel.clear();
 	yapoolListTable.removeAllRows();
-    yapoolListTable.setText(0, 0, "YaPool Name");
-    yapoolListTable.setText(0, 1, "YaPool Description");
-    yapoolListTable.setText(0, 2, "Tags");
-
-    if (type == ListType.ALL) {
-    	HttpInterface.doGet("/yapooldb/_design/yapool/_view/by_id", new ListAllYapoolRequestCallback());
-    }
-
-    else if (type == ListType.RECOMMENDED) {
-    	HttpInterface.doGet("/yapooldb/_design/yapool/_view/by_id", new ListAllYapoolRequestCallback());
-    }
     
+
+    	HttpInterface.doGet("/yapooldb/_design/yapool/_view/by_id", new ListAllYapoolRequestCallback());
+
+
   }
 
   public class ListAllYapoolRequestCallback extends AbstractRequestCallback {
@@ -110,7 +116,8 @@ public class ListYapoolUnit extends AbstractUnit {
 	    	  tagName = tags.get(i).isObject().get("key").isString().stringValue();
 	    	  
 	    	  final Label tagLabel = new Label(tagName);
-	    	  Label divider = new Label(", ");
+	    	  tagLabel.getElement().setClassName("listTags");
+	    	  //Label divider = new Label(", ");
 	    	  //tagLabel.getElement().setClassName("selectorLabel");
 	    	  tagLabel.addClickHandler(new ClickHandler() {
 	    	    @Override
@@ -125,8 +132,8 @@ public class ListYapoolUnit extends AbstractUnit {
 	    	    }
 	    	  });
 		    	  tagPanel.add(tagLabel);
-		    	  if (i != size - 1)
-		    	  tagPanel.add(divider);
+		    	  //if (i != size - 1)
+		    	  //tagPanel.add(divider);
 	    	    }
 	      //displayYapoolList(yapools);
 	    }

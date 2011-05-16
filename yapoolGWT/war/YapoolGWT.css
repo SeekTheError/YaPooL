@@ -7,6 +7,7 @@ html,body {
 	font-size: medium;
 	height: 100%;
 	font-size: 10pt;
+	table-layout: fixed;
 }
 
 .myYapoolLabel {
@@ -15,8 +16,23 @@ html,body {
 	padding: 4px;
 }
 
+.listYapoolTags {
+	width: 100px;
+	float: right;
+}
+
 .myYapoolLabel:hover {
 	background-color: orange;
+}
+
+.listTags {
+	padding: 3px;
+	font-size: 14pt;
+}
+
+.listTags:hover {
+	cursor: pointer;
+	background-color: yellow;
 }
 
 .yapoolListTable {
@@ -40,10 +56,10 @@ html,body {
 .logo {
 	font-size: 30pt;
 	font-weight: bold;
-	color: black;
+	color: white;
 	font-style: normal;
 	padding: 20px;
-	margin-top: 10px;
+	padding-top: 10px;
 }
 
 .top_header {
@@ -264,9 +280,8 @@ html,body {
 		margin-right: 150px;
 	}
 	.content_right {
-		font-size:large;
-		margin-right:20px;
-	
+		font-size: large;
+		margin-right: 20px;
 		top: 150px;
 		float: none;
 		width: 400px;
@@ -285,8 +300,6 @@ html,body {
 		height: 32px;
 	}
 	.displayYapoolName {
-	margin-top: 55px;
+		margin-top: 55px;
 	}
-	
-	
 }
