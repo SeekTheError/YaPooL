@@ -23,6 +23,7 @@ import com.jsar.client.YapoolGWT;
 import com.jsar.client.http.AbstractRequestCallback;
 import com.jsar.client.http.HttpInterface;
 import com.jsar.client.json.ProfileJson;
+import com.jsar.client.json.RestaurantJson;
 import com.jsar.client.json.ViewJson;
 import com.jsar.client.json.PostJson;
 import com.jsar.client.json.YapoolJson;
@@ -44,6 +45,10 @@ public class DisplayYapoolUnit extends AbstractUnit {
   private Button closeButton;
   private Button doneButton;
   private ScrollPanel postScrollPanel;
+  
+  private Label restaurantNameLabel;
+  private Label pickUpPlaceLabel;
+  private Label orderTimeLabel;
 
   private TextBox messageInput;
   private FlexTable memberListTable;
@@ -73,7 +78,12 @@ public class DisplayYapoolUnit extends AbstractUnit {
 
     memberListTable = new FlexTable();
     currentYapool = new YapoolJson();
-
+    
+    restaurantNameLabel = new Label();
+    pickUpPlaceLabel = new Label();
+    orderTimeLabel = new Label();
+    Label spaceLabel = new Label("");
+    
     joinButton.setVisible(false);
     leaveButton.setVisible(false);
     messageInput.setVisible(false);
@@ -93,8 +103,10 @@ public class DisplayYapoolUnit extends AbstractUnit {
     RootPanel.get("displayYapoolContent").add(leaveButton);
     RootPanel.get("displayYapoolContent").add(closeButton);
     RootPanel.get("displayYapoolContent").add(doneButton);
+    //RootPanel.get("displayYapoolContent").add(spaceLabel);
+    
 
-    VerticalPanel verticalPanel = new VerticalPanel();
+    //VerticalPanel verticalPanel = new VerticalPanel();
 
     postScrollPanel = new ScrollPanel();
     postScrollPanel.add(postListTable);
@@ -103,8 +115,11 @@ public class DisplayYapoolUnit extends AbstractUnit {
     postScrollPanel.setWidth("500px");
     Label chatLabel = new Label("Chat With the Members");
     chatLabel.getElement().setClassName("displayYapoolChatLabel");
-    verticalPanel.add(postScrollPanel);
-    verticalPanel.add(messageInput);
+    //verticalPanel.add(postScrollPanel);
+    //verticalPanel.add(messageInput);
+    RootPanel.get("displayYapoolWall").add(restaurantNameLabel);
+    RootPanel.get("displayYapoolWall").add(pickUpPlaceLabel);
+    RootPanel.get("displayYapoolWall").add(orderTimeLabel);
     RootPanel.get("displayYapoolWall").add(chatLabel);
     RootPanel.get("displayYapoolWall").add(postScrollPanel);
     // RootPanel.get("displayYapoolWall")
@@ -144,6 +159,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	}
 	newPost.setUser(YapoolGWT.currentSession.getName());
 	messageInput.setText("");
+	
 	tempMessage = newPost;
 	HttpInterface.doPostJson("/yapooldb/", newPost, new WritePostRequestCallback());
       }
@@ -302,6 +318,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
   public class LoadYapoolRequestCallback extends AbstractRequestCallback {
     @Override
     public void onResponseReceived(Request request, Response response) {
+    	messageInput.setFocus(true);
       currentYapool = new YapoolJson(response.getText());
       yapoolNameLabel.setText(currentYapool.getName());
       JSONArray members = currentYapool.getMembers();
@@ -317,6 +334,25 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	stateLabel.setText("Done");
 	stateLabel.getElement().setClassName("displayYapoolState done");
       }
+      
+      pickUpPlaceLabel.setText("Pick Up Place: " + currentYapool.getPickUpPlace());
+      orderTimeLabel.setText("Shooting Order Time: " + currentYapool.getExpectedOrderDate());
+	  HttpInterface.doGet("/yapooldb/" + currentYapool.getRestaurant(), new AbstractRequestCallback() {
+		    @Override
+		    public void onResponseReceived(Request request, Response response) {
+		      RestaurantJson restaurant = new RestaurantJson(response.getText());
+		      //System.out.println("here: " + restaurant);
+		      //System.out.println("name: " + restaurant.getName());
+		      restaurantNameLabel.setText("Restaurant Name: " + restaurant.getName());
+		      restaurantNameLabel.addClickHandler(new ClickHandler() {
+		            public void onClick(ClickEvent event) {
+		            	NavigationUnit.navigationUnit.hideAll();
+		            	DisplayRestaurantUnit.displayRestaurantUnit.displayRestaurant(currentYapool.getRestaurant());
+		              }
+		      });
+		      restaurantNameLabel.getElement().setClassName("listTags");
+		    }
+		  });
 
       if (size != lastMemberCount || !state.equals(lastState)) {
 	lastMemberCount = size;

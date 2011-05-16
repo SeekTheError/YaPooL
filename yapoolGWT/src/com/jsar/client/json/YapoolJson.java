@@ -53,8 +53,8 @@ public class YapoolJson extends AbstractJson {
 		jsonObject.put(RESTAURANT, new JSONString(restaurantId));
 	}
 
-	public void getRestaurant() {
-		jsonObject.get(NAME).isString().toString();
+	public String getRestaurant() {
+		return jsonObject.get(RESTAURANT).isString().stringValue();
 	}
 
 	public void setExpectedOrderDate(String expectedOrderDate) {
