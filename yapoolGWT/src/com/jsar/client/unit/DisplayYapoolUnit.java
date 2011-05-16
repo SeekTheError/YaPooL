@@ -69,8 +69,8 @@ public class DisplayYapoolUnit extends AbstractUnit {
     doneButton = new Button("Done");
 
     messageInput = new TextBox();
-    ScrollPanel memberScrollPanel= new ScrollPanel();
-    
+    ScrollPanel memberScrollPanel = new ScrollPanel();
+
     memberListTable = new FlexTable();
     currentYapool = new YapoolJson();
 
@@ -85,29 +85,29 @@ public class DisplayYapoolUnit extends AbstractUnit {
     memberScrollPanel.add(memberListTable);
     memberScrollPanel.setHeight("80px");
     memberScrollPanel.setWidth("80px");
-    memberScrollPanel.getElement().setClassName(memberScrollPanel.getElement().getClassName()+"displayYapoolMemberTable");
+    memberScrollPanel.getElement().setClassName(
+	memberScrollPanel.getElement().getClassName() + "displayYapoolMemberTable");
     RootPanel.get("displayYapoolContent").add(memberScrollPanel);
     RootPanel.get("displayYapoolContent").add(stateLabel);
     RootPanel.get("displayYapoolContent").add(joinButton);
     RootPanel.get("displayYapoolContent").add(leaveButton);
     RootPanel.get("displayYapoolContent").add(closeButton);
     RootPanel.get("displayYapoolContent").add(doneButton);
-    
-    VerticalPanel verticalPanel=new VerticalPanel();
-    
-    postScrollPanel=new ScrollPanel();
+
+    VerticalPanel verticalPanel = new VerticalPanel();
+
+    postScrollPanel = new ScrollPanel();
     postScrollPanel.add(postListTable);
     postScrollPanel.setVisible(true);
     postScrollPanel.setHeight("250px");
     postScrollPanel.setWidth("500px");
-    Label chatLabel=new Label("Chat With the Members");
+    Label chatLabel = new Label("Chat With the Members");
     chatLabel.getElement().setClassName("displayYapoolChatLabel");
     verticalPanel.add(postScrollPanel);
     verticalPanel.add(messageInput);
     RootPanel.get("displayYapoolWall").add(chatLabel);
     RootPanel.get("displayYapoolWall").add(postScrollPanel);
-    RootPanel.get("displayYapoolWall").add(messageInput);
-
+    // RootPanel.get("displayYapoolWall")
 
     messageInput.addKeyDownHandler(new PostMessageKeydowndHandler());
     joinButton.addClickHandler(new JoinYapoolClickHandler());
@@ -123,7 +123,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
     this.SetVisible(true);
     currentYapoolId = yapoolId;
     postListTable.removeAllRows();
-    
+
     HttpInterface.doGet("/yapooldb/" + currentYapoolId, new LoadYapoolRequestCallback());
     HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + yapoolId + "\"",
 	new DisplayYapoolPostRequestCallback());
@@ -317,7 +317,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	stateLabel.setText("Done");
 	stateLabel.getElement().setClassName("displayYapoolState done");
       }
-      
+
       if (size != lastMemberCount || !state.equals(lastState)) {
 	lastMemberCount = size;
 	lastState = state;
@@ -431,6 +431,9 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	  postListTable.setText(rowCounts, 0, post.getUser());
 	  postListTable.setText(rowCounts, 1, post.getMessage());
 	}
+	int rowCounts = postListTable.getRowCount();
+	postListTable.setText(rowCounts, 0, "message:");
+	postListTable.setWidget(rowCounts, 1, messageInput);
 	postScrollPanel.scrollToBottom();
       }
       Timer t = new UpdatePostTimer();
@@ -448,20 +451,26 @@ public class DisplayYapoolUnit extends AbstractUnit {
 
     @Override
     public void run() {
-      if(RootPanel.get(getContainerId()).isVisible()&& currentYapool!=null){
-      
-      HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + currentYapoolId + "\"",
-	  new DisplayYapoolPostRequestCallback());
-      HttpInterface.doGet("/yapooldb/" + currentYapoolId, new LoadYapoolRequestCallback());
-    }}
+      if (RootPanel.get(getContainerId()).isVisible() && currentYapool != null) {
+
+	HttpInterface.doGet("/yapooldb/_design/post/_view/by_yapoolId?key=\"" + currentYapoolId + "\"",
+	    new DisplayYapoolPostRequestCallback());
+	HttpInterface.doGet("/yapooldb/" + currentYapoolId, new LoadYapoolRequestCallback());
+      }
+    }
   }
 
   public class WritePostRequestCallback extends AbstractRequestCallback {
     @Override
     public void onResponseReceived(Request request, Response response) {
-     int rowCounts = postListTable.getRowCount();
-      postListTable.setText(rowCounts, 0, tempMessage.getUser());
-      postListTable.setText(rowCounts, 1, tempMessage.getMessage());
+      int rowCounts = postListTable.getRowCount();
+      postListTable.remove(messageInput);
+      postListTable.setText(rowCounts-1, 0, tempMessage.getUser());
+      postListTable.setText(rowCounts-1, 1, tempMessage.getMessage());
+      rowCounts++;
+      
+      postListTable.setText(rowCounts, 0, "message: ");
+      postListTable.setWidget(rowCounts, 1, messageInput);
       postScrollPanel.scrollToBottom();
     }
   }

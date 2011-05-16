@@ -9,9 +9,14 @@ html,body {
 	font-size: 10pt;
 }
 
-.myYapoolLabel{
-font-size: large;
-font-family: serif;
+.myYapoolLabel {
+	font-size: large;
+	font-family: serif;
+	padding: 4px;
+}
+
+.myYapoolLabel:hover {
+	background-color: orange;
 }
 
 .yapoolListTable {
@@ -187,9 +192,8 @@ font-family: serif;
 }
 
 .displayYapoolName {
-	padding-left: 200px;
-	padding-top: 20px;
-	width: 250px;
+	margin-left: 200px;
+	margin-top: 20px;
 	height: 30px;
 	position: absolute;
 	font-size: 14pt;
@@ -252,12 +256,18 @@ font-family: serif;
 
 @media screen and (max-device-width: 600px) {
 	/*--- iPhone only CSS here ---*/
-	
 	.body {
 		font-size: medium;
 		width: 600px;
 	}
+	.myYapoolLabel {
+		margin-right: 150px;
+	}
 	.content_right {
+		font-size:large;
+		margin-right:20px;
+	
+		top: 150px;
 		float: none;
 		width: 400px;
 	}
@@ -272,7 +282,11 @@ font-family: serif;
 		display: none;
 	}
 	.displayYapooLHeader {
-	height: 32px;
-}
+		height: 32px;
+	}
+	.displayYapoolName {
+	margin-top: 55px;
+	}
+	
 	
 }
