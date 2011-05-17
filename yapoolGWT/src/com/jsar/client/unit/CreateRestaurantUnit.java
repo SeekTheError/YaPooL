@@ -205,6 +205,10 @@ public class CreateRestaurantUnit {
       // TODO deal with bugs when not in sign-in state & clicking the button
       System.out.println(response.getText());
       if (responseIsOk(response)) {
+	addressField.setText("");
+	nameField.setText("");
+	telephoneNumber_middle.setText("");
+	telephoneNumber_last.setText("");
         MessageDisplayer.DisplayMessage(
             "Restaurant information Successfully Added.");
         ListRestaurantUnit.listRestaurantUnit.loadList();

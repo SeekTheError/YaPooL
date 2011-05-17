@@ -134,6 +134,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
   }
 
   public void displayYapool(String yapoolId) {
+    lastPostCount=-1;
     NavigationUnit.navigationUnit.hideAll();
     this.SetVisible(true);
     currentYapoolId = yapoolId;
@@ -311,7 +312,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
     }
   }
 
-  static int lastPostCount = -1;
+  public static int lastPostCount = -1;
   static int lastMemberCount = -1;
   static String lastState = "";
 
@@ -473,7 +474,7 @@ public class DisplayYapoolUnit extends AbstractUnit {
 	postScrollPanel.scrollToBottom();
       }
       Timer t = new UpdatePostTimer();
-      t.schedule(200);
+      t.schedule(1000);
     }
   }
 

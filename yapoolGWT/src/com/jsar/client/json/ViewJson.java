@@ -1,6 +1,7 @@
 package com.jsar.client.json;
 
 import com.google.gwt.json.client.JSONArray;
+import com.google.gwt.json.client.JSONObject;
 import com.google.gwt.json.client.JSONParser;
 
 /**
@@ -14,7 +15,11 @@ public class ViewJson extends AbstractJson {
   public static final String VALUE = "value";
 
   public ViewJson(String jsonString) {
-    this.jsonObject = JSONParser.parseStrict(jsonString).isObject();
+    try{
+    this.jsonObject = JSONParser.parseStrict(jsonString).isObject();}
+    catch(Exception e){
+      this.jsonObject=new JSONObject();
+    }
   }
 
   public JSONArray getRows() {

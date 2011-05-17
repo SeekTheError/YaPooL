@@ -61,12 +61,9 @@ public class YapoolSignUnit {
     } else {
       signOut();
     }
-
     signButtonClickHandler = new SignButtonClickHandler();
     signButton.addClickHandler(signButtonClickHandler);
-
     passwordField.addKeyDownHandler(new KeyDownHandler() {
-
       @Override
       public void onKeyDown(KeyDownEvent event) {
 	if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
@@ -82,6 +79,7 @@ public class YapoolSignUnit {
       @Override
       public void onClick(ClickEvent event) {
 	DisplayYapoolUnit.displayYapoolUnit.displayYapool(YapoolGWT.currentProfile.getCurrentYapool());
+	DisplayYapoolUnit.lastPostCount=-1;
 
       }
     });

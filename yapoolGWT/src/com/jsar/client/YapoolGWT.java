@@ -163,6 +163,7 @@ public class YapoolGWT implements EntryPoint {
 		System.out.println("Current Session Name?: " + currentSession.getName());
 		System.out.println("Current Profile?: \n" + response2.getText());
 		currentProfile = new ProfileJson(response2.getText());
+		YapoolSignUnit.yapoolSignUnit.displayCurrentYapoolButton();
 	      }
 	    }
 	  });
