@@ -52,7 +52,6 @@ html,body {
 	height: 100%;
 	margin: 0 auto -25px;
 	width: auto;
-	
 	overflow: auto;
 }
 
@@ -85,15 +84,15 @@ html,body {
 .content {
 	padding-right: 20px;
 	padding-top: 10px;
-	float:left;
+	float: left;
 }
 
 .content_right {
-	left:300px;
-	top:100px;
-	position:absolute;
+	left: 300px;
+	top: 100px;
+	position: absolute;
 	width: auto;
-	margin-left:25px;
+	margin-left: 25px;
 	font-size: 12pt;
 	float: right;
 }
@@ -105,7 +104,7 @@ html,body {
 	border-color: black;
 	border-width: 1px;
 	border-style: solid;
-	background-color: white; 
+	background-color: white;
 }
 
 .navigationHeader {
@@ -133,7 +132,7 @@ html,body {
 }
 
 .footer {
-	padding-top:25px;
+	padding-top: 25px;
 	height: 25px;
 	width: auto;
 }
@@ -280,7 +279,7 @@ html,body {
 }
 
 @media screen and (max-device-width: 600px) {
-	/*--- iPhone only CSS here ---*/	
+	/*--- iPhone only CSS here ---*/
 	.body {
 		font-size: larger;
 		height: 2px;
@@ -289,20 +288,17 @@ html,body {
 		margin-right: 150px;
 	}
 	.wrapper {
-	padding:0px;
-	min-height:none;
-	min-width:none
-	height: auto;
-	height: auto;
-	margin: 0px;
-	width: auto;
-}
-	
-	
+		padding: 0px;
+		min-height: none;
+		min-width: none height :     auto;
+		height: auto;
+		margin: 0px;
+		width: auto;
+	}
 	.content_right {
 		font-size: large;
 		margin-right: 20px;
-		right:30px;
+		right: 30px;
 		top: 150px;
 		float: none;
 		width: 400px;
@@ -335,12 +331,9 @@ html,body {
 		display: none;
 	}
 	.logo {
-	padding:0px;
-}
+		padding: 0px;
+	}
 	.myYapoolLabel:hover {
-	margin-top:1000px;
-	display: none;
-}
-	
-	
+		display: none;
+	}
 }

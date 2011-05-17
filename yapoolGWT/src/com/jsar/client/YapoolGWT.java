@@ -44,6 +44,8 @@ public class YapoolGWT implements EntryPoint {
    */
   public void onModuleLoad() {
     loadSession();
+
+	
   }
 
   public void loadSession() {
@@ -86,7 +88,8 @@ public class YapoolGWT implements EntryPoint {
     });
 
   }
-
+  
+  
   public boolean getSignState() {
     return signState;
   }
