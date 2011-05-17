@@ -302,6 +302,7 @@ html,body {
 	.content_right {
 		font-size: large;
 		margin-right: 20px;
+		right:30px;
 		top: 150px;
 		float: none;
 		width: 400px;

@@ -325,10 +325,11 @@ public class DisplayYapoolUnit extends AbstractUnit {
       JSONArray members = currentYapool.getMembers();
       int size = members.size();
       String state = currentYapool.getState();
+      System.out.println("state:  "+state);
       if (state.equals("open")) {
 	stateLabel.setText("Open");
 	stateLabel.getElement().setClassName("displayYapoolState open");
-      } else if (state.equals("close")) {
+      } else if (state.equals("closed")) {
 	stateLabel.setText("Close");
 	stateLabel.getElement().setClassName("displayYapoolState close");
       } else if (state.equals("done")) {
